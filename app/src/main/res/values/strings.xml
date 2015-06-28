@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">eCareZone Doctor</string>
+
+    <!--login-->
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_button_text">LOGIN</string>
+    <string name="login_forgot_password">Forgot your password?</string>
+
+    <!-- side menu  -->
+    <string name="main_profile_title">Profile</string>
+    <string name="main_side_menu_home">Home</string>
+    <string name="main_side_menu_my_patients">My patients</string>
+    <string name="main_side_menu_settings">Settings</string>
+    <string name="main_side_menu_logout">Logout</string>
+
+    <!-- Profile -->
+    <string name="profile_mine">My profile</string>
+
+    <!-- Profile details -->
+    <string name="profile_details_name">Name</string>
+    <string name="profile_details_gender">Gender</string>
+    <string name="profile_details_address">Address</string>
+    <string name="profile_details_birth">Date of Birth</string>
+    <string name="profile_details_ethnicity">Ethnicity</string>
+    <string name="profile_details_height">Height</string>
+    <string name="profile_details_weight">Weight</string>
+
+    <!-- Settings -->
+    <string name="settings_email">Email:</string>
+    <string name="settings_password">Password:</string>
+    <string name="settings_country">Country:</string>
+    <string name="settings_about_app">About eCareZone</string>
+    <string name="settings_action_check">Check</string>
+
+    <!--country name list-->
+    <string-array name="country_array">
+        <item>China</item>
+        <item>Denmark</item>
+        <item>Finland</item>
+        <item>Norway</item>
+        <item>Sweden</item>
+    </string-array>
+
+   <!-- Error -->
+    <string name="error_user_login">Invalid username or password!</string>
+
+</resources>

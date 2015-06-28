@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ecarezone_blue_dark">#1C75BC</color>
+    <color name="ecarezone_blue_light">#7ABDE2</color>
+    <color name="ecarezone_green_dark">#68AA43</color>
+    <color name="ecarezone_green_light">#AECE78</color>
+    <color name="ecarezone_gray">#D1D3D4</color>
+    <color name="ecarezone_light_gray">#EDECEC</color>
+    <color name="ecarezone_news_categories_text_view_background_white">#5FFFFFFF</color>
+    <color name="ecarezone_light_gray_alpha">#6FAAAAAA</color>
+</resources>

@@ -1,5 +1,6 @@
 package com.ecarezone.android.doctor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -8,10 +9,17 @@ import android.view.MenuItem;
 
 import com.ecarezone.android.doctor.fragment.UserProfileDetailsFragment;
 
+/**
+ * Created by L&T Technology Services on 3/18/2016.
+ */
 public class ProfileDetailsActivity extends EcareZoneBaseActivity {
 
     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
+    private UserProfileDetailsFragment userProfileDetailsFragment = new UserProfileDetailsFragment();
+
+    public static String IS_NEW_PROFILE = "is_new_profile";
+    public static String PROFILE_ID = "profile_id";
 
     @Override
     protected String getCallerName() {
@@ -23,19 +31,9 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_profile);
         onNavigationChanged(R.layout.frag_user_profle_details, null);
+
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        if (mToolBar != null) {
-            setSupportActionBar(mToolBar);
-            mToolBar.setNavigationIcon(R.drawable.ic_action_menu);
-            mToolBar.setOnMenuItemClickListener(
-                    new Toolbar.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            // Handle menu item click event
-                            return true;
-                        }
-                    });
-        }
+        setSupportActionBar(mToolBar);
         mActionBar = getSupportActionBar();
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -44,6 +42,7 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_check, menu);
         return true;
     }
 
@@ -51,7 +50,6 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             popBackStack();
-            //finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -59,12 +57,22 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
 
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
-        if(fragmentLayoutResId < 0) return;
+        if (fragmentLayoutResId < 0) return;
 
-         if(fragmentLayoutResId == R.layout.frag_user_profle_details) {
-             changeFragment(R.id.screen_container, new UserProfileDetailsFragment(),
-                     UserProfileDetailsFragment.class.getSimpleName(), args);
+        if (fragmentLayoutResId == R.layout.frag_user_profle_details) {
+            changeFragment(R.id.screen_container, userProfileDetailsFragment,
+                    UserProfileDetailsFragment.class.getSimpleName(), args);
         }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        userProfileDetailsFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        userProfileDetailsFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

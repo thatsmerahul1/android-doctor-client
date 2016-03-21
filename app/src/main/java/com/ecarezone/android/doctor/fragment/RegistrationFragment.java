@@ -315,12 +315,11 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                      */
                     if (userTable.userExists(Long.toString(data.userId))) {
                         userTable.updateUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(1), data.settings.country);
+                                , Integer.toString(0), data.settings.country);
                     } else {
                         userTable.saveUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
-                                , Integer.toString(1), data.settings.country);
+                                , Integer.toString(0), data.settings.country);
                     }
-
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

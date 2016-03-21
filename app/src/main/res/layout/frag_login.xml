@@ -11,6 +11,14 @@
         android:layout_height="wrap_content"
         android:padding="32dp"
         android:src="@drawable/login_logo" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/splash_screen_for_doctors"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"
+        android:padding="16dp"
+        android:textColor="@color/ecarezone_blue_light"/>
 
     <EditText
         android:id="@+id/edit_text_login_username"

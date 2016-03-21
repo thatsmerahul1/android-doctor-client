@@ -42,7 +42,7 @@ public class LocationFinder extends Service implements LocationListener {
     }
 
     private void findLocationCordinates() {
-        Log.d("MANI", "findLocationCordinates");
+
         locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
         if (locationManager == null) {
             return;

@@ -10,7 +10,7 @@
     <string name="login_create_account">CREATE ACCOUNT</string>
 
     <!--registration-->
-    <string name="registration_title">Create your eCareZone account</string>
+    <string name="registration_title">Register as eCareZone doctor</string>
     <string name="registration_username">@string/login_username</string>
     <string name="registration_password">@string/login_password</string>
     <string name="registration_country">Country:</string>
@@ -19,12 +19,10 @@
 
     <!-- side menu  -->
     <string name="main_profile_title">Profile</string>
-    <string name="main_side_menu_home">Home</string>
+    <string name="main_side_menu_messages">Messages</string>
     <string name="main_side_menu_my_patients">My patients</string>
     <string name="main_side_menu_news">News feed</string>
-    <string name="main_side_menu_health">Health status</string>
-    <string name="main_side_menu_medication">Medication</string>
-    <string name="main_side_menu_health_plan">Health plan</string>
+
     <string name="main_side_menu_settings">Account Settings</string>
     <string name="main_side_menu_logout">Logout</string>
 
@@ -179,5 +177,7 @@
     <string name="title_activity_forget_password">ForgetPasswordActivity</string>
 
     <string name="gallery_chooser_select_picture">Select photo</string>
+
+    <string name="splash_screen_for_doctors">FOR DOCTORS</string>
 
 </resources>

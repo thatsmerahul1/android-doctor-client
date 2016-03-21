@@ -40,10 +40,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
 
     private NavigationItem mHome = null;
     private NavigationItem mNews = null;
-    private NavigationItem mHealth = null;
     private NavigationItem mDoctors = null;
-    private NavigationItem mMedication = null;
-    private NavigationItem mPlan = null;
     private NavigationItem mSettings = null;
     private NavigationItem mLogout = null;
 
@@ -58,21 +55,12 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_side_navigation, container, false);
         view.findViewById(R.id.navigation_user_profile).setOnClickListener(this);
-        mHome = (NavigationItem) view.findViewById(R.id.navigation_home);
+        mHome = (NavigationItem) view.findViewById(R.id.navigation_messages);
         mHome.setOnNavigationItemClickListener(this);
         mNews = (NavigationItem) view.findViewById(R.id.navigation_news);
         mNews.setOnNavigationItemClickListener(this);
-        mHealth = (NavigationItem) view.findViewById(R.id.navigation_health);
-        mHealth.setOnNavigationItemClickListener(this);
-        mHealth.setEnabled(false);
-        mDoctors = (NavigationItem) view.findViewById(R.id.navigation_doctors);
+        mDoctors = (NavigationItem) view.findViewById(R.id.navigation_my_patients);
         mDoctors.setOnNavigationItemClickListener(this);
-        mMedication = (NavigationItem) view.findViewById(R.id.navigation_medication);
-        mMedication.setOnNavigationItemClickListener(this);
-        mMedication.setEnabled(false);
-        mPlan = (NavigationItem) view.findViewById(R.id.navigation_plan);
-        mPlan.setOnNavigationItemClickListener(this);
-        mPlan.setEnabled(false);
         mSettings = (NavigationItem) view.findViewById(R.id.navigation_settings);
         mSettings.setOnNavigationItemClickListener(this);
         mLogout = (NavigationItem) view.findViewById(R.id.navigation_logout);
@@ -89,16 +77,12 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         int layoutResId = 0;
         if (!TextUtils.isEmpty(tag)) {
             Bundle b = null;
-            if (getString(R.string.main_side_menu_home).equals(tag)) {
+            if (getString(R.string.main_side_menu_messages).equals(tag)) {
                 layoutResId = R.layout.frag_doctor_main;
             } else if (getString(R.string.main_side_menu_news).equals(tag)) {
                 layoutResId = R.layout.frag_news_categories;
             } else if (getString(R.string.main_side_menu_my_patients).equals(tag)) {
                 layoutResId = R.layout.frag_doctor_list;
-            } else if (getString(R.string.main_side_menu_health).equals(tag)) {
-                // TODO
-            } else if (getString(R.string.main_side_menu_medication).equals(tag)) {
-                // TODO
             } else if (getString(R.string.main_side_menu_logout).equals(tag)) {
                 doLogout();
 
@@ -186,7 +170,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
             final String tag = fragment.getTag();
             if (getString(R.string.main_side_menu_my_patients).equals(tag)) {
                 highlightNavigationItem(mDoctors);
-            } else if (getString(R.string.main_side_menu_home).equals(tag)) {
+            } else if (getString(R.string.main_side_menu_messages).equals(tag)) {
                 highlightNavigationItem(mHome);
             } else if (getString(R.string.main_side_menu_news).equals(tag)) {
                 highlightNavigationItem(mNews);

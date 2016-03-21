@@ -1,5 +1,6 @@
 package com.ecarezone.android.doctor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 
@@ -24,7 +25,6 @@ public class SplashScreenActivty extends EcareZoneBaseActivity {
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if (fragmentLayoutResId == R.layout.frag_splashscreen) {
-
             changeFragment(R.id.screen_container, splashScreenFragment,
                     SplashScreenFragment.class.getSimpleName(), args);
         }

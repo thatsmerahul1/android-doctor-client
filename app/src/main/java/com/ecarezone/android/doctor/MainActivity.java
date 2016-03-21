@@ -156,7 +156,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         if (fragmentLayoutResId < 0) return;
         if (fragmentLayoutResId == R.layout.frag_doctor_main) {
             changeFragment(R.id.screen_container, new PatientFragment(),
-                    getString(R.string.main_side_menu_home), args, false);
+                    getString(R.string.main_side_menu_messages), args, false);
             isBackStackRequired = false;
             isWelcomeMainRequired = true;
         } else if (fragmentLayoutResId == R.layout.frag_welcome) {

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -51,6 +50,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private Bundle doctorDetailData;
     private Long doctorId;
     private String doctorName;
+    private Doctor doctor;
 
     private Activity mActivity;
     private int viewId;
@@ -72,7 +72,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         final View view = inflater.inflate(R.layout.frag_doctor, container, false);
 
         doctorDetailData = getArguments();
-        Doctor doctor = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
+        doctor = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
         getAllComponent(view, doctor);
         return view;
     }
@@ -139,8 +139,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (PermissionUtil.isPermissionRequired() && PermissionUtil.getAllpermissionRequired(mActivity, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
             PermissionUtil.setAllPermission(mActivity, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS, PermissionUtil.SINCH_PERMISSIONS);
         } else {
-            Intent callScreen = new Intent(mActivity, VideoActivity.class);
-            startActivity(callScreen);
+            Intent videoScreen = new Intent(mActivity, VideoActivity.class);
+            videoScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
+            videoScreen.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+            startActivity(videoScreen);
         }
     }
 
@@ -149,12 +151,17 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             PermissionUtil.setAllPermission(mActivity, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS, PermissionUtil.SINCH_PERMISSIONS);
         } else {
             Intent callScreen = new Intent(mActivity, CallActivity.class);
+            callScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
+            callScreen.putExtra(Constants.EXTRA_EMAIL, doctor.email);
             startActivity(callScreen);
         }
     }
 
     private void chatButtonClicked() {
-        mActivity.startActivity(new Intent(mActivity.getApplicationContext(), ChatActivity.class));
+        Intent chatIntent = new Intent(mActivity.getApplicationContext(), ChatActivity.class);
+        chatIntent.putExtra(Constants.EXTRA_NAME, doctor.name);
+        chatIntent.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+        mActivity.startActivity(chatIntent);
         mActivity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 

@@ -7,7 +7,7 @@
     <string name="login_button_text">LOGIN</string>
     <string name="login_forgot_password">Forgot your password?</string>
     <string name="login_for_new_user">For new user</string>
-    <string name="login_create_account">CREATE ACCOUNT</string>
+    <string name="login_create_account">Register as eCareZone Doctor</string>
 
     <!--registration-->
     <string name="registration_title">Register as eCareZone doctor</string>
@@ -155,7 +155,7 @@
     <string name="error_user_login">Invalid username or password</string>
     <string name="error_user_registration">@string/error_user_login</string>
 
-    <string name="cancel">Cancel</string>
+    <string name="cancel" translatable="false">Cancel</string>
     <string name="welcome_button_send">send</string>
 
     <!-- dialog options for Gender in profile page -->

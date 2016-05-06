@@ -24,20 +24,13 @@
                 android:textColor="@color/ecarezone_blue_dark"
                 android:textSize="@dimen/text_size_very_big" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:gravity="center"
-                android:text="@string/welcome_message"
-                android:textSize="@dimen/text_size_small" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/welcome_dialog"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -81,12 +74,15 @@
         </LinearLayout>
     </ScrollView>
 
-    <ImageView
+    <TextView
+        android:id="@+id/emptyMessages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/welcome_nurse" />
+        android:text="@string/welcome_empty_message"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="183dp"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
 

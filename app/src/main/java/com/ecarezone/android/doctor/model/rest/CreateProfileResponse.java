@@ -10,30 +10,25 @@ import java.io.Serializable;
  */
 public class CreateProfileResponse extends BaseResponse implements Serializable {
     @Expose
-    public String profileName;
-    @Expose
-    public String email;
-    @Expose
-    public String height;
+    public String id;
     @Expose
     public String name;
     @Expose
-    public String address;
-    @Expose
-    public String weight;
+    public String doctorDescription;
     @Expose
     public String avatarUrl;
     @Expose
-    public String profileId;
+    public String registrationId;
     @Expose
-    public String ethnicity;
+    public String birthDate;
     @Expose
     public String gender;
     @Expose
-    public String birthdate;
+    public String category;
 
     @Override
     public String toString() {
-        return profileName + ":" + email + ":" + height + ":" + name + ":" + address + ":" + weight + ":" + avatarUrl + ":" + profileId + ":" + ethnicity + ":" + gender + ":" + birthdate;
+        return   id + ":" +  name + ":" +   doctorDescription + ":" + avatarUrl + ":" +  registrationId + ":" + birthDate + ":" + gender + ":" +category;
     }
+
 }

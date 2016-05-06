@@ -59,11 +59,11 @@ public class UserProfileFragment extends EcareZoneBaseFragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if (mProfiesList.get(position).profileId == null) {
+        if (mProfiesList.get(position).id == null) {
             startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
                     .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, true), VIEW_PROFILE_REQUEST_CODE);
         } else {
-            String profileId = mProfiesList.get(position).profileId;
+            String profileId = mProfiesList.get(position).id;
             startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
                     .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)
                     .putExtra(ProfileDetailsActivity.PROFILE_ID, profileId), VIEW_PROFILE_REQUEST_CODE);

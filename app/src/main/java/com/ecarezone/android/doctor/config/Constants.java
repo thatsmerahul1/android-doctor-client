@@ -29,6 +29,7 @@ public class Constants {
     public static String DEFAULT_GRAVATOR_IMAGE_URL = "http%3A%2F%2F188.166.55.204%2Fimages%2Fnews%2Fothers1.jpg";
 
     //Doctor Details Constants
+    public  static String PATIENT_ALREADY_ADDED = "patientAlreadyAdded";
     public static String DOCTOR_DETAIL = "doctorDetail";
     public static String DOCTOR_BIO_DETAIL = "doctorBioDetail";
     public static String DOCTOR_LIST = "doctorList";

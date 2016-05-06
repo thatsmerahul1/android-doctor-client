@@ -10,4 +10,6 @@
     <color name="ecarezone_light_gray_alpha">#6FAAAAAA</color>
     <color name="ecarezone_semi_white_transparent">#CCFFFFFF</color>
 
+    <color name="ecarezone_red">#ffff4444</color>
+
 </resources>

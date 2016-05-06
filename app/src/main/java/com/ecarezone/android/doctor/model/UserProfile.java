@@ -12,46 +12,29 @@ public class UserProfile implements Serializable {
     @Expose
     @DatabaseField(canBeNull = false)
     public String userId;
-    @Expose
-    @DatabaseField
-    public String profileName;
-    @Expose
-    @DatabaseField
-    public String email;
-    @Expose
-    @DatabaseField
-    public String height;
+    public String id;
     @Expose
     @DatabaseField
     public String name;
     @Expose
     @DatabaseField
-    public String address;
-    @Expose
-    @DatabaseField
-    public String weight;
+    public String doctorDescription;
     @Expose
     @DatabaseField
     public String avatarUrl;
     @Expose
-    @DatabaseField(canBeNull = false)
-    public String profileId;
+    @DatabaseField
+    public String registrationId;
     @Expose
     @DatabaseField
-    public String ethnicity;
+    public String birthDate;
     @Expose
     @DatabaseField
     public String gender;
     @Expose
     @DatabaseField
-    public String birthdate;
-    @DatabaseField
-    public boolean isComplete;
-
-    public UserProfile() {
-    }
-
+    public String category;
     public String toString() {
-        return profileName + " " + email + " " + height + " " + name + " " + address + " " + weight + " " + avatarUrl + " " + profileId + " " + ethnicity + " " + gender + " " + birthdate + " " + isComplete;
+         return   name + " "  + doctorDescription + " " + avatarUrl + " " +  registrationId + " " + birthDate + " " +  gender+ " " + category;
     }
 }

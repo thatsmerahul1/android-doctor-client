@@ -53,9 +53,9 @@ public class FirstTimeUserProfileFragment extends EcareZoneBaseFragment implemen
                 //getActivity().getSupportFragmentManager().popBackStack();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.remove(this);
-                transaction.replace(R.id.screen_container, new UserProfileFragment());
+                transaction.replace(R.id.screen_container, new UserProfileDetailsFragment());
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                transaction.addToBackStack(UserProfileFragment.class.getSimpleName());
+                transaction.addToBackStack(UserProfileDetailsFragment.class.getSimpleName());
                 transaction.commit();
             }
         }

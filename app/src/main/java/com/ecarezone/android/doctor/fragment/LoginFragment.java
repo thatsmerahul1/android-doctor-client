@@ -46,6 +46,8 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     private ProgressDialog progressDialog;
     private static String TAG = LoginFragment.class.getSimpleName();
 
+
+
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
@@ -200,16 +202,14 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     }
 
     //Login Request
-    private void doLogin(String username, String password) {
+    public void doLogin(String username, String password) {
         // Changing password to hashed password for security
-
         hashedPassword = PasswordUtil.getHashedPassword(password);
         LoginRequest request =
                 new LoginRequest(username, hashedPassword, 0, Constants.API_KEY, Constants.deviceUnique, locationFinder.getLatitude(), locationFinder.getLongitude());
         final LoginResponse response = new LoginResponse();
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Logging ........");
         getSpiceManager().execute(request, new LoginRequestListener());
-
     }
 
     /*

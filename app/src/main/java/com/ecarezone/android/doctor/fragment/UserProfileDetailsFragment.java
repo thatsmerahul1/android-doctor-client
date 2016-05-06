@@ -15,32 +15,29 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.DoctorProfile;
 import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.rest.CreateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.CreateProfileResponse;
-import com.ecarezone.android.doctor.model.rest.DeleteProfileRequest;
 import com.ecarezone.android.doctor.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.UploadImageResponse;
-import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.utils.EcareZoneLog;
 import com.ecarezone.android.doctor.utils.ImageUtil;
-import com.ecarezone.android.doctor.utils.MD5Util;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -76,8 +73,8 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag_user_profle_details, container, false);
-        ((ProfileDetailsActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getText(R.string.profile_actionbar_title));
+//        ((ProfileDetailsActivity) getActivity()).getSupportActionBar()
+//                .setTitle(getResources().getText(R.string.profile_actionbar_title));
         mSelectedPhotoPath = null;
         mUploadedImageUrl = null;
         return view;
@@ -98,16 +95,14 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             mToolBar.setOnMenuItemClickListener(this);
         }
 
-        /* Whenever profile name is changed, check the name length to enable or disable the save button in action bar. */
-        profileNameET = (EditText) view.findViewById(R.id.profileName);
-        profileNameET.addTextChangedListener(this);
-
         EditText nameET = (EditText) view.findViewById(R.id.name);
         nameET.addTextChangedListener(this);
 
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+//        String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
+//        mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), "36"/*profileId*/);
 
-        String myProfileText = getResources().getString(R.string.profile_mine);
+
         if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
             // Profile exists. Retrieve from DB and display the profile details
             String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
@@ -116,23 +111,12 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             }
         } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
             // No profiles found. make this as "My profile"
-            profileNameET.setText(myProfileText);
-            profileNameET.setEnabled(false);
-        }
-
-        Button deleteProfileBtn = (Button) view.findViewById(R.id.deleteProfileBtn);
+         }
 
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
-            deleteProfileBtn.setOnClickListener(this);
-            if (mProfile.profileName != null && mProfile.profileName.equals(myProfileText)) {
-                // For "My profile" disable delete button & the profile name field
-                profileNameET.setEnabled(false);
-                deleteProfileBtn.setEnabled(false);
-            }
         } else {
             // This is creating new profile. So, disabling the delete profile button
-            deleteProfileBtn.setEnabled(false);
         }
 
         view.findViewById(R.id.dob).setOnClickListener(this);
@@ -147,13 +131,13 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             if (mProfile.avatarUrl == null || mProfile.avatarUrl.equals("")) {
                 //size of the profile picture to download from Gravatar. Giving the dimensions of the image container(imageView)
                 int imageSize = getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
-                if (mProfile.email != null) {
-                    // convert the email string to md5hex and pass it in the Gravatarl url.
-                    String hashEmail = MD5Util.md5Hex(mProfile.email);
-                    imageUrl = Constants.GRAVATOR_URL + hashEmail + "?d=" + Constants.DEFAULT_GRAVATOR_IMAGE_URL + "?s=" + imageSize;
-                } else {
-                    imageUrl = null;
-                }
+//                if (mProfile.email != null) {
+//                    // convert the email string to md5hex and pass it in the Gravatarl url.
+//                    String hashEmail = MD5Util.md5Hex(mProfile.email);
+//                    imageUrl = Constants.GRAVATOR_URL + hashEmail + "?d=" + Constants.DEFAULT_GRAVATOR_IMAGE_URL + "?s=" + imageSize;
+//                } else {
+//                    imageUrl = null;
+//                }
             } else {
                 imageUrl = mProfile.avatarUrl;
             }
@@ -204,12 +188,10 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private void setProfileValuesToFormFields(UserProfile profile) {
         ((EditText) view.findViewById(R.id.name)).setText(profile.name);
         ((EditText) view.findViewById(R.id.gender)).setText(profile.gender);
-        ((EditText) view.findViewById(R.id.address)).setText(profile.address);
-        ((EditText) view.findViewById(R.id.dob)).setText(profile.birthdate);
-        ((EditText) view.findViewById(R.id.ethnicity)).setText(profile.ethnicity);
-        ((EditText) view.findViewById(R.id.profileName)).setText(profile.profileName);
-        ((EditText) view.findViewById(R.id.height)).setText(profile.height);
-        ((EditText) view.findViewById(R.id.weight)).setText(profile.weight);
+        ((EditText) view.findViewById(R.id.specializedArea)).setText(profile.category);
+        ((EditText) view.findViewById(R.id.dob)).setText(profile.birthDate);
+        ((EditText) view.findViewById(R.id.registrationID)).setText(profile.registrationId);
+        ((EditText) view.findViewById(R.id.myBio)).setText(profile.doctorDescription);
     }
 
     private void setDateToDobField(String date) {
@@ -226,32 +208,22 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void deleteProfile() {
-        long profileId = Long.parseLong(mProfile.profileId);
-        mProgressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-                getResources().getString(R.string.progress_dialog_delete));
-        DeleteProfileRequest request = new DeleteProfileRequest(profileId);
-        getSpiceManager().execute(request, "profile_delete", DurationInMillis.ALWAYS_EXPIRED, new DeleteProfileResponseListener());
-    }
-
     // read all the fields in the UI and save the profile
     private void saveProfile() {
-        final UserProfile userProfile = new UserProfile();
+        final DoctorProfile userProfile = new DoctorProfile();
         userProfile.name = ((EditText) view.findViewById(R.id.name)).getText().toString();
         userProfile.gender = ((EditText) view.findViewById(R.id.gender)).getText().toString();
-        userProfile.address = ((EditText) view.findViewById(R.id.address)).getText().toString();
-        userProfile.birthdate = ((EditText) view.findViewById(R.id.dob)).getText().toString();
-        userProfile.profileName = ((EditText) view.findViewById(R.id.profileName)).getText().toString();
-        userProfile.email = LoginInfo.userName;
-        userProfile.ethnicity = ((EditText) view.findViewById(R.id.ethnicity)).getText().toString();
-        userProfile.height = ((EditText) view.findViewById(R.id.height)).getText().toString();
-        userProfile.weight = ((EditText) view.findViewById(R.id.weight)).getText().toString();
+        userProfile.birthDate = ((EditText) view.findViewById(R.id.dob)).getText().toString();
+//        userProfile.email = LoginInfo.userName;
+        userProfile.category = ((EditText) view.findViewById(R.id.specializedArea)).getText().toString();
+        userProfile.registrationId = ((EditText) view.findViewById(R.id.registrationID)).getText().toString();
+        userProfile.doctorDescription = ((EditText) view.findViewById(R.id.myBio)).getText().toString();
 
         SaveProfileAsyncTask saveProfileAsyncTask = new SaveProfileAsyncTask();
         saveProfileAsyncTask.execute(userProfile);
     }
 
-    class SaveProfileAsyncTask extends AsyncTask<UserProfile, Void, Void> {
+    class SaveProfileAsyncTask extends AsyncTask<DoctorProfile, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -262,8 +234,8 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         }
 
         @Override
-        protected Void doInBackground(UserProfile... params) {
-            UserProfile userProfile = params[0];
+        protected Void doInBackground(DoctorProfile... params) {
+            DoctorProfile userProfile = params[0];
             // if image is selected, upload it and receive the image URL.
             UploadImageResponse uploadImageResponse = null;
             if (mSelectedPhotoPath != null) {
@@ -288,7 +260,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 saveProfileInServer(userProfile);
             } else {
                 // Update the current profile in server and in local DB
-                long profileId = Long.parseLong(mProfile.profileId);
+                long profileId = Long.parseLong(mProfile.id);
                 updateProfileInServer(profileId, userProfile);
             }
             return null;
@@ -296,14 +268,15 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     }
 
     /* creates a new profile in server by calling web service api */
-    private void saveProfileInServer(UserProfile userProfile) {
+    private void saveProfileInServer(DoctorProfile userProfile) {
         CreateProfileRequest request = new CreateProfileRequest();
-        request.userProfile = userProfile;
+        request.doctorProfile = userProfile;
         getSpiceManager().execute(request, "profile_create", DurationInMillis.ALWAYS_EXPIRED, new CreateProfileResponseListener());
+        Log.d("","Request::" + request);
     }
 
     /* updates the current profile in server */
-    private void updateProfileInServer(long profileId, final UserProfile userProfile) {
+    private void updateProfileInServer(Long profileId, final DoctorProfile userProfile) {
         UpdateProfileRequest request = new UpdateProfileRequest(profileId);
         request.userProfile = userProfile;
         getSpiceManager().execute(request, "profile_update", DurationInMillis.ALWAYS_EXPIRED, new UpdateProfileResponseListener());
@@ -329,9 +302,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 String dateStr = ((EditText) view.findViewById(R.id.dob)).getText().toString();
                 ((DatePickerFragment) newFragment).setDate(dateStr);
                 newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
-                break;
-            case R.id.deleteProfileBtn:
-                deleteProfile();
                 break;
             case R.id.gender:
                 showGenderSelectorDialog();
@@ -421,12 +391,13 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
         @Override
         public void onRequestSuccess(CreateProfileResponse response) {
-            if (response != null && response.profileId != null && Integer.parseInt(response.profileId) > 0) {
+            if (response != null && response.id != null && Integer.parseInt(response.id) > 0) {
 
                 UserProfile profile = createUserProfileFromResponse(response);
 
                 ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
-                profileDbApi.saveProfile(LoginInfo.userId.toString(), profile, response.profileId);
+                profileDbApi.saveProfile(LoginInfo.userId.toString(), profile, response.id);
+//                profileDbApi.updateProfile(LoginInfo.userId.toString(), profile, response.id);
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
@@ -444,32 +415,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
         @Override
         public void onRequestSuccess(CreateProfileResponse response) {
-            if (response != null && response.profileId != null && Integer.parseInt(response.profileId) > 0) {
+            if (response != null && response.id != null &&  Integer.parseInt(response.id) > 0) {
                 UserProfile profile = createUserProfileFromResponse(response);
 
                 ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
-                profileDbApi.updateProfile(LoginInfo.userId.toString(), profile, mProfile.profileId);
-
-                getActivity().setResult(getActivity().RESULT_OK, null);
-                getActivity().finish();
-            }
-            dismissDialog();
-        }
-    }
-
-    private class DeleteProfileResponseListener implements RequestListener<BaseResponse> {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            dismissDialog();
-            spiceException.printStackTrace();
-        }
-
-        @Override
-        public void onRequestSuccess(BaseResponse response) {
-            if (response != null && response.status != null && response.status.code == 200) {
-                // Code 200 is for successful deletion of profile.
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
-                profileDbApi.deleteProfile(LoginInfo.userId.toString(), mProfile.profileId);
+                profileDbApi.updateProfile(LoginInfo.userId.toString(), profile, mProfile.id);
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
             }
@@ -486,17 +436,13 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private UserProfile createUserProfileFromResponse(CreateProfileResponse response) {
         if (response != null) {
             UserProfile profile = new UserProfile();
-            profile.profileName = response.profileName;
-            profile.email = response.email;
-            profile.height = response.height;
             profile.name = response.name;
-            profile.address = response.address;
-            profile.weight = response.weight;
+            profile.doctorDescription = response.doctorDescription;
             profile.avatarUrl = response.avatarUrl;
-            profile.profileId = response.profileId;
-            profile.ethnicity = response.ethnicity;
+            profile.registrationId = response.registrationId;
+            profile.birthDate = response.birthDate;
             profile.gender = response.gender;
-            profile.birthdate = response.birthdate;
+            profile.category = response.category;
             return profile;
         } else {
             return null;

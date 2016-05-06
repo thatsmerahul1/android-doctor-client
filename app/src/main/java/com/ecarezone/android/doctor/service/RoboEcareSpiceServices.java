@@ -44,7 +44,5 @@ public class RoboEcareSpiceServices extends RetrofitGsonSpiceService {
 
         return builder;
     }
-
-
 }
 

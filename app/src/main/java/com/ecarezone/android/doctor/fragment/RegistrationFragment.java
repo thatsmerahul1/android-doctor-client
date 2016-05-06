@@ -1,17 +1,23 @@
 package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -20,14 +26,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.fragment.dialog.RegistrationDialogFragment;
+import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.database.UserTable;
 import com.ecarezone.android.doctor.model.rest.Data;
+import com.ecarezone.android.doctor.model.rest.LoginRequest;
 import com.ecarezone.android.doctor.model.rest.LoginResponse;
 import com.ecarezone.android.doctor.model.rest.SignupRequest;
+import com.ecarezone.android.doctor.service.LocationFinder;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.EcareZoneLog;
 import com.ecarezone.android.doctor.utils.PasswordUtil;
@@ -62,6 +72,9 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     public static final Integer LANGUAGE_RESULT = 101;
     private String hashedPassword;
     private UserTable userTable;
+    private TextView mStartService;
+    private LocationFinder locationFinder;
+    int flag = 0;
 
     @Override
     protected String getCallerName() {
@@ -141,11 +154,17 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mSpinnerCountry.setOnClickListener(this);
         mSpinnerLanguage.setKeyListener(null);
         //English selected as a default language
-        mSpinnerLanguage.setText(R.string.language_english);
+//        mSpinnerLanguage.setText(R.string.language_english);
         mSpinnerLanguage.setTag(getResources().getString(R.string.language_local_english));
         mSpinnerLanguage.setOnClickListener(this);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.checkbox_registration_terms);
+
         mCheckBoxTerms.setOnCheckedChangeListener(this);
+        String txt = "<HTML>"+getString(R.string.registration_agreement_you_agree)+
+                " <b><a href=\"http://google.com\">"+getString(R.string.terms)+"</a></b> " +getString(R.string.and)+"<b>" +
+                " <a href=\"http://google.com\">"+getString(R.string.privacy_policy)+"</a></b></HTML>";
+        mCheckBoxTerms.setText(Html.fromHtml(txt));
+        mCheckBoxTerms.setMovementMethod(LinkMovementMethod.getInstance());
         return view;
     }
 
@@ -166,6 +185,9 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             } else {
                 mButtonRegister.setEnabled(false);
                 doRegistration(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
+                if(flag != 1){
+                    doLogin(username, password);
+                }
             }
         } else if (viewId == R.id.country_spinner) {
             createRegestrationDialog(Constants.COUNTRY);
@@ -259,15 +281,125 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     }
 
     //Create account request
-    private void doRegistration(String username, String password, String country, String language) {
-        //TODO register
+    private void doRegistration(final String username, final String password, final String country, final String language) {
+
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), getText(R.string.progress_dialog_create_account).toString());
         hashedPassword = PasswordUtil.getHashedPassword(password);
         SignupRequest signupRequest = new SignupRequest(username, hashedPassword, 0,
                 country, language, "N/A", "N/A", Constants.API_KEY, Constants.deviceUnique);
         getSpiceManager().execute(signupRequest, new DosSettingsRequestListener());
+        progressDialog.dismiss();
     }
 
+    private void doLogin(final String username, final String password) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.registration_successful_dialog);
+        mStartService = (TextView)dialog.findViewById(R.id.start_service);
+        mStartService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationFinder = new LocationFinder(getActivity());
+                hashedPassword = PasswordUtil.getHashedPassword(password);
+                LoginRequest request =
+                        new LoginRequest(username, hashedPassword, 0, Constants.API_KEY, Constants.deviceUnique, locationFinder.getLatitude(), locationFinder.getLongitude());
+                final LoginResponse response = new LoginResponse();
+                progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Logging ........");
+                getSpiceManager().execute(request, new LoginRequestListener());
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
+        progressDialog.dismiss();
+    }
+        //Login response listner
+    public final class LoginRequestListener implements RequestListener<LoginResponse> {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Log.d(TAG, "NetWork Failure");
+            Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                }
+            });
+            mEditTextPassword.setText("");
+
+        }
+
+        @Override
+        public void onRequestSuccess(final LoginResponse response) {
+            mEditTextPassword.setText("");
+            Log.d(TAG, "Status Code " + response.status.code);
+            if (response.status.code == 200) {
+                final Activity activity = getActivity();
+                Data data = response.data;
+                LoginInfo.userName = data.settings.email;
+                LoginInfo.userId = data.userId;
+                LoginInfo.hashedPassword = hashedPassword;
+                LoginInfo.role = String.valueOf(0);
+
+                if (activity != null) {
+                    // record the app stauts as "is_login" then the next launch will go to main page directly instead of go to registration page
+
+                    // Make server call & get the user information & save it internally in db.
+                    if (data.userProfiles != null) {
+                        ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                        profileDbApi.deleteProfiles(LoginInfo.userId.toString());
+                        profileDbApi.saveMultipleProfiles(LoginInfo.userId.toString(), response.data.userProfiles);
+                    }
+                    userTable = new UserTable(getActivity());
+                    /*
+                         If user already exists , Updating the data into database.
+                         If user doesn't exist , Inserting data in database
+                     */
+                    if (userTable.userExists(Long.toString(data.userId))) {
+                        userTable.updateUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
+                                , Integer.toString(0), data.settings.country);
+                    } else {
+                        userTable.saveUserData(Long.toString(data.userId), data.settings.email, hashedPassword, data.settings.language
+                                , Integer.toString(0), data.settings.country);
+                    }
+                    /*
+                       Saving UserId and Login status into shared preference
+                     */
+                    SharedPreferences perPreferences = activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = perPreferences.edit();
+                    editor.putBoolean(Constants.IS_LOGIN, true);
+                    editor.putString(Constants.USER_ID, String.valueOf(LoginInfo.userId));
+                    editor.commit();
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!SinchUtil.getSinchServiceInterface().isStarted()) {
+                                SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
+                            }
+                            nextScreen(activity);
+                        }
+                    });
+
+                }
+                progressDialog.dismiss();
+            } else {
+                Toast.makeText(getApplicationContext(), response.status.message, Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                }
+            });
+            Log.d(TAG, "Login Success");
+        }
+    }
+    private void nextScreen(Activity activity) {
+        activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+        activity.finish();
+    }
     @Override
     public void onStartFailed(SinchError error) {
 
@@ -337,6 +469,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(), "Failed to signup: " + loginResponse.status.message, Toast.LENGTH_LONG).show();
+                        flag = 1;
                     }
                 });
             }

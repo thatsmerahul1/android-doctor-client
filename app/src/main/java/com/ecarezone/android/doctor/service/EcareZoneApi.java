@@ -6,10 +6,10 @@ import com.ecarezone.android.doctor.model.rest.CreateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.CreateProfileResponse;
 import com.ecarezone.android.doctor.model.rest.DeleteProfileRequest;
 import com.ecarezone.android.doctor.model.rest.ForgetPassRequest;
-import com.ecarezone.android.doctor.model.rest.GetDoctorResponse;
 import com.ecarezone.android.doctor.model.rest.GetNewsResponse;
 import com.ecarezone.android.doctor.model.rest.LoginRequest;
 import com.ecarezone.android.doctor.model.rest.LoginResponse;
+import com.ecarezone.android.doctor.model.rest.PatientAcceptRequest;
 import com.ecarezone.android.doctor.model.rest.Repo;
 import com.ecarezone.android.doctor.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.doctor.model.rest.SearchDoctorsResponse;
@@ -17,7 +17,6 @@ import com.ecarezone.android.doctor.model.rest.SettingsRequest;
 import com.ecarezone.android.doctor.model.rest.SignupRequest;
 import com.ecarezone.android.doctor.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.UploadImageResponse;
-import com.ecarezone.android.doctor.model.rest.base.BaseRequest;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 
 import java.lang.annotation.Documented;
@@ -63,9 +62,6 @@ public interface EcareZoneApi {
     @POST("/doctors/search")
     SearchDoctorsResponse searchDoctors(@Body SearchDoctorsRequest request);
 
-    @POST("/doctors/{doctorId}")
-    GetDoctorResponse getDoctor(@Path("doctorId") Long doctorId, @Body BaseRequest request);
-
     @GET("/users/{userId}/doctors")
     SearchDoctorsResponse getDoctors(@Path("userId") Long userId);
 
@@ -75,8 +71,8 @@ public interface EcareZoneApi {
     @PUT("/users/{userId}/profiles/{profileId}")
     CreateProfileResponse updateProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body UpdateProfileRequest request);
 
-    @POST("/users/{userId}/profiles")
-    CreateProfileResponse createProfile(@Path("userId") Long userId, @Body CreateProfileRequest request);
+    @POST("/doctors/{doctorid}/profiles")
+    CreateProfileResponse createProfile(@Path("doctorid") Long userId, @Body CreateProfileRequest request);
 
     @DELETE("/users/{userId}/profiles/{profileId}")
     BaseResponse deleteProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body DeleteProfileRequest request);
@@ -91,6 +87,19 @@ public interface EcareZoneApi {
 
     @GET("/users/recommendedDoctors")
     SearchDoctorsResponse getRecommendedDoctors();
+
+    @GET ("/users/{doctorid}/patients")
+    SearchDoctorsResponse getPatients(@Path("doctorid") Long doctorid);
+
+//    @POST("/patients/{userid}")
+//    SearchDoctorsResponse getPatients(@Path("userId") Long userId) ;
+
+    @POST ("/users/{doctorId}/patients/{patientid}")
+    SearchDoctorsResponse requestAccept(@Path("doctorId") Long userId, @Path("patientid") Long profileId, @Body PatientAcceptRequest request);
+
+    @GET("/users/{doctorid}/pendingpatients")
+    SearchDoctorsResponse getPendingRequest(@Path("doctorid") Long doctorid);
+
 
 }
 

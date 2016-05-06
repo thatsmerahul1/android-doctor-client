@@ -21,9 +21,9 @@ import com.ecarezone.android.doctor.VideoActivity;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.fragment.dialog.AddDoctorRequestDialog;
-import com.ecarezone.android.doctor.model.Doctor;
 import com.ecarezone.android.doctor.model.rest.AddDoctorRequest;
 import com.ecarezone.android.doctor.model.rest.AddDoctorResponse;
+import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -50,7 +50,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private Bundle doctorDetailData;
     private Long doctorId;
     private String doctorName;
-    private Doctor doctor;
+    private Patient patient;
 
     private Activity mActivity;
     private int viewId;
@@ -72,41 +72,38 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         final View view = inflater.inflate(R.layout.frag_doctor, container, false);
 
         doctorDetailData = getArguments();
-        doctor = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
-        getAllComponent(view, doctor);
+        patient = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
+        getAllComponent(view, patient);
         return view;
     }
 
-    private void getAllComponent(View view, Doctor doctor) {
-        doctorStatusIcon = (ImageView) view.findViewById(R.id.doctor_status_icon);
-        doctorStatusText = (TextView) view.findViewById(R.id.doctor_status_text);
+    private void getAllComponent(View view, Patient patient) {
+//        doctorStatusIcon = (ImageView) view.findViewById(R.id.doctor_status_icon);
+//        doctorStatusText = (TextView) view.findViewById(R.id.doctor_status_text);
         doctorNameView = (TextView) view.findViewById(R.id.doctor_name_id);
-        doctorSpecialist = (TextView) view.findViewById(R.id.doctor_specialist_id);
         doctorProfileImg = (ImageView) view.findViewById(R.id.doctor_profile_pic_id);
         doctorChat = (Button) view.findViewById(R.id.btn_doctor_chat_id);
         doctorVideo = (Button) view.findViewById(R.id.btn_doctor_video_id);
         doctorVoice = (Button) view.findViewById(R.id.btn_doctor_voice_id);
-        addDoctorButton = (Button) view.findViewById(R.id.add_doctor_button);
-        buttonAppointment = (Button) view.findViewById(R.id.button_appointment);
+//        buttonAppointment = (Button) view.findViewById(R.id.button_appointment);
 
         doctorChat.setOnClickListener(this);
         doctorVideo.setOnClickListener(this);
         doctorVoice.setOnClickListener(this);
-        addDoctorButton.setOnClickListener(this);
-        buttonAppointment.setOnClickListener(this);
+//        buttonAppointment.setOnClickListener(this);
 
-        if (getActivity().getIntent().getBooleanExtra(DoctorListFragment.ADD_DOCTOR_DISABLE_CHECK, false)) {
-            addDoctorButton.setVisibility(View.GONE);
+        if (getActivity().getIntent().getBooleanExtra(MyPatientListFragment.ADD_DOCTOR_DISABLE_CHECK, false)) {
+//            addDoctorButton.setVisibility(View.GONE);
         }
 
-        if (doctor != null) {
-            setDoctorPresenceIcon(doctor.status);
-            doctorStatusText.setText(doctor.status);
-            doctorNameView.setText("Dr. " + doctor.name);
-            doctorSpecialist.setText(doctor.doctorCategory);
+        if (patient != null) {
+//            setDoctorPresenceIcon(doctor.status);
+//            doctorStatusText.setText(doctor.status);
+            doctorNameView.setText(patient.name);
+//            doctorSpecialist.setText(doctor.doctorCategory);
         }
-        doctorId = doctor.doctorId;
-        doctorName = doctor.name;
+        doctorId = patient.userId;
+        doctorName = patient.name;
     }
 
     @Override
@@ -127,9 +124,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             case R.id.button_appointment:
                 createAppointment();
                 break;
-            case R.id.add_doctor_button:
+            /*case R.id.add_doctor_button:
                 sendAddDoctorRequest();
-                break;
+                break;*/
         }
 
 
@@ -140,8 +137,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             PermissionUtil.setAllPermission(mActivity, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS, PermissionUtil.SINCH_PERMISSIONS);
         } else {
             Intent videoScreen = new Intent(mActivity, VideoActivity.class);
-            videoScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
-            videoScreen.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+            videoScreen.putExtra(Constants.EXTRA_NAME, patient.name);
+            videoScreen.putExtra(Constants.EXTRA_EMAIL, patient.email);
             startActivity(videoScreen);
         }
     }
@@ -151,16 +148,16 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             PermissionUtil.setAllPermission(mActivity, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS, PermissionUtil.SINCH_PERMISSIONS);
         } else {
             Intent callScreen = new Intent(mActivity, CallActivity.class);
-            callScreen.putExtra(Constants.EXTRA_NAME, doctor.name);
-            callScreen.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+            callScreen.putExtra(Constants.EXTRA_NAME, patient.name);
+            callScreen.putExtra(Constants.EXTRA_EMAIL, patient.email);
             startActivity(callScreen);
         }
     }
 
     private void chatButtonClicked() {
         Intent chatIntent = new Intent(mActivity.getApplicationContext(), ChatActivity.class);
-        chatIntent.putExtra(Constants.EXTRA_NAME, doctor.name);
-        chatIntent.putExtra(Constants.EXTRA_EMAIL, doctor.email);
+        chatIntent.putExtra(Constants.EXTRA_NAME, patient.name);
+        chatIntent.putExtra(Constants.EXTRA_EMAIL, patient.email);
         mActivity.startActivity(chatIntent);
         mActivity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }

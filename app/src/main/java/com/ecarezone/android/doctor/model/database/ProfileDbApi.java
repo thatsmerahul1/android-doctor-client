@@ -2,7 +2,6 @@ package com.ecarezone.android.doctor.model.database;
 
 import android.content.Context;
 
-import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.UserProfile;
 import com.j256.ormlite.dao.Dao;
@@ -45,7 +44,7 @@ public class ProfileDbApi {
     /* Saves multiple user profiles at a time in local database. Used during login */
     public boolean saveMultipleProfiles(String userId, UserProfile[] userProfiles) {
         for (UserProfile userProfile : userProfiles) {
-            saveProfile(userId, userProfile, userProfile.profileId);
+            saveProfile(userId, userProfile, userProfile.id);
         }
         return true;
     }
@@ -68,8 +67,8 @@ public class ProfileDbApi {
         try {
             Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
             userProfile.userId = userId;
-            userProfile.profileId = profileId;
-            userProfile.isComplete = areAllFieldsFilled(userProfile);
+            userProfile.id = profileId;
+//            userProfile.isComplete = areAllFieldsFilled(userProfile);
             int status = userProfileDao.create(userProfile);
             return status != 0;
         } catch (SQLException e) {
@@ -77,7 +76,18 @@ public class ProfileDbApi {
         }
         return false;
     }
-
+    public boolean saveProfile(String userId, UserProfile userProfile) {
+        try {
+            Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
+            userProfile.id = userId;
+ //            userProfile.isComplete = areAllFieldsFilled(userProfile);
+            int status = userProfileDao.create(userProfile);
+            return status != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     /* Saves a user profile in local database. Returns success failure response. */
     public boolean updateProfile(String userId, UserProfile userProfile, String profileId) {
         try {
@@ -89,16 +99,15 @@ public class ProfileDbApi {
                     .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_ID, profileId);
 
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_NAME, userProfile.name);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, userProfile.profileName);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_EMAIL, userProfile.email);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_ADDRESS, userProfile.address);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_BIRTH_DATE, userProfile.birthdate);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_ETHNICITY, userProfile.ethnicity);
+//            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_EMAIL, userProfile.email);
+            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_BIRTH_DATE, userProfile.birthDate);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_GENDER, userProfile.gender);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_HEIGHT, userProfile.height);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_WEIGHT, userProfile.weight);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_IS_COMPLETE, areAllFieldsFilled(userProfile));
+            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_SPECIALIZED_AREAS, userProfile.category);
+            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_REGISTRATION_ID, userProfile.registrationId);
+            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_MY_BIO, userProfile.doctorDescription);
+
 
             updateBuilder.update();
             return true;
@@ -165,7 +174,7 @@ public class ProfileDbApi {
             return queryBuilder.where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
                     .and()
-                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
+//                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
                     .queryForFirst();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -181,10 +190,10 @@ public class ProfileDbApi {
                     .where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
                     .and()
-                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
+//                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
                     .queryForFirst();
             if(myProfile!=null){
-                return myProfile.isComplete;
+//                return myProfile.isComplete;
             }
             return false;
         } catch (SQLException e) {
@@ -195,25 +204,15 @@ public class ProfileDbApi {
 
     private boolean areAllFieldsFilled(UserProfile userProfile) {
         try {
-            if (userProfile.profileName.length() < 2) {
+            if (userProfile.avatarUrl.length() < 2) {
                 return false;
-            } else if (userProfile.address.length() < 2) {
+            } else if (userProfile.birthDate.length() < 2) {
                 return false;
-            } else if (userProfile.avatarUrl.length() < 2) {
+            }/* else if (userProfile.email.length() < 2) {
                 return false;
-            } else if (userProfile.birthdate.length() < 2) {
-                return false;
-            } else if (userProfile.email.length() < 2) {
-                return false;
-            } else if (userProfile.ethnicity.length() < 2) {
-                return false;
-            } else if (userProfile.gender.length() < 2) {
+            } */else if (userProfile.gender.length() < 2) {
                 return false;
             } else if (userProfile.name.length() < 2) {
-                return false;
-            } else if (userProfile.height.length() < 1) {
-                return false;
-            } else if (userProfile.weight.length() < 1) {
                 return false;
             } else {
                 // all fields have some data

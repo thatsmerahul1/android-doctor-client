@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.RegistrationActivity;
 import com.ecarezone.android.doctor.app.widget.NavigationItem;
@@ -39,7 +40,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     }
 
     private NavigationItem mHome = null;
-    private NavigationItem mNews = null;
+    private NavigationItem mAppointments = null;
     private NavigationItem mDoctors = null;
     private NavigationItem mSettings = null;
     private NavigationItem mLogout = null;
@@ -57,8 +58,9 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         view.findViewById(R.id.navigation_user_profile).setOnClickListener(this);
         mHome = (NavigationItem) view.findViewById(R.id.navigation_messages);
         mHome.setOnNavigationItemClickListener(this);
-        mNews = (NavigationItem) view.findViewById(R.id.navigation_news);
-        mNews.setOnNavigationItemClickListener(this);
+        mAppointments = (NavigationItem)view.findViewById(R.id.navigation_appointments);
+        mAppointments.setOnNavigationItemClickListener(this);
+        mAppointments.setEnabled(false);
         mDoctors = (NavigationItem) view.findViewById(R.id.navigation_my_patients);
         mDoctors.setOnNavigationItemClickListener(this);
         mSettings = (NavigationItem) view.findViewById(R.id.navigation_settings);
@@ -78,7 +80,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         if (!TextUtils.isEmpty(tag)) {
             Bundle b = null;
             if (getString(R.string.main_side_menu_messages).equals(tag)) {
-                layoutResId = R.layout.frag_doctor_main;
+                layoutResId = R.layout.frag_message_list;
             } else if (getString(R.string.main_side_menu_news).equals(tag)) {
                 layoutResId = R.layout.frag_news_categories;
             } else if (getString(R.string.main_side_menu_my_patients).equals(tag)) {
@@ -100,7 +102,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     private void doLogout() {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), getText(R.string.progress_dialog_logout).toString());
         LoginRequest request =
-                new LoginRequest(LoginInfo.userName, null, Integer.parseInt(LoginInfo.role), null, null, null, null);
+                new LoginRequest(LoginInfo.userName, null, 0/*Integer.parseInt(LoginInfo.role)*/, null, null, null, null);
         getSpiceManager().execute(request, new LogoutRequestListener());
     }
 
@@ -144,7 +146,6 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
 
     private void highlightNavigationItem(NavigationItem navigationItem) {
         mHome.highlightItem(false);
-        mNews.highlightItem(false);
         mDoctors.highlightItem(false);
         mSettings.highlightItem(false);
         mLogout.highlightItem(false);
@@ -172,9 +173,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                 highlightNavigationItem(mDoctors);
             } else if (getString(R.string.main_side_menu_messages).equals(tag)) {
                 highlightNavigationItem(mHome);
-            } else if (getString(R.string.main_side_menu_news).equals(tag)) {
-                highlightNavigationItem(mNews);
-            } else if (getString(R.string.main_side_menu_logout).equals(tag)) {
+            }  else if (getString(R.string.main_side_menu_logout).equals(tag)) {
             } else if (getString(R.string.main_side_menu_settings).equals(tag)) {
                 highlightNavigationItem(mSettings);
             }

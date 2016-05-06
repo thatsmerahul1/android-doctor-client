@@ -14,16 +14,16 @@ import com.ecarezone.android.doctor.fragment.DoctorFragment;
 /**
  * Created by CHAO WEI on 6/1/2015.
  */
-public class DoctorActivity extends EcareZoneBaseActivity {
+public class MyPatientActivity extends EcareZoneBaseActivity {
 
-    private static final String TAG = DoctorActivity.class.getSimpleName();
+    private static final String TAG = MyPatientActivity.class.getSimpleName();
     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
     private Bundle data;
 
     @Override
     protected String getCallerName() {
-        return DoctorActivity.class.getSimpleName();
+        return MyPatientActivity.class.getSimpleName();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DoctorActivity extends EcareZoneBaseActivity {
                             // Handle menu item click event
                             if (item.getItemId() == R.id.action_info) {
                                 Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
-                                Intent showDoctorBioIntent = new Intent(DoctorActivity.this, DoctorBioActivity.class);
+                                Intent showDoctorBioIntent = new Intent(MyPatientActivity.this, MyPatientBioActivity.class);
                                 showDoctorBioIntent.putExtra(Constants.DOCTOR_BIO_DETAIL, data);
                                 startActivity(showDoctorBioIntent);
                             }

@@ -1,4 +1,4 @@
-package com.ecarezone.android.doctor.fragment;
+package com.ecarezone.android.doctor;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -22,6 +22,7 @@ import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.fragment.EcareZoneBaseFragment;
 import com.ecarezone.android.doctor.fragment.dialog.RegistrationDialogFragment;
 import com.ecarezone.android.doctor.model.User;
 import com.ecarezone.android.doctor.model.database.UserTable;
@@ -89,9 +90,9 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mSpinnerLanguage.setOnClickListener(this);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.checkbox_registration_terms);
         mCheckBoxTerms.setVisibility(View.GONE);
-        mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
-        mTextViewAbout.setVisibility(View.VISIBLE);
-        mTextViewAbout.setOnClickListener(this);
+//        mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
+//        mTextViewAbout.setVisibility(View.VISIBLE);
+//        mTextViewAbout.setOnClickListener(this);
         updateUserData();
         //Enabling the option menu use
         setHasOptionsMenu(true);
@@ -138,9 +139,9 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
 
         } else if (viewId == R.id.spinner_language) {
             createRegestrationDialog(Constants.LANGUAGE);
-        } else if (viewId == R.id.textview_registration_about) {
+        } /*else if (viewId == R.id.textview_registration_about) {
             getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
-        }
+        }*/
 
     }
 

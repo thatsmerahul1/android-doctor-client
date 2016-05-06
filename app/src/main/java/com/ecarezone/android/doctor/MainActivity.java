@@ -15,12 +15,9 @@ import android.view.View;
 
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
-import com.ecarezone.android.doctor.fragment.DoctorListFragment;
+import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
 import com.ecarezone.android.doctor.fragment.FirstTimeUserProfileFragment;
-import com.ecarezone.android.doctor.fragment.NewsCategoriesFragment;
-import com.ecarezone.android.doctor.fragment.PatientFragment;
-import com.ecarezone.android.doctor.fragment.SettingsFragment;
-import com.ecarezone.android.doctor.fragment.UserProfileFragment;
+import com.ecarezone.android.doctor.fragment.MessagesListFragment;
 import com.ecarezone.android.doctor.fragment.WelcomeFragment;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 
@@ -36,7 +33,7 @@ public class MainActivity extends EcareZoneBaseActivity {
     private ActionBar mActionBar = null;
     private boolean isBackStackRequired;
     private boolean isWelcomeMainRequired;
-
+    public static int VIEW_PROFILE_REQUEST_CODE = 1001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,8 +151,8 @@ public class MainActivity extends EcareZoneBaseActivity {
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         Log.d(TAG, "onNavigationChanged " + fragmentLayoutResId);
         if (fragmentLayoutResId < 0) return;
-        if (fragmentLayoutResId == R.layout.frag_doctor_main) {
-            changeFragment(R.id.screen_container, new PatientFragment(),
+        if (fragmentLayoutResId == R.layout.frag_message_list) {
+            changeFragment(R.id.screen_container, new MessagesListFragment(),
                     getString(R.string.main_side_menu_messages), args, false);
             isBackStackRequired = false;
             isWelcomeMainRequired = true;
@@ -163,12 +160,12 @@ public class MainActivity extends EcareZoneBaseActivity {
             changeFragment(R.id.screen_container, new WelcomeFragment(),
                     WelcomeFragment.class.getSimpleName(), args, false);
             isBackStackRequired = false;
-        } else if (fragmentLayoutResId == R.layout.frag_news_categories) {
+        } /*else if (fragmentLayoutResId == R.layout.frag_news_categories) {
             changeFragment(R.id.screen_container, new NewsCategoriesFragment(),
                     getString(R.string.main_side_menu_news), args, false);
             isBackStackRequired = true;
-        } else if (fragmentLayoutResId == R.layout.frag_doctor_list) {
-            changeFragment(R.id.screen_container, new DoctorListFragment(),
+        } */else if (fragmentLayoutResId == R.layout.frag_doctor_list) {
+            changeFragment(R.id.screen_container, new MyPatientListFragment(),
                     getString(R.string.main_side_menu_my_patients), args, false);
             isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.frag_settings) {
@@ -176,9 +173,13 @@ public class MainActivity extends EcareZoneBaseActivity {
                     getString(R.string.main_side_menu_settings), args, false);
             isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.list_view) {
-            changeFragment(R.id.screen_container, new UserProfileFragment(),
-                    UserProfileFragment.class.getSimpleName(), args, false);
-            isBackStackRequired = true;
+            Long profileId =  (LoginInfo.userId);
+            startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
+                    .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)
+                    .putExtra(ProfileDetailsActivity.PROFILE_ID, profileId), VIEW_PROFILE_REQUEST_CODE);
+//            changeFragment(R.id.screen_container, new UserProfileDetailsFragment(),
+//                    UserProfileDetailsFragment.class.getSimpleName(), args, false);
+//            isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.frag_first_time_profile) {
             changeFragment(R.id.screen_container, new FirstTimeUserProfileFragment(),
                     FirstTimeUserProfileFragment.class.getSimpleName(), args, false);

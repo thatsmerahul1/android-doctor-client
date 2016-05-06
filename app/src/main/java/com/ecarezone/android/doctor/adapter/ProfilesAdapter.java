@@ -68,21 +68,18 @@ public class ProfilesAdapter extends BaseAdapter {
         if ((profileItem != null) && (mProfiles != null)) {
             UserProfile item = mProfiles.get(position);
 
-            // Set the profile name
-            profileItem.title.setText(item.profileName);
-
             // if profile doesn't have avatarUrl, try to load Gravatar from his email.
             String imageUrl = null;
             if (item.avatarUrl == null || item.avatarUrl.equals("")) {
                 //size of the profile picture to download from Gravatar. Giving the dimenstions of the image container(imageView)
                 int imageSize = mContext.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
-                if (item.email != null) {
-                    // convert the email string to md5hex and pass it in the Gravatarl url.
-                    String hashEmail = MD5Util.md5Hex(item.email);
-                    imageUrl = Constants.GRAVATOR_URL + hashEmail + "?d=" + Constants.DEFAULT_GRAVATOR_IMAGE_URL + "?s=" + imageSize;
-                } else {
-                    imageUrl = null;
-                }
+//                if (item.email != null) {
+//                    // convert the email string to md5hex and pass it in the Gravatarl url.
+//                    String hashEmail = MD5Util.md5Hex(item.email);
+//                    imageUrl = Constants.GRAVATOR_URL + hashEmail + "?d=" + Constants.DEFAULT_GRAVATOR_IMAGE_URL + "?s=" + imageSize;
+//                } else {
+//                    imageUrl = null;
+//                }
             } else {
                 imageUrl = item.avatarUrl;
             }
@@ -139,18 +136,17 @@ public class ProfilesAdapter extends BaseAdapter {
             mProfiles = new ArrayList<UserProfile>(Arrays.asList(tempProfiles));
             // check whether the db contains more or single profile.
             // If no profiles, add "Create your profile" item to this mProfiles list
-            if ((tempProfiles.length == 0) ||
-                    ((tempProfiles.length == 1) && (!mProfiles.get(0).profileName
-                            .equals(mContext.getResources().getString(R.string.profile_mine))))) {
-                UserProfile myProfileItem = new UserProfile();
-                myProfileItem.profileName = mContext.getResources().getString(R.string.profile_add_your_profile);
-                mProfiles.add(myProfileItem);
-            }
+//            if ((tempProfiles.length == 0) ||
+//                    ((tempProfiles.length == 1) && (!mProfiles.get(0).profileName
+//                            .equals(mContext.getResources().getString(R.string.profile_mine))))) {
+//                UserProfile myProfileItem = new UserProfile();
+//                myProfileItem.profileName = mContext.getResources().getString(R.string.profile_add_your_profile);
+//                mProfiles.add(myProfileItem);
+//            }
         }
 
         // Always adding, "Add people you care" item at the end of the list
         UserProfile addProfileField = new UserProfile();
-        addProfileField.profileName = mContext.getResources().getString(R.string.profile_add_people_you_care);
         mProfiles.add(addProfileField);
 
         super.notifyDataSetChanged();

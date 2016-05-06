@@ -88,7 +88,7 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
             case R.id.button_finish_profile_ok:
                 ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
                 UserProfile profile = profileDbApi.getMyProfile();
-                String profileId = profile.profileId;
+                String profileId = profile.id;
                 startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
                         .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)
                         .putExtra(ProfileDetailsActivity.PROFILE_ID, profileId), UserProfileFragment.VIEW_PROFILE_REQUEST_CODE);

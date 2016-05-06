@@ -21,9 +21,10 @@ public class SearchDoctorsRequest extends RetrofitSpiceRequest<SearchDoctorsResp
     @Expose
     String deviceUnique;
     @Expose
-    Long userId;
+    long userId;
+    boolean mycare;
 
-    public SearchDoctorsRequest(Long userId, String email, String password, String apiKey, String deviceUnique, String keyword) {
+    public SearchDoctorsRequest(long userId, String email, String password, String apiKey, String deviceUnique, String keyword,boolean mycare) {
         super(SearchDoctorsResponse.class, EcareZoneApi.class);
         this.keyword = keyword;
         this.userId = userId;
@@ -31,21 +32,19 @@ public class SearchDoctorsRequest extends RetrofitSpiceRequest<SearchDoctorsResp
         this.apiKey = apiKey;
         this.deviceUnique = deviceUnique;
         this.password = password;
+        this.mycare = mycare;
     }
 
     @Override
     public SearchDoctorsResponse loadDataFromNetwork() throws Exception {
 
         //This file is common for searchDoctor , recommendedDoctot and mycareteam doctors
-        if (keyword == null) {
-            if (userId == null) {
-                return getService().getRecommendedDoctors();
-            } else {
-                return getService().getDoctors(userId);
-            }
-        } else {
-            return getService().searchDoctors(this);
-        }
+
+        if(mycare) {
+            return getService().getPatients(userId);
+        } else
+            return getService().getPendingRequest(userId);
+
     }
 
 }

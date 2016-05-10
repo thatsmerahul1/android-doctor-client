@@ -6,10 +6,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +30,7 @@ import android.widget.ImageView;
 
 import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.DoctorProfile;
 import com.ecarezone.android.doctor.model.UserProfile;
@@ -45,6 +48,10 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 
 /**
@@ -99,19 +106,19 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         nameET.addTextChangedListener(this);
 
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
-//        String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
-//        mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), "36"/*profileId*/);
+        String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
+        mProfile = profileDbApi.getProfile(LoginInfo.userId.toString()/*, "36"*//*profileId*/);
 
 
-        if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
-            // Profile exists. Retrieve from DB and display the profile details
-            String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
-            if (profileId != null) {
-                mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), profileId);
-            }
-        } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
-            // No profiles found. make this as "My profile"
-         }
+//        if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
+//            // Profile exists. Retrieve from DB and display the profile details
+//            String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
+//            if (profileId != null) {
+//                mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), profileId);
+//            }
+//        } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
+//            // No profiles found. make this as "My profile"
+//         }
 
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
@@ -260,7 +267,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 saveProfileInServer(userProfile);
             } else {
                 // Update the current profile in server and in local DB
-                long profileId = Long.parseLong(mProfile.id);
+
+                SharedPreferences perPreferences =
+                        getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+                 String userId = perPreferences.getString(Constants.PROFILE_ID, null);
+                long profileId = Long.parseLong(userId);
                 updateProfileInServer(profileId, userProfile);
             }
             return null;
@@ -394,6 +405,10 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             if (response != null && response.id != null && Integer.parseInt(response.id) > 0) {
 
                 UserProfile profile = createUserProfileFromResponse(response);
+                SharedPreferences perPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = perPreferences.edit();
+                editor.putString(Constants.PROFILE_ID, response.id);
+                editor.commit();
 
                 ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
                 profileDbApi.saveProfile(LoginInfo.userId.toString(), profile, response.id);
@@ -436,6 +451,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private UserProfile createUserProfileFromResponse(CreateProfileResponse response) {
         if (response != null) {
             UserProfile profile = new UserProfile();
+            profile.id = response.id;
             profile.name = response.name;
             profile.doctorDescription = response.doctorDescription;
             profile.avatarUrl = response.avatarUrl;
@@ -513,6 +529,37 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+
+    @SuppressWarnings("resource")
+    private void pullDBFromdevice() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+
+                String currentDBPath = getApplicationContext().getDatabasePath("ecarezone").toString();/*"/data/" + getApplicationContext().getPackageName() + "/databases/ecarezone"*/
+
+                File currentDB = new File(currentDBPath);
+
+                String backupDBPath = "ecarezone.db";
+                File backupDB = new File(sd, "/Download/" + backupDBPath);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB)
+                            .getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB)
+                            .getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch (Exception e) {
+            Log.e("", e.toString());
         }
     }
 }

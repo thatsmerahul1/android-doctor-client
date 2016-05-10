@@ -52,7 +52,6 @@
                 android:background="@drawable/circle_red"
                 android:gravity="center"
                 android:paddingBottom="1dp"
-                android:text="2"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 

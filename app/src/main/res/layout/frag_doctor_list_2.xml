@@ -82,6 +82,18 @@
 
                 </LinearLayout>
                 </LinearLayout>-->
+
+                <TextView
+                    android:id="@+id/nomessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:gravity="center"
+                    android:paddingTop="100dp"
+                    android:text="@string/no_patient"
+                    android:textSize="@dimen/text_size_big"
+                    android:visibility="gone"
+                    android:layout_weight="7.37" />
                 <ListView
                     android:id="@+id/added_patient_list"
                     android:layout_width="match_parent"

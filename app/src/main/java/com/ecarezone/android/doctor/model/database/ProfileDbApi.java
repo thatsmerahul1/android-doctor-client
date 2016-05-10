@@ -95,8 +95,8 @@ public class ProfileDbApi {
             UpdateBuilder<UserProfile, Integer> updateBuilder = userProfileDao.updateBuilder();
             updateBuilder.where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, userId)
-                    .and()
-                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_ID, profileId);
+                   /* .and()
+                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_ID, profileId)*/;
 
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_NAME, userProfile.name);
 //            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_EMAIL, userProfile.email);
@@ -118,20 +118,21 @@ public class ProfileDbApi {
     }
 
     /* retrieve the details of a particular profile */
-    public UserProfile getProfile(String userId, String profileId) {
+    public UserProfile getProfile(String userId /*String profileId*/) {
         try {
             Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
             QueryBuilder<UserProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
             return queryBuilder.where()
-                    .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, userId)
+                    .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, userId)/*
                     .and()
-                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_ID, profileId)
+                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_ID, profileId)*/
                     .queryForFirst();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
     /* Retrieve all the profiles associated with particular user */
     public UserProfile[] getProfiles(String userId) {
@@ -150,7 +151,7 @@ public class ProfileDbApi {
         return null;
     }
 
-    /* deletes a particular profile */
+   /* *//* deletes a particular profile *//*
     public boolean deleteProfile(String userId, String profileId) {
         try {
             Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
@@ -165,7 +166,7 @@ public class ProfileDbApi {
             e.printStackTrace();
         }
         return false;
-    }
+    }*/
 
     public UserProfile getMyProfile() {
         try {

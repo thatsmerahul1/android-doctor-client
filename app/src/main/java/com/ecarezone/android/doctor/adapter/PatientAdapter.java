@@ -129,7 +129,12 @@ public class PatientAdapter extends BaseAdapter {
                 patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
             }
             patientName.setText(patient.name);
-            chatCount.setText(patient.userDevicesCount);
+            if(patient.userDevicesCount.equalsIgnoreCase("0")){
+                chatCount.setVisibility(View.GONE);
+            } else {
+                chatCount.setVisibility(View.VISIBLE);
+                chatCount.setText(patient.userDevicesCount);
+            }
         }
 
 //        holder.pendingPatientName.setText(patient.email);

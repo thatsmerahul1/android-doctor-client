@@ -27,7 +27,7 @@ public final class DbContract {
         public static final String TABLE_NAME = "UserProfile";
 
         public static final String COLUMN_NAME_USER_ID = "userId";
-        public static final String COLUMN_NAME_PROFILE_ID = "profileId";
+//        public static final String COLUMN_NAME_PROFILE_ID = "profileId";
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_BIRTH_DATE = "birthDate";

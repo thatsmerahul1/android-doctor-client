@@ -43,24 +43,24 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_doctor_main, container, false);
-        LinearLayout newsFeedLayout = (LinearLayout) view.findViewById(R.id.newsFeedLayout);
-        newsFeedLayout.setOnClickListener(this);
-
-        LinearLayout chatAlertLayout = (LinearLayout) view.findViewById(R.id.chatAlertLayout);
-        chatAlertLayout.setOnClickListener(this);
-
-        LinearLayout recommendedDoctorLayout = (LinearLayout) view.findViewById(R.id.recommendedDoctorLayout);
-        //TODO hide or show this recommended doctor layout based on data.
-        //recommendedDoctorLayout.setVisibility(View.GONE);
-        Button viewDoctorProfileButton = (Button) view.findViewById(R.id.viewDoctorProfile);
-        viewDoctorProfileButton.setOnClickListener(this);
-
-        mProfileFinishReminderLayout = (LinearLayout) view.findViewById(R.id.profileFinishReminderLayout);
-        new ProfileFinishedAsyncTask().execute();
-
-        mMessageCounterLayout = (RelativeLayout)view.findViewById(R.id.new_message_counter_layout);
-        mHomeMessageIndicator = (TextView)view.findViewById(R.id.text_view_home_message_indicator);
-        updateUnreadMessageCount(ChatDbApi.getInstance(getApplicationContext()).getUnReadChatCount());
+//        LinearLayout newsFeedLayout = (LinearLayout) view.findViewById(R.id.newsFeedLayout);
+//        newsFeedLayout.setOnClickListener(this);
+//
+//        LinearLayout chatAlertLayout = (LinearLayout) view.findViewById(R.id.chatAlertLayout);
+//        chatAlertLayout.setOnClickListener(this);
+//
+//        LinearLayout recommendedDoctorLayout = (LinearLayout) view.findViewById(R.id.recommendedDoctorLayout);
+//        //TODO hide or show this recommended doctor layout based on data.
+//        //recommendedDoctorLayout.setVisibility(View.GONE);
+//        Button viewDoctorProfileButton = (Button) view.findViewById(R.id.viewDoctorProfile);
+//        viewDoctorProfileButton.setOnClickListener(this);
+//
+//        mProfileFinishReminderLayout = (LinearLayout) view.findViewById(R.id.profileFinishReminderLayout);
+//        new ProfileFinishedAsyncTask().execute();
+//
+//        mMessageCounterLayout = (RelativeLayout)view.findViewById(R.id.new_message_counter_layout);
+//        mHomeMessageIndicator = (TextView)view.findViewById(R.id.text_view_home_message_indicator);
+//        updateUnreadMessageCount(ChatDbApi.getInstance(getApplicationContext()).getUnReadChatCount());
 
         return view;
     }
@@ -75,25 +75,25 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.newsFeedLayout:
-                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_news_categories, null);
-                break;
-            case R.id.chatAlertLayout:
-                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
-                break;
-            case R.id.viewDoctorProfile:
-                // TODO call the doctor profile activity.
-                break;
-            case R.id.button_finish_profile_ok:
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
-                UserProfile profile = profileDbApi.getMyProfile();
-                String profileId = profile.id;
-                startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
-                        .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)
-                        .putExtra(ProfileDetailsActivity.PROFILE_ID, profileId), UserProfileFragment.VIEW_PROFILE_REQUEST_CODE);
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.newsFeedLayout:
+//                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_news_categories, null);
+//                break;
+//            case R.id.chatAlertLayout:
+//                ((MainActivity) getActivity()).onNavigationChanged(R.layout.frag_doctor_list, null);
+//                break;
+//            case R.id.viewDoctorProfile:
+//                // TODO call the doctor profile activity.
+//                break;
+//            case R.id.button_finish_profile_ok:
+//                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+//                UserProfile profile = profileDbApi.getMyProfile();
+//                String profileId = profile.id;
+//                startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
+//                        .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)
+//                        .putExtra(ProfileDetailsActivity.PROFILE_ID, profileId), UserProfileFragment.VIEW_PROFILE_REQUEST_CODE);
+//                break;
+//        }
     }
 
     @Override
@@ -120,14 +120,14 @@ public class PatientFragment extends EcareZoneBaseFragment implements View.OnCli
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if (aBoolean) {
-                // profile is finished. so remove this layout
-                mProfileFinishReminderLayout.setVisibility(View.GONE);
-            } else {
-                mProfileFinishReminderLayout.setVisibility(View.VISIBLE);
-                Button button_finish_profile_ok = (Button) mProfileFinishReminderLayout.findViewById(R.id.button_finish_profile_ok);
-                button_finish_profile_ok.setOnClickListener(PatientFragment.this);
-            }
+//            if (aBoolean) {
+//                // profile is finished. so remove this layout
+//                mProfileFinishReminderLayout.setVisibility(View.GONE);
+//            } else {
+//                mProfileFinishReminderLayout.setVisibility(View.VISIBLE);
+//                Button button_finish_profile_ok = (Button) mProfileFinishReminderLayout.findViewById(R.id.button_finish_profile_ok);
+//                button_finish_profile_ok.setOnClickListener(PatientFragment.this);
+//            }
         }
     }
 

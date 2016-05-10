@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
+import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 
 /**
  * Created by CHAO WEI on 5/1/2015.
@@ -26,6 +30,18 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
         final View view = inflater.inflate(R.layout.frag_welcome, container, false);
         view.findViewById(R.id.button_welcome_not_now).setOnClickListener(this);
         view.findViewById(R.id.button_welcome_ok).setOnClickListener(this);
+        LinearLayout welcom_layout = (LinearLayout) view.findViewById(R.id.welcome_page);
+        TextView noMessage = (TextView)view.findViewById(R.id.nomessage);
+
+        ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+        boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
+        if(hasProfiles){
+            noMessage.setVisibility(View.VISIBLE);
+            welcom_layout.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.GONE);
+            welcom_layout.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 

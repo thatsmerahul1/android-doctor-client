@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/appointment_detail"
+        android:id="@+id/appointment_details"
+        android:textColor="@color/text_black_color_selector"
+        android:textSize="25sp"
+        android:layout_gravity="center_horizontal" />
+
+    <ImageView
+        android:id="@+id/patient_avatar_of_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        android:minWidth="72dp"
+        android:scaleType="fitCenter"
+        android:padding="40dp"
+        android:src="@drawable/dr_john_photo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/patient_name"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(New Text)"
+        android:id="@+id/type_of_call"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/appointment_date"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="20dp"
+        android:textColor="@color/ecarezone_green_dark"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/appointment_time"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/ecarezone_green_dark"/>
+
+    <Button
+        android:layout_width="248dp"
+        android:layout_height="wrap_content"
+        android:text="@string/change_date_and_time"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/circle_blue_complete"
+        android:layout_marginBottom="30dp"/>
+
+    <Button
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_appointment"
+        android:id="@+id/button2"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/circle_red_complete"/>
+
+
+</LinearLayout>

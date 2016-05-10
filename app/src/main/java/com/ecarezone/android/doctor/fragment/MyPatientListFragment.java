@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.MyPatientActivity;
@@ -47,6 +48,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
     private boolean checkProgress;
     private ListView myPatientListView = null;
     private ListView myPatientPendingListView = null;
+    private TextView noPatient;
 
     @Override
     protected String getCallerName() {
@@ -104,6 +106,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
 //        recommendedDoctorListView = (ListView) view.findViewById(R.id.recommended_doctors_list);
         patientList = view.findViewById(R.id.patient_list);
         myPatientListView = (ListView)view.findViewById(R.id.added_patient_list);
+        noPatient = (TextView)view.findViewById(R.id.nomessage);
 //        myPatientPendingListView = (ListView)view.findViewById(R.id.pending_patient_list);
 //        pendingRequest = (LinearLayout)view.findViewById(R.id.patient_layout_);
 
@@ -190,10 +193,12 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
 
                 if (patientLists.size() == 0) {
                     myPatientListView.setVisibility(View.GONE);
+                    noPatient.setVisibility(View.VISIBLE);
                     progressDialog.dismiss();
 
                 } else if (patientLists.size() > 0) {
                     mycareDoctorAdapter.notifyDataSetChanged();
+                    noPatient.setVisibility(View.GONE);
 
                     myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -265,8 +270,9 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 myPatientListView.setAdapter(mycareDoctorAdapter);
                 if (patientLists.size() == 0) {
                     progressDialog.dismiss();
-
+                    noPatient.setVisibility(View.VISIBLE);
                 } else if (patientLists.size() > 0) {
+                    noPatient.setVisibility(View.GONE);
 //                    mycareDoctorAdapter = new PatientAdapter(getActivity(), patientLists, mOnButtonClickedListener);
 //                    myPatientListView.setAdapter(mycareDoctorAdapter);
 

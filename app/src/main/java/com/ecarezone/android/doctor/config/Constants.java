@@ -42,6 +42,7 @@ public class Constants {
 
     //Login Screen Constants
     public static String USER_ID = "UserId";
+    public static String PROFILE_ID = "profileId";
     public static String IS_LOGIN = "is_login";
     public static String SHARED_PREF_NAME = "eCareZone";
 

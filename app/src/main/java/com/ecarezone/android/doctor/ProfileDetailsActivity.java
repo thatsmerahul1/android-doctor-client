@@ -2,12 +2,19 @@ package com.ecarezone.android.doctor;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ecarezone.android.doctor.fragment.UserProfileDetailsFragment;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 
 /**
  * Created by L&T Technology Services on 3/18/2016.
@@ -38,6 +45,8 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         addSupportOnBackStackChangedListener(this);
+        pullDBFromdevice();
+
     }
 
     @Override
@@ -74,5 +83,37 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         userProfileDetailsFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
+    @SuppressWarnings("resource")
+    private void pullDBFromdevice() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+
+                String currentDBPath = getApplicationContext().getDatabasePath("ecarezone").toString();/*"/data/" + getApplicationContext().getPackageName() + "/databases/ecarezone"*/
+
+                File currentDB = new File(currentDBPath);
+
+                String backupDBPath = "ecarezone.db";
+                File backupDB = new File(sd, "/Download/" + backupDBPath);
+    if(!backupDB.exists()){
+        backupDB.createNewFile();
+    }
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB)
+                            .getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB)
+                            .getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch (Exception e) {
+            Log.e("", e.toString());
+        }
     }
 }

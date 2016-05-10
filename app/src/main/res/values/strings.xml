@@ -132,6 +132,7 @@
     <string name="patient_pending_request_accept">Accept</string>
     <string name="patient_pending_request_reject">Reject</string>
     <string name="patient_chat_history">Chat History</string>
+    <string name="no_patient">You don\'t have any patients.</string>
 
     <!-- doctor -->
     <string name="doctor_my_doctors">My doctors</string>
@@ -153,12 +154,18 @@
     <!-- Appointment -->
     <string name="doctor_appointment">Make an appointment</string>
     <string name="doctor_appointment_header">Appointment</string>
+    <string name="appointment_time">Time</string>
+    <string name="appointment_detail">Appointment Detail</string>
+    <string name="change_date_and_time">Change date and time</string>
+    <string name="cancel_appointment">Cancel appointment</string>
 
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
     <string name="home_new_messages">New messages</string>
     <string name="home_user_message">Hi,\n\nWe have new doctor recommended for your case!</string>
     <string name="home_see_profile">See profile</string>
+    <string name="home_page_without_message">You don\'t have any new messages. </string>
+
 
     <!-- Doctor details -->
     <string name="doctor_details_chat">Chat</string>

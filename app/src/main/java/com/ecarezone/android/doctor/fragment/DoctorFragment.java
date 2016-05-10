@@ -98,7 +98,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (patient != null) {
 //            setDoctorPresenceIcon(doctor.status);
-//            doctorStatusText.setText(doctor.status);
+//            doctorStatusText .setText(doctor.status);
             doctorNameView.setText(patient.name);
 //            doctorSpecialist.setText(doctor.doctorCategory);
         }
@@ -121,9 +121,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             case R.id.btn_doctor_voice_id:
                 callButtonClicked();
                 break;
-            case R.id.button_appointment:
+            /*case R.id.button_appointment:
                 createAppointment();
-                break;
+                break;*/
             /*case R.id.add_doctor_button:
                 sendAddDoctorRequest();
                 break;*/

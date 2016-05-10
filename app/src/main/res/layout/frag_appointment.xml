@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:fillViewport="true"
     >
 
-    <RelativeLayout
+    <!--<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/doctor_layout"
         android:layout_width="fill_parent"
@@ -140,7 +140,18 @@
 
     </RelativeLayout>
 
-    <!--<View
+    &lt;!&ndash;<View
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/actionBarSize" />-->
-</ScrollView>
+        android:layout_height="?android:attr/actionBarSize" />&ndash;&gt;-->
+    <CalendarView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/calendarView" />
+
+    <ListView
+        android:id="@+id/appointment_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+</LinearLayout>

@@ -1,0 +1,61 @@
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appointment_accepted_layout_"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="14dp"
+    android:background="@drawable/blue_rectangle_layout_selector"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:weightSum="1">
+    <ImageView
+        android:id="@+id/appointment_patient_avatar_of_request"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:minWidth="72dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/dr_john_photo" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:layout_weight="0.75">
+
+
+        <TextView
+            android:layout_width="219dp"
+            android:layout_height="wrap_content"
+            android:text="@string/appointment_time"
+            android:id="@+id/appointment_accepted_time"
+            android:textSize="20sp"
+            android:textColor="@color/text_black_color_selector"
+            android:padding="5dp"/>
+
+        <TextView
+            android:id="@+id/accepted_type_of_call"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/doctor_name1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/accepted_patient_name"
+            android:layout_width="219dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/doctor_name1"
+            android:textSize="16sp"
+            android:paddingBottom="5dp"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>
+

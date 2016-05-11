@@ -29,8 +29,10 @@ public class Patient implements Parcelable, Serializable {
     public String recommandedDoctorId;
     @Expose
     public String userSettings;
+    @Expose
+    public String avatarUrl;
 
-    public Patient(Long userId, String email, String name, String recommandedDoctorId, String status, String isCallAllowed, String userDevicesCount, String userSettings, String userProfile) {
+    public Patient(Long userId, String email, String name, String recommandedDoctorId, String status, String isCallAllowed, String userDevicesCount, String userSettings, String userProfile, String avatarUrl) {
         this.userId = userId;
         this.email = email;
         this.name = name;
@@ -40,6 +42,7 @@ public class Patient implements Parcelable, Serializable {
         this.userDevicesCount = userDevicesCount;
         this.userSettings = userSettings;
         this.userProfile = userProfile;
+        this.avatarUrl = avatarUrl;
     }
     public Patient(Parcel in) {
         this.userId = in.readLong();
@@ -51,6 +54,7 @@ public class Patient implements Parcelable, Serializable {
         this.userDevicesCount = in.readString();
         this.recommandedDoctorId = in.readString();
         this.userSettings = in.readString();
+        this.avatarUrl = in.readString();
     }
 
     @Override
@@ -69,6 +73,7 @@ public class Patient implements Parcelable, Serializable {
         dest.writeString(userDevicesCount);
         dest.writeString(recommandedDoctorId);
         dest.writeString(userSettings);
+        dest.writeString(avatarUrl);
     }
 
     public static Parcelable.Creator<Patient> CREATOR = new Parcelable.Creator<Patient>() {

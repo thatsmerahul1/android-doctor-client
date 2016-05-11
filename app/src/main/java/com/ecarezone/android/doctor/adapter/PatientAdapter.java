@@ -2,6 +2,7 @@ package com.ecarezone.android.doctor.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,10 @@ import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
+import com.ecarezone.android.doctor.gcm.GcmIntentService;
+import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -38,6 +42,8 @@ public class PatientAdapter extends BaseAdapter {
         this.mOnButtonClickedListener = mOnButtonClickedListener;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
+
 
 
     @Override
@@ -74,7 +80,7 @@ public class PatientAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         ViewHolder holder;
-
+        int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
         PatientListItem patient = patientList.get(position);
 //        if (view == null) {
 //            holder = new ViewHolder();
@@ -112,7 +118,16 @@ public class PatientAdapter extends BaseAdapter {
             });
 
             pendingPatientName.setText(patient.name);
-            pendingPatientAvatar.setImageResource(R.drawable.request_icon);
+            String imageUrl = patient.avatarUrl;
+
+            if (imageUrl != null && imageUrl.trim().length() > 8) {
+                Picasso.with(activity)
+                        .load(imageUrl).resize(dp, dp)
+                        .centerCrop().placeholder(R.drawable.news_other)
+                        .error(R.drawable.news_other)
+                        .into(pendingPatientAvatar);
+            }
+
 
         } else {
             ImageView patientAvatar = (ImageView) view.findViewById(R.id.patient_avatar);
@@ -129,40 +144,17 @@ public class PatientAdapter extends BaseAdapter {
                 patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
             }
             patientName.setText(patient.name);
-            if(patient.userDevicesCount.equalsIgnoreCase("0")){
-                chatCount.setVisibility(View.GONE);
-            } else {
+            String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCount());
+            if(!count.equalsIgnoreCase("0")){
+                chatCount.setText(count);
                 chatCount.setVisibility(View.VISIBLE);
-                chatCount.setText(patient.userDevicesCount);
-            }
+            } else {
+                chatCount.setVisibility(View.GONE);
+             }
         }
-
-//        holder.pendingPatientName.setText(patient.email);
-
-
-//        holder.patientName.setText(patient.name);
-//        holder.chatCount.setText(patient.userDevicesCount);
-        //        holder.doctorType.setText(doctorList.get(position).doctorCategory);
-        //TODO:
-//        if(patient.status.equalsIgnoreCase("1")) {
-//            holder.patientStatus.setText(R.string.doctor_available);
-//        }
-//        else{
-//            holder.patientStatus.setText(R.string.doctor_busy);
-//        }
-
-//        setDoctorPresence(holder, patient.status);
         return view;
     }
 
-
-    //    private void setDoctorPresence(ViewHolder holder, String status) {
-//        if (status.equalsIgnoreCase("available")) {
-//            holder.patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
-//        } else if (status.equalsIgnoreCase("busy")) {
-//            holder.patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
-//        }
-//    }
     class ViewHolder {
         TextView patientName;
         ImageView patientAvatar;

@@ -8,14 +8,15 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:weightSum="1">
-        <ImageView
-            android:id="@+id/patient_avatar_of_request"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:minWidth="72dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/dr_john_photo" />
+    <com.ecarezone.android.doctor.view.CircleImageView
+        android:id="@+id/patient_avatar_of_request"
+        android:layout_width="@dimen/profile_thumbnail_edge_size"
+        android:layout_height="@dimen/profile_thumbnail_edge_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="4dp"
+        android:src="@drawable/news_other"
+         >
+    </com.ecarezone.android.doctor.view.CircleImageView>
 
 
         <LinearLayout

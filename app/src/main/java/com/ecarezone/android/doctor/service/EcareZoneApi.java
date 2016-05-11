@@ -85,9 +85,6 @@ public interface EcareZoneApi {
     UploadImageResponse upload(@Part("profilepic") TypedFile file,
                                @Path("userId") Long userId);
 
-    @GET("/users/recommendedDoctors")
-    SearchDoctorsResponse getRecommendedDoctors();
-
     @GET ("/users/{doctorid}/patients")
     SearchDoctorsResponse getPatients(@Path("doctorid") Long doctorid);
 

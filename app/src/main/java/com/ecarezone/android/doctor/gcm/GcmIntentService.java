@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.sinch.android.rtc.NotificationResult;
 import com.sinch.android.rtc.SinchHelpers;
@@ -44,7 +45,6 @@ public class GcmIntentService extends IntentService implements ServiceConnection
         if (mIntent == null) {
             return;
         }
-
         if (SinchHelpers.isSinchPushIntent(mIntent)) {
             SinchService.SinchServiceInterface sinchService = (SinchService.SinchServiceInterface) iBinder;
             if (sinchService != null) {

@@ -198,6 +198,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
 
                 } else if (patientLists.size() > 0) {
                     mycareDoctorAdapter.notifyDataSetChanged();
+
                     noPatient.setVisibility(View.GONE);
 
                     myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -210,7 +211,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                             Patient patient = new Patient(patientListItem.userId, patientListItem.email,
                                     patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
                                     patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-                                    patientListItem.userSettings, patientListItem.userProfile);
+                                    patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
 
                             data.putParcelable(Constants.DOCTOR_DETAIL, patient);
                             data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
@@ -224,8 +225,10 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                             }
                         }
                     });
+
                 }
-            } else {
+
+             } else {
                 Toast.makeText(getApplicationContext(), "Failed to get doctors: " + getDoctorsResponse.status.message, Toast.LENGTH_LONG).show();
             }
             if (checkProgress) {
@@ -264,6 +267,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.status = patient.status;
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
+                    patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
                 }
                 mycareDoctorAdapter = new PatientAdapter(getActivity(), patientLists, mOnButtonClickedListener);
@@ -287,7 +291,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                             Patient patient = new Patient(patientListItem.userId, patientListItem.email,
                                     patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
                                     patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-                                    patientListItem.userSettings, patientListItem.userProfile);
+                                    patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
 
                             data.putParcelable(Constants.DOCTOR_DETAIL, patient);
                             data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);

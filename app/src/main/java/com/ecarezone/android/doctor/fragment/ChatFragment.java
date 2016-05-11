@@ -57,7 +57,6 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     String recipient = "ecareuser@mail.com";
     private String deviceImagePath;
     Map<String, Integer> perms = new HashMap<>();
-    View view;
     @Override
     protected String getCallerName() {
         return null;
@@ -66,7 +65,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag_chat, container, false);
+        final View view = inflater.inflate(R.layout.frag_chat, container, false);
         getAllComponent(view);
         ((ChatActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getText(R.string.doctor_details_chat));
@@ -103,19 +102,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         recipient = getArguments().getString(Constants.EXTRA_EMAIL);
         chatAdapter.getChatHistory(recipient);
-
-        Intent intent = new Intent("message");
-        intent.putExtra("recipient", recipient);
-        getActivity().sendBroadcast(intent);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getAllComponent(view);
-    }
-
-
 
     @Override
     public void onClick(View view) {
@@ -136,11 +123,14 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
 
     @Override
     public void onIncomingMessage(MessageClient messageClient, Message message) {
-        if (!message.getRecipientIds().get(0).equals(recipient)) {
-            return;
+        String messageSenderId = message.getSenderId();
+        if(messageSenderId != null) {
+            if (!messageSenderId.equals(recipient)) {
+                return;
+            }
+            chatAdapter.addMessage(incomingMessage(message));
+            chatList.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
         }
-        chatAdapter.addMessage(incomingMessage(message));
-        chatList.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
     }
 
     private void takePicture(){

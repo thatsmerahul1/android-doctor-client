@@ -41,6 +41,7 @@ import com.ecarezone.android.doctor.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.UploadImageResponse;
 import com.ecarezone.android.doctor.utils.EcareZoneLog;
 import com.ecarezone.android.doctor.utils.ImageUtil;
+import com.ecarezone.android.doctor.utils.MD5Util;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -138,13 +139,13 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             if (mProfile.avatarUrl == null || mProfile.avatarUrl.equals("")) {
                 //size of the profile picture to download from Gravatar. Giving the dimensions of the image container(imageView)
                 int imageSize = getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
-//                if (mProfile.email != null) {
-//                    // convert the email string to md5hex and pass it in the Gravatarl url.
-//                    String hashEmail = MD5Util.md5Hex(mProfile.email);
-//                    imageUrl = Constants.GRAVATOR_URL + hashEmail + "?d=" + Constants.DEFAULT_GRAVATOR_IMAGE_URL + "?s=" + imageSize;
-//                } else {
-//                    imageUrl = null;
-//                }
+                if (mProfile.name != null) {
+                    // convert the email string to md5hex and pass it in the Gravatarl url.
+                    String hashEmail = MD5Util.md5Hex(mProfile.name);
+                    imageUrl = Constants.GRAVATOR_URL + hashEmail + "?d=" + Constants.DEFAULT_GRAVATOR_IMAGE_URL + "?s=" + imageSize;
+                } else {
+                    imageUrl = null;
+                }
             } else {
                 imageUrl = mProfile.avatarUrl;
             }
@@ -529,37 +530,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-
-
-    @SuppressWarnings("resource")
-    private void pullDBFromdevice() {
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-
-            if (sd.canWrite()) {
-
-                String currentDBPath = getApplicationContext().getDatabasePath("ecarezone").toString();/*"/data/" + getApplicationContext().getPackageName() + "/databases/ecarezone"*/
-
-                File currentDB = new File(currentDBPath);
-
-                String backupDBPath = "ecarezone.db";
-                File backupDB = new File(sd, "/Download/" + backupDBPath);
-
-                if (currentDB.exists()) {
-                    FileChannel src = new FileInputStream(currentDB)
-                            .getChannel();
-                    FileChannel dst = new FileOutputStream(backupDB)
-                            .getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-            }
-        } catch (Exception e) {
-            Log.e("", e.toString());
         }
     }
 }

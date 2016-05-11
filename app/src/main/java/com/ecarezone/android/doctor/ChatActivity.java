@@ -71,15 +71,6 @@ public class ChatActivity extends EcareZoneBaseActivity {
         }
     }
 
-    /*@Override
-    protected void onRestart() {
-        super.onRestart();
-        Intent intent = getIntent();
-        finish();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
-    }*/
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -102,31 +93,5 @@ public class ChatActivity extends EcareZoneBaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         chatFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getBaseContext().registerReceiver(mMessageReceiver, new IntentFilter("unique_name"));
-    }
-
-    //Must unregister onPause()
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getBaseContext().unregisterReceiver(mMessageReceiver);
-    }
-
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            ChatAdapter chatAdapter = new ChatAdapter(context);
-
-
-            // Extract data included in the Intent
-            String message = intent.getStringExtra("recipient");
-            chatAdapter.getChatHistory(message);
-            //do other stuff here
-        }
-    };
 
 }

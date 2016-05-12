@@ -28,5 +28,6 @@ public class PatientListItem {
     @Expose
     public String userSettings;
     public boolean isPending;
+    @Expose
     public String avatarUrl;
 }

@@ -2,8 +2,13 @@ package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,6 +34,10 @@ import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
@@ -68,8 +77,14 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
         }
         ((MainActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getString(R.string.main_side_menu_my_patients));
+        pullDBFromdevice();
     }
-
+    BroadcastReceiver message = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mycareDoctorAdapter.notifyDataSetChanged();
+        }
+    };
     @Override
     public void onResume() {
         super.onResume();
@@ -81,7 +96,18 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
 
         populatePendingPatientList();
         populateMyCarePatientList();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
+                new IntentFilter("send"));
+        pullDBFromdevice();
     }
+
+    @Override
+    public void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(message);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -197,8 +223,9 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     progressDialog.dismiss();
 
                 } else if (patientLists.size() > 0) {
-                    mycareDoctorAdapter.notifyDataSetChanged();
-
+                    if(mycareDoctorAdapter != null) {
+                        mycareDoctorAdapter.notifyDataSetChanged();
+                    }
                     noPatient.setVisibility(View.GONE);
 
                     myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -333,4 +360,37 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
 
         }
     };
+
+    @SuppressWarnings("resource")
+    private void pullDBFromdevice() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+
+                String currentDBPath = getApplicationContext().getDatabasePath("ecarezone.db").toString();/*"/data/" + getApplicationContext().getPackageName() + "/databases/ecarezone"*/
+
+                File currentDB = new File(currentDBPath);
+
+                String backupDBPath = "ecarezone.db";
+                File backupDB = new File(sd, "/Download/" + backupDBPath);
+                if(!backupDB.exists()){
+                    backupDB.createNewFile();
+                }
+
+                    FileChannel src = new FileInputStream(currentDB)
+                            .getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB)
+                            .getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+
+            }
+        } catch (Exception e) {
+            Log.e("", e.toString());
+        }
+    }
+
+
 }

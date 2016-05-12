@@ -1,6 +1,8 @@
 package com.ecarezone.android.doctor.model.database;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 
 import com.ecarezone.android.doctor.model.Chat;
 import com.j256.ormlite.dao.Dao;
@@ -8,6 +10,10 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -100,12 +106,18 @@ public class ChatDbApi {
     }
 
     /* retrieve unread ChatCount from chat History by userId */
-    public int getUnReadChatCountByUserId(String userId) {
+
+    /**
+     * get the chat count by emaiId
+     * @param emailId
+     * @return
+     */
+    public int getUnReadChatCountByUserId(String emailId) {
         try {
             Dao<Chat, Integer> chatDao = mDbHelper.getChatDao();
             QueryBuilder<Chat, Integer> queryBuilder = chatDao.queryBuilder();
             return queryBuilder.where()
-                    .eq(COLUMN_NAME_CHAT_USER_ID, userId)
+                    .eq(COLUMN_NAME_CHAT_USER_ID, emailId)
                     .and()
                     .eq(COLUMN_NAME_CHAT_READ_STATUS, CHAT_UNREAD_STATUS)
                     .query().size();
@@ -128,4 +140,8 @@ public class ChatDbApi {
         }
         return 0;
     }
+
+
+
+
 }

@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,6 +54,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.Calendar;
 
@@ -189,7 +192,42 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     /* scales & sets the image thumbnail to the profile image button*/
     private void setPic(String imagePath) {
         Bitmap bitmap = ImageUtil.createScaledBitmap(imagePath, profileImageButton.getWidth(), profileImageButton.getHeight());
-        profileImageButton.setImageBitmap(bitmap);
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        boolean doApplyMatrix = false;
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.postRotate(90);
+                doApplyMatrix = true;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.postRotate(180);
+                doApplyMatrix = true;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.postRotate(270);
+                doApplyMatrix = true;
+                break;
+            default:
+                break;
+        }
+
+        if (doApplyMatrix) {
+            Bitmap imgBitmap = Bitmap.createBitmap(bitmap, 0,
+                    0, bitmap.getWidth(), bitmap.getHeight(),
+                    matrix, true);
+            profileImageButton.setImageBitmap(imgBitmap);
+        } else {
+            profileImageButton.setImageBitmap(bitmap);
+        }
     }
 
     /* sets the provide profile details in the UI fields */
@@ -290,7 +328,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     /* updates the current profile in server */
     private void updateProfileInServer(Long profileId, final DoctorProfile userProfile) {
         UpdateProfileRequest request = new UpdateProfileRequest(profileId);
-        request.userProfile = userProfile;
+        request.doctorProfile = userProfile;
         getSpiceManager().execute(request, "profile_update", DurationInMillis.ALWAYS_EXPIRED, new UpdateProfileResponseListener());
     }
 

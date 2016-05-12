@@ -16,7 +16,7 @@ public class UpdateProfileRequest extends RetrofitSpiceRequest<CreateProfileResp
     @Expose
     public Long profileId;
     @Expose
-    public DoctorProfile userProfile;
+    public DoctorProfile doctorProfile;
     @Expose
     public String email;
     @Expose
@@ -25,6 +25,7 @@ public class UpdateProfileRequest extends RetrofitSpiceRequest<CreateProfileResp
     public String apiKey;
     @Expose
     public String deviceUnique;
+
 
     public UpdateProfileRequest(Long profileId) {
         super(CreateProfileResponse.class, EcareZoneApi.class);

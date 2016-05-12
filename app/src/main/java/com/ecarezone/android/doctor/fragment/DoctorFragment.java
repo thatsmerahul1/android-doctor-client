@@ -3,7 +3,9 @@ package com.ecarezone.android.doctor.fragment;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ecarezone.android.doctor.AppointmentActivity;
 import com.ecarezone.android.doctor.CallActivity;
@@ -111,27 +114,35 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
 
         viewId = v.getId();
-        switch (viewId) {
-            case R.id.btn_doctor_chat_id:
-                chatButtonClicked();
-                break;
-            case R.id.btn_doctor_video_id:
-                callVideoButtonClicked();
-                break;
-            case R.id.btn_doctor_voice_id:
-                callButtonClicked();
-                break;
+        if(isNetworkAvailable(mActivity)) {
+            switch (viewId) {
+                case R.id.btn_doctor_chat_id:
+                    chatButtonClicked();
+                    break;
+                case R.id.btn_doctor_video_id:
+                    callVideoButtonClicked();
+                    break;
+                case R.id.btn_doctor_voice_id:
+                    callButtonClicked();
+
+                    break;
             /*case R.id.button_appointment:
                 createAppointment();
                 break;*/
             /*case R.id.add_doctor_button:
                 sendAddDoctorRequest();
                 break;*/
+            }
+
+        } else {
+            Toast.makeText(mActivity, "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
-
-
     }
 
+    public boolean isNetworkAvailable(final Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
     private void callVideoButtonClicked() {
         if (PermissionUtil.isPermissionRequired() && PermissionUtil.getAllpermissionRequired(mActivity, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
             PermissionUtil.setAllPermission(mActivity, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS, PermissionUtil.SINCH_PERMISSIONS);

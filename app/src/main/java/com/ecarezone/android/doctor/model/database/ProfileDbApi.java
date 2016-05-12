@@ -103,7 +103,7 @@ public class ProfileDbApi {
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_BIRTH_DATE, userProfile.birthDate);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_GENDER, userProfile.gender);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
-            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_IS_COMPLETE, areAllFieldsFilled(userProfile));
+//            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_IS_COMPLETE, areAllFieldsFilled(userProfile));
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_SPECIALIZED_AREAS, userProfile.category);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_REGISTRATION_ID, userProfile.registrationId);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_MY_BIO, userProfile.doctorDescription);

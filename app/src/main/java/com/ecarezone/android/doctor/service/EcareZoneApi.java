@@ -68,8 +68,8 @@ public interface EcareZoneApi {
     @POST("/users/{userId}/doctors/{doctorId}")
     AddDoctorResponse addDoctor(@Path("userId") Long userId, @Path("doctorId") Long doctorId, @Body AddDoctorRequest request);
 
-    @PUT("/users/{userId}/profiles/{profileId}")
-    CreateProfileResponse updateProfile(@Path("userId") Long userId, @Path("profileId") Long profileId, @Body UpdateProfileRequest request);
+    @PUT("/doctors/{doctorid}/profiles/{profileid}")
+    CreateProfileResponse updateProfile(@Path("doctorid") Long doctorid, @Path("profileid") Long profileid, @Body UpdateProfileRequest request);
 
     @POST("/doctors/{doctorid}/profiles")
     CreateProfileResponse createProfile(@Path("doctorid") Long userId, @Body CreateProfileRequest request);
@@ -81,9 +81,9 @@ public interface EcareZoneApi {
     GetNewsResponse getNews(@Path("userId") Long userId);
 
     @Multipart
-    @POST("/users/{userId}/profilespic")
+    @POST("/doctors/{doctorid}/profilespic")
     UploadImageResponse upload(@Part("profilepic") TypedFile file,
-                               @Path("userId") Long userId);
+                               @Path("doctorid") Long doctorid);
 
     @GET ("/users/{doctorid}/patients")
     SearchDoctorsResponse getPatients(@Path("doctorid") Long doctorid);

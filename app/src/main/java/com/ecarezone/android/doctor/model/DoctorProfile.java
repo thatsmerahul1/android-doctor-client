@@ -32,6 +32,7 @@ public class DoctorProfile implements Serializable {
         @DatabaseField
         public String category;
         //    public String email;
+
         public String toString() {
             return   name + " "  + doctorDescription + " " + avatarUrl + " " +  registrationId + " " + birthDate + " " +  gender+ " " + category;
         }

@@ -144,13 +144,22 @@ public class PatientAdapter extends BaseAdapter {
                 patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
             }
             patientName.setText(patient.name);
-            String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCount());
+            String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email));
             if(!count.equalsIgnoreCase("0")){
                 chatCount.setText(count);
                 chatCount.setVisibility(View.VISIBLE);
             } else {
                 chatCount.setVisibility(View.GONE);
              }
+            String imageUrl = patient.avatarUrl;
+
+            if (imageUrl != null && imageUrl.trim().length() > 8) {
+                Picasso.with(activity)
+                        .load(imageUrl).resize(dp, dp)
+                        .centerCrop().placeholder(R.drawable.news_other)
+                        .error(R.drawable.news_other)
+                        .into(patientAvatar);
+            }
         }
         return view;
     }

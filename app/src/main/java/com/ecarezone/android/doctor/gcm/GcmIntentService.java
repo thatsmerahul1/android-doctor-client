@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
+import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.sinch.android.rtc.NotificationResult;
 import com.sinch.android.rtc.SinchHelpers;
@@ -51,6 +53,7 @@ public class GcmIntentService extends IntentService implements ServiceConnection
                 NotificationResult result = sinchService.relayRemotePushNotificationPayload(mIntent);
                 if (result.isMessage() && sinchService.isMessageNotifcationRequired()) {
                     // handle result, e.g. show a notification or similar
+                    sendBroadcast();
                 }
             }
         }
@@ -59,6 +62,12 @@ public class GcmIntentService extends IntentService implements ServiceConnection
         mIntent = null;
     }
 
+
+    public void sendBroadcast() {
+        Intent intent = new Intent("send");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+    }
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
         Log.i(TAG, "Service disconnected");

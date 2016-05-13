@@ -20,10 +20,12 @@ public class PatientAcceptRequest extends RetrofitSpiceRequest<SearchDoctorsResp
     String apiKey;
     @Expose
     String deviceUnique;
+    @Expose
+    String status;
     long profileId;
     long doctorId;
 
-    public PatientAcceptRequest(long profileId , long doctorId) {
+    public PatientAcceptRequest(long profileId , long doctorId, String status) {
         super(SearchDoctorsResponse.class, EcareZoneApi.class);
         this.email = LoginInfo.userName;
         this.password = LoginInfo.hashedPassword;
@@ -31,6 +33,7 @@ public class PatientAcceptRequest extends RetrofitSpiceRequest<SearchDoctorsResp
         this.deviceUnique = Constants.deviceUnique;
         this.profileId = profileId;
         this.doctorId = doctorId;
+        this.status = status;
     }
 
     @Override
@@ -38,3 +41,4 @@ public class PatientAcceptRequest extends RetrofitSpiceRequest<SearchDoctorsResp
         return getService().requestAccept(profileId, doctorId,this);
     }
 }
+

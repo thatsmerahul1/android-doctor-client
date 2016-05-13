@@ -161,8 +161,8 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 new SearchDoctorsRequest(LoginInfo.userId, null, null, null, null, null, false);
         getSpiceManager().execute(request, new PopulatePendingPatientListRequestListener());
     }
-    private void acceptedPatientRequest(long patientId) {
-        PatientAcceptRequest request = new PatientAcceptRequest(/*2,26*/LoginInfo.userId, patientId  );
+    private void acceptedPatientRequest(long patientId, String status) {
+        PatientAcceptRequest request = new PatientAcceptRequest(LoginInfo.userId, patientId, status );
         getSpiceManager().execute(request, new RequestFromPatients());
     }
 
@@ -352,10 +352,10 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             PatientListItem patientItem = patientLists.get(position);
 
             if(isAccept){
-                acceptedPatientRequest(patientItem.userId);
+                acceptedPatientRequest(patientItem.userId, "approved");
             }
             else{
-
+                acceptedPatientRequest(patientItem.userId, "rejected");
             }
 
         }

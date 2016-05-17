@@ -18,6 +18,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
@@ -110,7 +112,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         nameET.addTextChangedListener(this);
 
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
-        String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
+        long profileId = mActivity.getIntent().getLongExtra(ProfileDetailsActivity.PROFILE_ID, -1);
         mProfile = profileDbApi.getProfile(LoginInfo.userId.toString()/*, "36"*//*profileId*/);
 
 
@@ -265,8 +267,21 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         userProfile.registrationId = ((EditText) view.findViewById(R.id.registrationID)).getText().toString();
         userProfile.doctorDescription = ((EditText) view.findViewById(R.id.myBio)).getText().toString();
 
-        SaveProfileAsyncTask saveProfileAsyncTask = new SaveProfileAsyncTask();
-        saveProfileAsyncTask.execute(userProfile);
+        if((TextUtils.isEmpty(((EditText) view.findViewById(R.id.name)).getText().toString()))||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.gender)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.dob)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.specializedArea)).getText().toString())) ||
+                        (TextUtils.isEmpty(((EditText) view.findViewById(R.id.registrationID)).getText().toString())) ||
+                        (TextUtils.isEmpty(((EditText) view.findViewById(R.id.myBio)).getText().toString()))) {
+
+            Toast.makeText(mActivity, "Please enter all the fields", Toast.LENGTH_LONG).show();
+
+        } else {
+            SaveProfileAsyncTask saveProfileAsyncTask = new SaveProfileAsyncTask();
+            saveProfileAsyncTask.execute(userProfile);
+
+        }
+
     }
 
     class SaveProfileAsyncTask extends AsyncTask<DoctorProfile, Void, Void> {
@@ -545,7 +560,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
+            StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day + 1);
             setDateToDobField(dateSb.toString());
         }
     }

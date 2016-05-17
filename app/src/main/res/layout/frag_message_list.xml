@@ -3,15 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
    <LinearLayout
                 android:id="@+id/message_container"
                 android:layout_width="match_parent"
@@ -24,17 +15,15 @@
                 <ListView
                     android:id="@+id/message_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="14dp"
                     android:padding="16dp" />
 
             </LinearLayout>
 
-        </LinearLayout>
 
-    </ScrollView>
-</FrameLayout>
+ </FrameLayout>
 
 
 

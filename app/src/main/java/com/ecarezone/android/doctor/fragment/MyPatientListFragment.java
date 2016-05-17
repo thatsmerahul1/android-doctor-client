@@ -214,6 +214,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.status = patient.status;
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
+                    patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
                 }
 

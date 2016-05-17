@@ -18,6 +18,7 @@ import com.ecarezone.android.doctor.model.rest.SignupRequest;
 import com.ecarezone.android.doctor.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.UploadImageResponse;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
+import com.ecarezone.android.doctor.model.rest.base.UpdatePasswordRequest;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -55,6 +56,9 @@ public interface EcareZoneApi {
 
     @POST("/signup")
     LoginResponse signup(@Body SignupRequest request);
+
+    @POST("/changePassword")
+    BaseResponse updatePassword(@Body UpdatePasswordRequest request);
 
     @PUT("/users/{userid}/settings")
     LoginResponse settingsUpdate(@Path("userid") Long userId, @Body SettingsRequest request);

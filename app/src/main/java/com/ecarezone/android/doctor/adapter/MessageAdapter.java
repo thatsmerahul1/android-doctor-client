@@ -10,9 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
+import com.ecarezone.android.doctor.model.Chat;
+import com.ecarezone.android.doctor.model.database.ChatDbApi;
+import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 20109804 on 4/15/2016.
@@ -21,19 +25,21 @@ public class MessageAdapter extends BaseAdapter {
 
     private final static String TAG = MessageAdapter.class.getSimpleName();
     private Activity activity;
-    //TODO : Message pojo class
-    private ArrayList<Patient> messageList;
     private static LayoutInflater inflater;
+    private ArrayList<PatientListItem> patientList;
+    private List<Chat> mMessages;
 
-    public MessageAdapter(Activity activity, ArrayList<Patient> messageList) {
+
+    public MessageAdapter(Activity activity, ArrayList<PatientListItem> patientList) {
         this.activity = activity;
-        this.messageList = messageList;
+        this.patientList = patientList;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+         mMessages = new ArrayList<Chat>();
     }
 
     @Override
     public int getCount() {
-        return messageList.size();
+        return patientList.size();
     }
 
     @Override
@@ -49,34 +55,31 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        ViewHolder holder;
+         PatientListItem patient = patientList.get(position);
 
-        if (convertView == null) {
+        if(patient.isPending) {
             view = inflater.inflate(R.layout.message_list_item_layout, null);
-            holder = new ViewHolder();
-            holder.avatar = (ImageView) view.findViewById(R.id.message_avatar);
-            holder.messageTitle = (TextView) view.findViewById(R.id.message_title);
-            holder.messageDescription = (TextView) view.findViewById(R.id.message_description);
-            holder.messageDate = (TextView) view.findViewById(R.id.message_date);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
-        //TODO : fields in Message class and show avatar based on type of message
-//        holder.messageTitle.setText(messageList.get(position).name);
-//        holder.messageDescription.setText(messageList.get(position).doctorCategory);
-//        holder.messageDate.setText(messageList.get(position).status);
-        holder.messageTitle.setText("Joe");
-        holder.messageDescription.setText("Hey I want to know..");
-        holder.messageDate.setText("Monday");
 
+        } else {
+            view = inflater.inflate(R.layout.message_chat_list_item, null);
+        }
+        if(patient.isPending) {
+            TextView messageSenderName = (TextView) view.findViewById(R.id.messagesenderName);
+            messageSenderName.setText(patient.name);
+        } else {
+            String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email));
+            if(!count.equalsIgnoreCase("0")) {
+                mMessages = ChatDbApi.getInstance(activity).getChatHistory(patient.email);
+
+                TextView messageSenderName_chat = (TextView) view.findViewById(R.id.messageSenderName_chat);
+                TextView message_detail = (TextView) view.findViewById(R.id.messageDetail);
+                messageSenderName_chat.setText(patient.name);
+                message_detail.setText(mMessages.get(mMessages.size()-1).getMessageText());
+            } else {
+                view.setVisibility(View.GONE);
+            }
+        }
         return view;
     }
 
-    class ViewHolder {
-        ImageView avatar;
-        TextView messageTitle;
-        TextView messageDescription;
-        TextView messageDate;
-    }
 }

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -77,8 +78,10 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);
         //Disabling the username and password fields
         mEditTextUsername.setEnabled(false);
-        mEditTextPassword.setEnabled(false);
-        // add editor action listener for password EditText to accept input from soft keyboard
+        mEditTextPassword.setOnClickListener(this);
+        mEditTextPassword.setKeyListener(null);
+        mEditTextPassword.setFocusable(false);
+//         add editor action listener for password EditText to accept input from soft keyboard
         // Then the user need not to click login button
         mSpinnerCountry = (EditText) view.findViewById(R.id.country_spinner);
         mSpinnerLanguage = (EditText) view.findViewById(R.id.spinner_language);
@@ -141,7 +144,11 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
             createRegestrationDialog(Constants.LANGUAGE);
         } /*else if (viewId == R.id.textview_registration_about) {
             getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
-        }*/
+        }*/ else if(viewId == R.id.edit_text_registration_password)
+        {
+            Log.d("Naga","Updating Password ");
+            getActivity().startActivity(new Intent(getActivity(), UpdatePasswordActivity.class));
+        }
 
     }
 

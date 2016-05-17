@@ -162,7 +162,10 @@
             </intent-filter>
         </receiver>
         <service android:name=".gcm.GcmIntentService" />
-
+        <activity
+            android:name=".UpdatePasswordActivity"
+            android:label="@string/title_activity_update_password"
+            android:theme="@style/AppTheme"></activity>
 
     </application>
 

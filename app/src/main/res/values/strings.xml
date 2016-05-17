@@ -125,6 +125,7 @@
     <string name="message_title">Smith</string>
     <string name="message_description">Hey may I ask something</string>
     <string name="message_date">Monday</string>
+    <string name="new_patient_request">New Patient Request</string>
 
 
     <!-- my patient -->
@@ -170,7 +171,7 @@
     <!-- Doctor details -->
     <string name="doctor_details_chat">Chat</string>
     <string name="doctor_details_video">Video call</string>
-    <string name="doctor_details_voice">Voice</string>
+    <string name="doctor_details_voice">VoIP</string>
     <string name="doctor_details_chat_history">CHAT HISTORY</string>
 
     <!-- Video chat details -->
@@ -208,5 +209,11 @@
     <string name="gallery_chooser_select_picture">Select photo</string>
 
     <string name="splash_screen_for_doctors">FOR DOCTORS</string>
+    //Update Password
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="retype_password">Confirm New Password</string>
+    <string name="title_activity_update_password">UpdatePasswordActivity</string>
+    <string name="password_mismatch">New password and confirm password fields do not match</string>
 
 </resources>

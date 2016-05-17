@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
@@ -29,7 +30,7 @@ public class PatientAdapter extends BaseAdapter {
     private ArrayList<PatientListItem> patientList;
     private static LayoutInflater inflater;
     private MyPatientListFragment.OnButtonClicked mOnButtonClickedListener;
-//    private boolean isPending;
+    private boolean fromMessage;
 
     private static final int TYPES_COUNT = 2;
     private static final int TYPE_PENDING = 0;
@@ -82,52 +83,42 @@ public class PatientAdapter extends BaseAdapter {
         ViewHolder holder;
         int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
         PatientListItem patient = patientList.get(position);
-//        if (view == null) {
-//            holder = new ViewHolder();
         if (patient.isPending) {
 
             view = inflater.inflate(R.layout.patient_pending_list_item, null, false);
-//              holder.pendingPatientAvatar.setImageURI(patient.a);
         } else {
             view = inflater.inflate(R.layout.doctor_list_item_layout, null, false);
         }
-//            view.setTag(holder);
-//        } else {
-//            holder = (ViewHolder) view.getTag();
-//        }
+         if (patient.isPending) {
+                ImageView pendingPatientAvatar = (ImageView) view.findViewById(R.id.patient_avatar_of_request);
+                TextView pendingPatientName = (TextView) view.findViewById(R.id.myPatient_name);
+                Button accept = (Button) view.findViewById(R.id.patient_request_accept);
+                Button reject = (Button) view.findViewById(R.id.patient_request_reject);
 
-        if (patient.isPending) {
-            ImageView pendingPatientAvatar = (ImageView) view.findViewById(R.id.patient_avatar_of_request);
-            TextView pendingPatientName = (TextView) view.findViewById(R.id.myPatient_name);
+                accept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnButtonClickedListener.onButtonClickedListener(position, true);
+                    }
+                });
 
-            Button accept = (Button) view.findViewById(R.id.patient_request_accept);
-            Button reject = (Button) view.findViewById(R.id.patient_request_reject);
+                reject.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnButtonClickedListener.onButtonClickedListener(position, false);
+                    }
+                });
 
-            accept.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnButtonClickedListener.onButtonClickedListener(position, true);
+                pendingPatientName.setText(patient.name);
+                String imageUrl = patient.avatarUrl;
+
+                if (imageUrl != null && imageUrl.trim().length() > 8) {
+                    Picasso.with(activity)
+                            .load(imageUrl).resize(dp, dp)
+                            .centerCrop().placeholder(R.drawable.news_other)
+                            .error(R.drawable.news_other)
+                            .into(pendingPatientAvatar);
                 }
-            });
-
-            reject.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnButtonClickedListener.onButtonClickedListener(position, false);
-                }
-            });
-
-            pendingPatientName.setText(patient.name);
-            String imageUrl = patient.avatarUrl;
-
-            if (imageUrl != null && imageUrl.trim().length() > 8) {
-                Picasso.with(activity)
-                        .load(imageUrl).resize(dp, dp)
-                        .centerCrop().placeholder(R.drawable.news_other)
-                        .error(R.drawable.news_other)
-                        .into(pendingPatientAvatar);
-            }
-
 
         } else {
             ImageView patientAvatar = (ImageView) view.findViewById(R.id.patient_avatar);

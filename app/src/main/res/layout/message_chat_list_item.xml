@@ -14,7 +14,7 @@
         android:id="@+id/messageIcon"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/request_icon"/>
+        android:src="@drawable/message_icon"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -26,17 +26,17 @@
         android:weightSum="1">
 
         <TextView
-            android:id="@+id/messageTitle"
+            android:id="@+id/messageSenderName_chat"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:text="@string/new_patient_request"
+            android:text="name"
             android:textColor="@color/text_black_color_selector"
             android:textSize="18sp" />
         <TextView
-            android:id="@+id/messagesenderName"
+            android:id="@+id/messageDetail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="name"
+            android:text="details"
             android:textSize="16sp"/>
 
 

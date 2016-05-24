@@ -61,7 +61,6 @@
             android:launchMode="singleTask">
         </activity>
 
-
         <activity
             android:name="com.ecarezone.android.doctor.LoginActivity"
             android:label="@string/app_name"
@@ -69,8 +68,6 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
-
-
 
         <activity
             android:name="com.ecarezone.android.doctor.RegistrationActivity"
@@ -86,12 +83,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
-        <activity
-            android:name="com.ecarezone.android.doctor.ProfileDetailsActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+
 
         <activity
             android:name=".MyPatientActivity"
@@ -105,8 +97,9 @@
             android:name="com.ecarezone.android.doctor.ChatActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
 
         <activity
             android:name="com.ecarezone.android.doctor.VideoActivity"

@@ -16,7 +16,7 @@ public class Data implements Serializable {
     @Expose
     public Settings settings;
     @Expose
-    public UserProfile[] userProfiles;
+    public UserProfile[] doctorProfile;
     @Expose
     public int role;
     @Expose

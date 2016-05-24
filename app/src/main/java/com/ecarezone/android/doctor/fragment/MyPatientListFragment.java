@@ -25,6 +25,8 @@ import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
+import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.model.rest.PatientAcceptRequest;
@@ -78,6 +80,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
         ((MainActivity) getActivity()).getSupportActionBar()
                 .setTitle(getResources().getString(R.string.main_side_menu_my_patients));
         pullDBFromdevice();
+
     }
     BroadcastReceiver message = new BroadcastReceiver() {
         @Override
@@ -92,13 +95,17 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 getText(R.string.progress_dialog_loading).toString());
         checkProgress = true;
 
-        patientLists.clear();
-
-        populatePendingPatientList();
-        populateMyCarePatientList();
+        initListWithData();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
                 new IntentFilter("send"));
         pullDBFromdevice();
+    }
+
+    private void initListWithData(){
+
+        patientLists.clear();
+        populatePendingPatientList();
+        populateMyCarePatientList();
     }
 
     @Override
@@ -124,29 +131,9 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_doctor_list_2, container, false);
 
-//        patientAvatar = (ImageView)view.findViewById(R.id.patient_avatar_of_request);
-//        patientName = (TextView)view.findViewById(R.id.myPatient_name);
-//        accept = (Button)view.findViewById(R.id.patient_request_accept);
-//        reject = (Button)view.findViewById(R.id.patient_request_reject);
-
-//        recommendedDoctorListView = (ListView) view.findViewById(R.id.recommended_doctors_list);
         patientList = view.findViewById(R.id.patient_list);
         myPatientListView = (ListView)view.findViewById(R.id.added_patient_list);
         noPatient = (TextView)view.findViewById(R.id.nomessage);
-//        myPatientPendingListView = (ListView)view.findViewById(R.id.pending_patient_list);
-//        pendingRequest = (LinearLayout)view.findViewById(R.id.patient_layout_);
-
-//        accept.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                acceptedPatientRequest();
-////                pendingRequest.setVisibility(View.GONE);
-//            }
-//        });
-//        view.setVisibility(View.GONE);
-        //TODO: if request is not present then make it invisible
-//        pendingRequest = (LinearLayout)view.findViewById(R.id.doctor_layout);
-//        recommendedDoctorContainer = view.findViewById(R.id.recommended_doctors_container);
         return view;
     }
 
@@ -179,9 +166,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
 
         @Override
         public void onRequestSuccess(SearchDoctorsResponse status) {
-            if(status.status.code == HTTP_STATUS_OK) {
-
-            }
+            initListWithData();
             Toast.makeText(getActivity(), status.status.message, Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
         }
@@ -203,9 +188,9 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             if (getDoctorsResponse.status.code == HTTP_STATUS_OK) {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
-
+                Patient patient = null;
                 while(iter.hasNext()){
-                    Patient patient = iter.next();
+                    patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
                     patientItem.isPending = false;
                     patientItem.email = patient.email;
@@ -216,7 +201,15 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
+                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getApplicationContext());
+//                    profileDbApi.saveProfile(LoginInfo.userId, patient);
+                    profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
                 }
+//                if(patient != null) {
+//                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getApplicationContext());
+////                    profileDbApi.saveProfile(LoginInfo.userId, patient);
+//                    profileDbApi.updateProfile(String.valueOf(LoginInfo.userId), patient);
+//                }
 
                 if (patientLists.size() == 0) {
                     myPatientListView.setVisibility(View.GONE);
@@ -284,9 +277,9 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             if (getDoctorsResponse.status.code == HTTP_STATUS_OK) {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
-
+                Patient patient = null;
                 while(iter.hasNext()){
-                    Patient patient = iter.next();
+                    patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
                     patientItem.isPending = true;
                     patientItem.email = patient.email;
@@ -297,7 +290,17 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
+
+                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getActivity());
+                    Patient id = profileDbApi.getProfile(patient.email);
+                    if(id == null || patient.userId != id.userId ) {
+                        profileDbApi.saveProfile(patient.userId/*LoginInfo.userId*/, patient);
+                    }
+                    else {
+                        profileDbApi.updateProfile(String.valueOf(patient.userId), patient);
+                    }
                 }
+
                 mycareDoctorAdapter = new PatientAdapter(getActivity(), patientLists, mOnButtonClickedListener);
                 myPatientListView.setAdapter(mycareDoctorAdapter);
                 if (patientLists.size() == 0) {
@@ -305,6 +308,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     noPatient.setVisibility(View.VISIBLE);
                 } else if (patientLists.size() > 0) {
                     noPatient.setVisibility(View.GONE);
+
 //                    mycareDoctorAdapter = new PatientAdapter(getActivity(), patientLists, mOnButtonClickedListener);
 //                    myPatientListView.setAdapter(mycareDoctorAdapter);
 
@@ -313,8 +317,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
-
-
                             PatientListItem patientListItem = patientLists.get(position);
                             Patient patient = new Patient(patientListItem.userId, patientListItem.email,
                                     patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
@@ -354,6 +356,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
 
             if(isAccept){
                 acceptedPatientRequest(patientItem.userId, "approved");
+                mycareDoctorAdapter.notifyDataSetChanged();
             }
             else{
                 acceptedPatientRequest(patientItem.userId, "rejected");

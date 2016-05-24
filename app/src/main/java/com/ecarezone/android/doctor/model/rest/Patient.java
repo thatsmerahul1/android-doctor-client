@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
+import com.j256.ormlite.field.DatabaseField;
 
 import java.io.Serializable;
 
@@ -12,25 +13,35 @@ import java.io.Serializable;
  */
 public class Patient implements Parcelable, Serializable {
     @Expose
+    @DatabaseField
     public String userProfile;
     @Expose
+    @DatabaseField
     public String isCallAllowed;
     @Expose
+    @DatabaseField
     public String status;
     @Expose
+    @DatabaseField
     public String email;
     @Expose
     public String userDevicesCount;
     @Expose
+    @DatabaseField
     public Long userId;
     @Expose
+    @DatabaseField
     public String name;
     @Expose
     public String recommandedDoctorId;
     @Expose
     public String userSettings;
     @Expose
+    @DatabaseField
     public String avatarUrl;
+    public Patient(){
+
+    }
 
     public Patient(Long userId, String email, String name, String recommandedDoctorId, String status, String isCallAllowed, String userDevicesCount, String userSettings, String userProfile, String avatarUrl) {
         this.userId = userId;

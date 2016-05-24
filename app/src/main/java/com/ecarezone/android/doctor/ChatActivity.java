@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.ecarezone.android.doctor.adapter.ChatAdapter;
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.ChatFragment;
 import com.ecarezone.android.doctor.utils.SinchUtil;
 
@@ -75,6 +77,13 @@ public class ChatActivity extends EcareZoneBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         SinchUtil.getSinchServiceInterface().removeMessageClientListener(chatFragment);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getBundleExtra(Constants.EXTRA_EMAIL);
+        onNavigationChanged(R.layout.frag_chat, ((extras == null) ? null : extras));
     }
 
     @Override

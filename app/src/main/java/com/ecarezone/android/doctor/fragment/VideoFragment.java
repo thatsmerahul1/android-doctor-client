@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.VideoActivity;
+import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
+import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.SinchUtil;
 import com.sinch.android.rtc.AudioController;
@@ -26,6 +29,7 @@ import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallState;
 import com.sinch.android.rtc.video.VideoCallListener;
 import com.sinch.android.rtc.video.VideoController;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -46,6 +50,7 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
     private Activity mActivity;
     private Button hangupButton, answerButton, declineButton;
     private Bundle inComingvideoArguments;
+    private ImageView incomingUserProfilePic;
 
     @Override
     protected String getCallerName() {
@@ -89,11 +94,28 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
             answerButton = (Button) view.findViewById(R.id.answerButton);
             declineButton = (Button) view.findViewById(R.id.declineButton);
             incomingCallPanel.setVisibility(View.VISIBLE);
+            incomingUserProfilePic = (ImageView)view.findViewById(R.id.incomingUserProfilePic);
             inComingVideoCallRemoteUser.setText(inComingvideoArguments.getString(SinchService.INCOMING_CALL_USER));
 
             answerButton.setOnClickListener(this);
             declineButton.setOnClickListener(this);
 
+        }
+        PatientProfileDbApi profileDbApi = new PatientProfileDbApi(mActivity);
+        Patient tempProfiles;
+        String email = inComingvideoArguments.getString("INCOMING_CALL_USER");
+        tempProfiles = profileDbApi.getProfile(email);
+        if(tempProfiles != null) {
+            String imageUrl = tempProfiles.avatarUrl;
+            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+            if (imageUrl != null && imageUrl.trim().length() > 8) {
+                Picasso.with(mActivity)
+                        .load(imageUrl).resize(dp, dp)
+                        .centerCrop().placeholder(R.drawable.news_other)
+                        .error(R.drawable.news_other)
+                        .into(incomingUserProfilePic);
+            }
+            inComingVideoCallRemoteUser.setText(tempProfiles.name);
         }
         hangupButton.setOnClickListener(this);
     }

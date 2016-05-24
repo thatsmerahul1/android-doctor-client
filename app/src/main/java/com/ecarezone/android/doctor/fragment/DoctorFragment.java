@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.ecarezone.android.doctor.utils.PermissionUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -107,6 +109,17 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
         doctorId = patient.userId;
         doctorName = patient.name;
+
+        String imageUrl = patient.avatarUrl;
+
+        if (imageUrl != null && imageUrl.trim().length() > 8) {
+            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
+            Picasso.with(mActivity)
+                    .load(imageUrl).resize(dp, dp)
+                    .centerCrop().placeholder(R.drawable.news_other)
+                    .error(R.drawable.news_other)
+                    .into(doctorProfileImg);
+        }
     }
 
     @Override

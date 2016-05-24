@@ -40,4 +40,13 @@ public final class DbContract {
         public static final String COLUMN_NAME_REGISTRATION_ID = "registrationId";
         public static final String COLUMN_NAME_MY_BIO = "doctorDescription";
     }
+    public static abstract class PatientProfiles implements BaseColumns {
+        public static final String TABLE_NAME = "PatientProfile";
+
+        public static final String COLUMN_NAME_USER_ID = "userId";
+        public static final String COLUMN_NAME_STATUS = "status";
+        public static final String COLUMN_NAME_EMAIL = "email";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
+    }
 }

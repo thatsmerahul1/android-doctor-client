@@ -152,7 +152,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mSpinnerLanguage = (EditText) view.findViewById(R.id.spinner_language);
         mSpinnerCountry.setKeyListener(null);
         mSpinnerCountry.setOnClickListener(this);
-        mSpinnerLanguage.setKeyListener(null);
         //English selected as a default language
 //        mSpinnerLanguage.setText(R.string.language_english);
         mSpinnerLanguage.setTag(getResources().getString(R.string.language_local_english));
@@ -181,13 +180,10 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             if (TextUtils.isEmpty(username)
                     || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
                     || (TextUtils.isEmpty(password) || (password.trim().length() < 8))) {
-                Toast.makeText(v.getContext(), R.string.error_user_registration, Toast.LENGTH_LONG).show();
+                Toast.makeText(v.getContext(), R.string.error_password_less_than_registration, Toast.LENGTH_LONG).show();
             } else {
                 mButtonRegister.setEnabled(false);
                 doRegistration(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
-                if(flag != 1){
-                    doLogin(username, password);
-                }
             }
         } else if (viewId == R.id.country_spinner) {
             createRegestrationDialog(Constants.COUNTRY);
@@ -303,7 +299,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                 hashedPassword = PasswordUtil.getHashedPassword(password);
                 LoginRequest request =
                         new LoginRequest(username, hashedPassword, 0, Constants.API_KEY, Constants.deviceUnique, locationFinder.getLatitude(), locationFinder.getLongitude());
-                final LoginResponse response = new LoginResponse();
                 progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Logging ........");
                 getSpiceManager().execute(request, new LoginRequestListener());
                 dialog.dismiss();
@@ -345,10 +340,10 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                     // record the app stauts as "is_login" then the next launch will go to main page directly instead of go to registration page
 
                     // Make server call & get the user information & save it internally in db.
-                    if (data.userProfiles != null) {
+                    if (data.doctorProfile != null) {
                         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
                         profileDbApi.deleteProfiles(LoginInfo.userId.toString());
-                        profileDbApi.saveMultipleProfiles(LoginInfo.userId.toString(), response.data.userProfiles);
+                        profileDbApi.saveMultipleProfiles(LoginInfo.userId.toString(), response.data.doctorProfile);
                     }
                     userTable = new UserTable(getActivity());
                     /*
@@ -380,7 +375,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                             nextScreen(activity);
                         }
                     });
-
                 }
                 progressDialog.dismiss();
             } else {
@@ -453,17 +447,11 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                                 , Integer.toString(0), data.settings.country);
                     }
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!SinchUtil.getSinchServiceInterface().isStarted()) {
-                                SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
-                            }
+                    String username = LoginInfo.userName;
+                    String password = LoginInfo.hashedPassword;
+                    doLogin(username, password);
 
-                            invokeNavigationChanged(R.layout.frag_login, null);
-                        }
-                    });
-                }
+                 }
             }else {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

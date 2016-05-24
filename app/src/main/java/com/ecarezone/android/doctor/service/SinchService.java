@@ -2,7 +2,9 @@ package com.ecarezone.android.doctor.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +15,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.ecarezone.android.doctor.CallActivity;
+import com.ecarezone.android.doctor.ChatActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.VideoActivity;
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.utils.SinchUtil;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
@@ -61,6 +65,7 @@ public class SinchService extends Service {
     private StartFailedListener mListener;
     private PersistedSettings mSettings;
     private int numMessages = 0;
+    Intent resultIntent;
 
     @Override
     public void onCreate() {
@@ -400,10 +405,18 @@ public class SinchService extends Service {
 
         mNotifyBuilder.setContentText(message.getTextBody())
                 .setNumber(++numMessages);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(
-                notifyID,
-                mNotifyBuilder.build());
+
+        resultIntent = new Intent(this, ChatActivity.class);
+        resultIntent.putExtra(Constants.EXTRA_EMAIL, message.getSenderId());
+        if (resultIntent != null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                    resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mNotifyBuilder.setContentIntent(pendingIntent);
+        }
+        Notification notification = mNotifyBuilder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
 
     }
 

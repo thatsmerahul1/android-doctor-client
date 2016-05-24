@@ -78,6 +78,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         super.onResume();
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getText(R.string.progress_dialog_loading).toString());
+        patientLists.clear();
         populatePendingPatientList();
         populateMyCarePatientList();
     }

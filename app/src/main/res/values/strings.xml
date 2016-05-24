@@ -61,7 +61,7 @@
     <string name="profile_details_hint">-</string>
     <string name="profile_details_delete_profile">Delete Profile</string>
     <string name="profile_add_people_you_care">Add people you care</string>
-    <string name="profile_details_specialized_areas">Specialized ares</string>
+    <string name="ProfileFormEditTextStyle">Specialized areas</string>
     <string name="profile_details_registration_id">Registration ID</string>
     <string name="profile_details_my_bio">My Bio</string>
 
@@ -106,8 +106,8 @@
         <item>English</item>
         <item>Chinese</item>
         <item>Swedish</item>
-        <item>Norway</item>
-        <item>Finland</item>
+        <item>Norwegian</item>
+        <item>Finnish</item>
     </string-array>
 
     <string-array name="language_local_array">
@@ -184,6 +184,7 @@
     <!-- Error -->
     <string name="error_user_login">Invalid username or password</string>
     <string name="error_user_registration">@string/error_user_login</string>
+    <string name="error_password_less_than_registration">Password must be minimum 8 character</string>
 
     <string name="cancel" translatable="false">Cancel</string>
     <string name="welcome_button_send">send</string>
@@ -215,5 +216,14 @@
     <string name="retype_password">Confirm New Password</string>
     <string name="title_activity_update_password">UpdatePasswordActivity</string>
     <string name="password_mismatch">New password and confirm password fields do not match</string>
+    <string name="array_name">Specialized areas</string>
 
+    <string-array name="array_name">
+        <item>Select</item>
+        <item>Brain</item>
+        <item>Surgery</item>
+        <item>Heart</item>
+        <item>Kidney</item>
+        <item>Lungs</item>
+    </string-array>
 </resources>

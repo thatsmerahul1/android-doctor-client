@@ -50,13 +50,16 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-            <ImageView
+            <com.ecarezone.android.doctor.view.CircleImageView
                 android:id="@+id/doctor_profile_pic_id"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_gravity="center"
-                android:src="@drawable/dr_john_photo" />
+                android:layout_width="@dimen/profile_thumbnail_edge_size"
+                android:layout_height="@dimen/profile_thumbnail_edge_size"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="4dp"
+                android:src="@drawable/dr_john_photo"
+                >
+            </com.ecarezone.android.doctor.view.CircleImageView>
+
 
             <TextView
                 android:id="@+id/doctor_name_id"

@@ -45,7 +45,8 @@
                         android:id="@+id/name"
                         style="@style/ProfileFormEditTextStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"/>
                 </FrameLayout>
 
                 <View style="@style/ProfileFormLineViewStyle" />
@@ -68,6 +69,7 @@
                         android:editable="false"
                         android:focusable="false"
                         android:inputType="none"
+                        android:textSize="16sp"
                         />
 
                 </FrameLayout>
@@ -93,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:inputType="none"/>
+                android:inputType="none"
+                android:textSize="16sp"/>
         </FrameLayout>
        <!-- <FrameLayout
             android:layout_width="match_parent"
@@ -121,19 +124,34 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+               <TextView
                 style="@style/ProfileFormTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_details_specialized_areas" />
+                android:text="@string/ProfileFormEditTextStyle"
+                 android:layout_weight="1" />
 
-            <EditText
+           <!--  <EditText
                 android:id="@+id/specializedArea"
                 style="@style/ProfileFormEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text" />-->
+
+            <Spinner
+                style="@style/ProfileFormEditTextStyle"
+                android:id="@+id/specializedArea"
+                android:layout_width="94dp"
+                android:gravity="end"
+                android:layout_height="wrap_content"
+                android:entries="@array/array_name"
+                android:textSize="16sp"
+               />
+        </LinearLayout>
         </FrameLayout>
         <View style="@style/ProfileFormLineViewStyle" />
 
@@ -152,7 +170,8 @@
                 style="@style/ProfileFormEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textSize="16sp"/>
         </FrameLayout>
 
         <View style="@style/ProfileFormLineViewStyle" />
@@ -177,6 +196,7 @@
             android:layout_height="wrap_content"
             android:background="#ffffff"
             android:lines="5"
+            android:textSize="16sp"
             android:layout_marginTop="10dp"
             android:layout_weight="0.19" />
 

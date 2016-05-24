@@ -27,6 +27,7 @@ public class GcmIntentService extends IntentService implements ServiceConnection
         super("GcmIntentService");
     }
 
+
     @Override
     protected void onHandleIntent(Intent intent) {
         if (SinchHelpers.isSinchPushIntent(intent)) {

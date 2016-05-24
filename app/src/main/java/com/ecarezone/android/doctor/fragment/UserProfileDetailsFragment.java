@@ -27,9 +27,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.ProfileDetailsActivity;
@@ -77,6 +80,8 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private String mSelectedPhotoPath = null;
     private String mUploadedImageUrl = null;
     private ProgressDialog mProgressDialog;
+    Spinner spec;
+    Bitmap imgBitmap;
 
     @Override
     protected String getCallerName() {
@@ -112,19 +117,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         nameET.addTextChangedListener(this);
 
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
-        long profileId = mActivity.getIntent().getLongExtra(ProfileDetailsActivity.PROFILE_ID, -1);
-        mProfile = profileDbApi.getProfile(LoginInfo.userId.toString()/*, "36"*//*profileId*/);
-
-
-//        if (!mActivity.getIntent().getBooleanExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)) {
-//            // Profile exists. Retrieve from DB and display the profile details
-//            String profileId = mActivity.getIntent().getStringExtra(ProfileDetailsActivity.PROFILE_ID);
-//            if (profileId != null) {
-//                mProfile = profileDbApi.getProfile(LoginInfo.userId.toString(), profileId);
-//            }
-//        } else if (!profileDbApi.hasProfile(LoginInfo.userId.toString())) {
-//            // No profiles found. make this as "My profile"
-//         }
+        mProfile = profileDbApi.getProfile(LoginInfo.userId.toString());
 
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
@@ -223,23 +216,73 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         }
 
         if (doApplyMatrix) {
-            Bitmap imgBitmap = Bitmap.createBitmap(bitmap, 0,
+            imgBitmap = Bitmap.createBitmap(bitmap, 0,
                     0, bitmap.getWidth(), bitmap.getHeight(),
                     matrix, true);
+            saveBitmapToFile(imagePath, imgBitmap);
+
+
             profileImageButton.setImageBitmap(imgBitmap);
         } else {
             profileImageButton.setImageBitmap(bitmap);
         }
     }
+    public static boolean saveBitmapToFile(String file, Bitmap bmp) {
+
+        FileOutputStream out = null;
+        boolean isSavingSuccessful = false;
+        try {
+            out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            isSavingSuccessful = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return isSavingSuccessful;
+    }
 
     /* sets the provide profile details in the UI fields */
-    private void setProfileValuesToFormFields(UserProfile profile) {
+    private void setProfileValuesToFormFields(final UserProfile profile) {
         ((EditText) view.findViewById(R.id.name)).setText(profile.name);
         ((EditText) view.findViewById(R.id.gender)).setText(profile.gender);
-        ((EditText) view.findViewById(R.id.specializedArea)).setText(profile.category);
         ((EditText) view.findViewById(R.id.dob)).setText(profile.birthDate);
         ((EditText) view.findViewById(R.id.registrationID)).setText(profile.registrationId);
         ((EditText) view.findViewById(R.id.myBio)).setText(profile.doctorDescription);
+
+        spec = (Spinner) view.findViewById(R.id.specializedArea);
+        /*final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mActivity,
+                R.array.array_name, android.R.layout.simple_spinner_item);
+        spec.setAdapter(adapter);*/
+        spec.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if (profile.category.equalsIgnoreCase("Brain")) {
+            spec.setSelection(1);
+        } else if (profile.category.equalsIgnoreCase("Surgery")) {
+            spec.setSelection(2);
+        } else if (profile.category.equalsIgnoreCase("Heart")) {
+            spec.setSelection(3);
+        } else if (profile.category.equalsIgnoreCase("Kidney")) {
+            spec.setSelection(4);
+        } else if (profile.category.equalsIgnoreCase("Lungs")) {
+            spec.setSelection(5);
+        }
+
     }
 
     private void setDateToDobField(String date) {
@@ -263,16 +306,16 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         userProfile.gender = ((EditText) view.findViewById(R.id.gender)).getText().toString();
         userProfile.birthDate = ((EditText) view.findViewById(R.id.dob)).getText().toString();
 //        userProfile.email = LoginInfo.userName;
-        userProfile.category = ((EditText) view.findViewById(R.id.specializedArea)).getText().toString();
+        userProfile.category = ((Spinner) view.findViewById(R.id.specializedArea)).getSelectedItem().toString();
         userProfile.registrationId = ((EditText) view.findViewById(R.id.registrationID)).getText().toString();
         userProfile.doctorDescription = ((EditText) view.findViewById(R.id.myBio)).getText().toString();
 
-        if((TextUtils.isEmpty(((EditText) view.findViewById(R.id.name)).getText().toString()))||
+        if ((TextUtils.isEmpty(((EditText) view.findViewById(R.id.name)).getText().toString())) ||
                 (TextUtils.isEmpty(((EditText) view.findViewById(R.id.gender)).getText().toString())) ||
                 (TextUtils.isEmpty(((EditText) view.findViewById(R.id.dob)).getText().toString())) ||
-                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.specializedArea)).getText().toString())) ||
-                        (TextUtils.isEmpty(((EditText) view.findViewById(R.id.registrationID)).getText().toString())) ||
-                        (TextUtils.isEmpty(((EditText) view.findViewById(R.id.myBio)).getText().toString()))) {
+                (TextUtils.isEmpty(((Spinner) view.findViewById(R.id.specializedArea)).getSelectedItem().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.registrationID)).getText().toString())) ||
+                (TextUtils.isEmpty(((EditText) view.findViewById(R.id.myBio)).getText().toString()))) {
 
             Toast.makeText(mActivity, "Please enter all the fields", Toast.LENGTH_LONG).show();
 
@@ -324,7 +367,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
                 SharedPreferences perPreferences =
                         getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
-                 String userId = perPreferences.getString(Constants.PROFILE_ID, null);
+                String userId = perPreferences.getString(Constants.PROFILE_ID, null);
                 long profileId = Long.parseLong(userId);
                 updateProfileInServer(profileId, userProfile);
             }
@@ -337,7 +380,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         CreateProfileRequest request = new CreateProfileRequest();
         request.doctorProfile = userProfile;
         getSpiceManager().execute(request, "profile_create", DurationInMillis.ALWAYS_EXPIRED, new CreateProfileResponseListener());
-        Log.d("","Request::" + request);
+        Log.d("", "Request::" + request);
     }
 
     /* updates the current profile in server */
@@ -466,7 +509,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
                 ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
                 profileDbApi.saveProfile(LoginInfo.userId.toString(), profile, response.id);
-//                profileDbApi.updateProfile(LoginInfo.userId.toString(), profile, response.id);
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();
@@ -484,7 +526,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
         @Override
         public void onRequestSuccess(CreateProfileResponse response) {
-            if (response != null && response.id != null &&  Integer.parseInt(response.id) > 0) {
+            if (response != null && response.id != null && Integer.parseInt(response.id) > 0) {
                 UserProfile profile = createUserProfileFromResponse(response);
 
                 ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
@@ -560,7 +602,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day + 1);
+            StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
             setDateToDobField(dateSb.toString());
         }
     }

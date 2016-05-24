@@ -2,6 +2,7 @@ package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ import com.sinch.android.rtc.SinchError;
  */
 public class LoginFragment extends EcareZoneBaseFragment implements View.OnClickListener,
         SinchService.StartFailedListener {
-    private ProgressDialog progressDialog;
+    public ProgressDialog progressDialog;
     private static String TAG = LoginFragment.class.getSimpleName();
 
 
@@ -57,8 +58,8 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     private TextView mTextViewForgotPwd = null;
     private View mButtonLogin = null;
     private UserTable userTable;
-    private LocationFinder locationFinder;
-    private String hashedPassword;
+    public LocationFinder locationFinder;
+    public String hashedPassword;
     private TextView textView_error;
 
     @Override
@@ -234,6 +235,8 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
 
     }
 
+
+
     //Login response listner
     public final class LoginRequestListener implements RequestListener<LoginResponse> {
         @Override
@@ -266,10 +269,10 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                     // record the app stauts as "is_login" then the next launch will go to main page directly instead of go to registration page
 
                     // Make server call & get the user information & save it internally in db.
-                    if (data.userProfiles != null) {
+                    if (data.doctorProfile != null) {
                         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
                         profileDbApi.deleteProfiles(LoginInfo.userId.toString());
-                        profileDbApi.saveMultipleProfiles(LoginInfo.userId.toString(), response.data.userProfiles);
+                        profileDbApi.saveMultipleProfiles(LoginInfo.userId.toString(), response.data.doctorProfile);
                     }
                     userTable = new UserTable(getActivity());
                     /*

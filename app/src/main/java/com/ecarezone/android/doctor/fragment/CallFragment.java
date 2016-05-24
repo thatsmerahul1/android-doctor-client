@@ -2,6 +2,7 @@ package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -20,13 +21,23 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.CallActivity;
 import com.ecarezone.android.doctor.R;
+import com.ecarezone.android.doctor.config.Constants;
+import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.Chat;
+import com.ecarezone.android.doctor.model.UserProfile;
+import com.ecarezone.android.doctor.model.database.ChatDbApi;
+import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
+import com.ecarezone.android.doctor.model.database.ProfileDbApi;
+import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.SinchUtil;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallListener;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +54,7 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
     private Button endcallButton, answerButton, declineButton;
     private String TAG = CallFragment.class.getName();
     private String mCallId;
-
+    private  ImageView incomingUserProfilePic;
     @Override
     protected String getCallerName() {
         return CallFragment.class.getSimpleName();
@@ -72,6 +83,7 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
         endcallButton = (Button) view.findViewById(R.id.end_call);
         callMainBackground = (FrameLayout) view.findViewById(R.id.callMainBackground);
 
+
         ((CallActivity) getActivity()).hideActionbar();
 
         if (incomingCallArguments.getString(SinchService.CALL_ID) != null) {
@@ -80,15 +92,53 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             inComingVideoCallRemoteUser = (TextView) view.findViewById(R.id.remoteUser);
             answerButton = (Button) view.findViewById(R.id.answerButton);
             declineButton = (Button) view.findViewById(R.id.declineButton);
+            incomingUserProfilePic = (ImageView)view.findViewById(R.id.incomingUserProfilePic);
             incomingCallPanel.setVisibility(View.VISIBLE);
             inComingVideoCallRemoteUser.setText(incomingCallArguments.getString(SinchService.INCOMING_CALL_USER));
 
             answerButton.setOnClickListener(this);
             declineButton.setOnClickListener(this);
+        }
+        PatientProfileDbApi profileDbApi = new PatientProfileDbApi(mActivity);
+        String email = incomingCallArguments.getString("email");
+        Patient tempProfiles;
+        if(email != null){
+            tempProfiles = profileDbApi.getProfile(email);
+            if(tempProfiles != null) {
+                String imageUrl = tempProfiles.avatarUrl;
+                int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+                if (imageUrl != null && imageUrl.trim().length() > 8) {
+                    Picasso.with(mActivity)
+                            .load(imageUrl).resize(dp, dp)
+                            .centerCrop().placeholder(R.drawable.news_other)
+                            .error(R.drawable.news_other)
+                            .into(doctorAvatar);
+                }
+            }
+        } else{
+            tempProfiles = profileDbApi.getProfile(incomingCallArguments.getString("INCOMING_CALL_USER"));
+            if(tempProfiles != null) {
+                inComingVideoCallRemoteUser.setText(tempProfiles.name);
+                String imageUrl = tempProfiles.avatarUrl;
+                int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+                if (imageUrl != null && imageUrl.trim().length() > 8) {
+                    Picasso.with(mActivity)
+                            .load(imageUrl).resize(dp, dp)
+                            .centerCrop().placeholder(R.drawable.news_other)
+                            .error(R.drawable.news_other)
+                            .into(incomingUserProfilePic);
+                    Picasso.with(mActivity)
+                            .load(imageUrl).resize(dp, dp)
+                            .centerCrop().placeholder(R.drawable.news_other)
+                            .error(R.drawable.news_other)
+                            .into(doctorAvatar);
+                }
+            }
 
         }
-        endcallButton.setOnClickListener(this);
+        topPanel.setText(tempProfiles.name);
 
+        endcallButton.setOnClickListener(this);
         topPanel.setVisibility(View.GONE);
         bootomPanel.setVisibility(View.GONE);
         doctorAvatar.setVisibility(View.GONE);

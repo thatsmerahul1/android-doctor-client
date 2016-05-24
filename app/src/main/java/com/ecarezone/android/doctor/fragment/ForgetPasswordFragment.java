@@ -60,7 +60,7 @@ public class ForgetPasswordFragment extends EcareZoneBaseFragment implements Vie
             progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                     getText(R.string.progress_dialog_requesting).toString());
             ForgetPassRequest request =
-                    new ForgetPassRequest(editTextForgetPwd.getText().toString(), 1);
+                    new ForgetPassRequest(editTextForgetPwd.getText().toString(), 0);
             getSpiceManager().execute(request, new PasswordRequestListener());
 
         }

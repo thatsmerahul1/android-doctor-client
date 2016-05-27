@@ -45,12 +45,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private ImageView doctorStatusIcon;
     private TextView doctorStatusText;
     private TextView doctorNameView;
-    private TextView doctorSpecialist;
     private ImageView doctorProfileImg;
     private Button doctorChat;
     private Button doctorVideo;
     private Button doctorVoice;
-    private Button addDoctorButton;
     private Button buttonAppointment;
     private Bundle doctorDetailData;
     private Long doctorId;

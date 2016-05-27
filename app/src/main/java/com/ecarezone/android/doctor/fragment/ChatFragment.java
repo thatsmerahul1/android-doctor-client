@@ -1,10 +1,13 @@
 package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +40,7 @@ import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
 import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +61,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     String recipient = "ecareuser@mail.com";
     private String deviceImagePath;
     Map<String, Integer> perms = new HashMap<>();
+    String recipientName;
     @Override
     protected String getCallerName() {
         return null;
@@ -74,7 +79,8 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     }
 
     private void getAllComponent(View view) {
-        chatAdapter = new ChatAdapter(getActivity());
+        recipientName = getArguments().getString(Constants.EXTRA_NAME);
+        chatAdapter = new ChatAdapter(getActivity(),recipientName);
         chatList = (RecyclerView) view.findViewById(R.id.chat_mesage_list);
         chatList.setAdapter(chatAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -134,7 +140,8 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     }
 
     private void takePicture(){
-        deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity());
+        chat = new Chat();
+        deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity(), true, recipientName);
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(deviceImagePath);
         Uri contentUri = Uri.fromFile(f);
@@ -167,6 +174,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         Log.d(TAG, "onShouldSendPushData");
     }
 
+    private Date mMessageReceivedDate;
     private void sendMessage(String textBody, String messageType) {
         chat = new Chat();
         if (recipient.isEmpty()) {
@@ -180,7 +188,8 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
 
         chat.setChatUserId(recipient);
         chatBox.setText("");
-        chat.setTimeStamp(new Date());
+        mMessageReceivedDate = new Date();
+        chat.setTimeStamp(mMessageReceivedDate);
         chat.setChatType(ChatDbApi.CHAT_OUTGOING);
         chat.setReadStatus(ChatDbApi.CHAT_READ_STATUS);
 
@@ -210,6 +219,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         chat.setChatUserId(message.getSenderId());
         if (message.getTextBody().contains(Constants.ENDPOINTURL)) {
             chat.setInComingImageUrl(message.getTextBody());
+            downloadFile(chat.getInComingImageUrl(), message.getTimestamp());
         } else {
             chat.setMessageText(message.getTextBody());
         }
@@ -217,6 +227,34 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         chat.setChatType(ChatDbApi.CHAT_INCOMING);
 
         return chat;
+    }
+
+    //store images in sd card
+    public void downloadFile(String uri, Date fileName) {
+        File direct = new File(Environment.getExternalStorageDirectory()
+                + "/eCareZone"+ "/" + recipientName + "/incoming");
+
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
+
+        DownloadManager mgr = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uri);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
+        String todayDate = dateFormat.format(fileName);
+
+        request.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI
+                        | DownloadManager.Request.NETWORK_MOBILE)
+                        .setDestinationInExternalPublicDir("/eCareZone" + "/" + recipientName + "/incoming", todayDate + ".jpg");
+
+        mgr.enqueue(request);
+
     }
 
     @Override

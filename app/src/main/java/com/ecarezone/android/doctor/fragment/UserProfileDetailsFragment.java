@@ -13,7 +13,6 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -28,14 +27,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
@@ -56,11 +53,8 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.Calendar;
 
 /**
@@ -432,7 +426,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                                         PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
                             } else {
                                 // already have all permissions
-                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
+                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false,null);
                             }
                         } else {
                             if (PermissionUtil.isPermissionRequired()
@@ -621,7 +615,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 dispatchSelectFromGalleryIntent();
                 break;
             case PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS:
-                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity());
+                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false, null);
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);

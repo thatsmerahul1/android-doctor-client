@@ -1,9 +1,13 @@
 package com.ecarezone.android.doctor.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +30,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +116,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Chat chat = mMessages.get(position);
+        final Chat chat = mMessages.get(position);
         String message = chat.getMessageText();
         String name = null;
         String senderUserId;
@@ -134,12 +139,31 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         .config(Bitmap.Config.RGB_565).fit()
                         .centerCrop()
                         .into(holder.mChartImage);
+
+                holder.mChartImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()), "image/*");
+                        mContext.startActivity(intent);
+                    }
+                });
             } else if (chat.getDiscImageFile() != null) {
                 Picasso.with(mContext)
                         .load(chat.getDiscImageFile())
                         .config(Bitmap.Config.RGB_565).fit()
                         .centerCrop()
                         .into(holder.mChartImage);
+                holder.mChartImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()), "image/*");
+                        mContext.startActivity(intent);
+                    }
+                });
             } else {
                 new ImageUploadDiscTask(holder).execute(chat);
             }
@@ -185,7 +209,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             }
                         });
             }
-
+            final String finalImagePath = imagePath;
+            holder.mChartImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse("file://" + finalImagePath),"image/*");
+                    mContext.startActivity(intent);
+                }
+            });
         } else {
             holder.mChatText.setText(chat.getMessageText());
             holder.mChatText.setVisibility(View.VISIBLE);

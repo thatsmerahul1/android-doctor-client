@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.MyPatientActivity;
 import com.ecarezone.android.doctor.MainActivity;
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
@@ -106,11 +108,16 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
         pullDBFromdevice();
     }
 
-    private void initListWithData(){
+    private void initListWithData() {
 
         patientLists.clear();
-        populatePendingPatientList();
-        populateMyCarePatientList();
+        if (NetworkCheck.isNetworkAvailable(getActivity())) {
+            populatePendingPatientList();
+            populateMyCarePatientList();
+        } else {
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
+        progressDialog.dismiss();
     }
 
     @Override
@@ -236,6 +243,12 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
+                            if(NetworkCheck.isNetworkAvailable(getActivity())){
+                                PatientListItem patientListItem = patientLists.get(position);
+                                Patient patient = new Patient(patientListItem.userId, patientListItem.email,
+                                        patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
+                                        patientListItem.isCallAllowed, patientListItem.userDevicesCount,
+                                        patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
 
                             PatientListItem patientListItem = patientLists.get(position);
                             Patient patient = new Patient(patientListItem.userId, patientListItem.email,
@@ -326,21 +339,25 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
-                            PatientListItem patientListItem = patientLists.get(position);
-                            Patient patient = new Patient(patientListItem.userId, patientListItem.email,
-                                    patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
-                                    patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-                                    patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
+                            if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                                PatientListItem patientListItem = patientLists.get(position);
+                                Patient patient = new Patient(patientListItem.userId, patientListItem.email,
+                                        patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
+                                        patientListItem.isCallAllowed, patientListItem.userDevicesCount,
+                                        patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
 
-                            data.putParcelable(Constants.DOCTOR_DETAIL, patient);
-                            data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
-                            final Activity activity = getActivity();
-                            if (activity != null) {
-                                Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
-                                showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
-                                showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-                                activity.startActivity(showDoctorIntent);
-                                activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                data.putParcelable(Constants.DOCTOR_DETAIL, patient);
+                                data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
+                                final Activity activity = getActivity();
+                                if (activity != null) {
+                                    Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
+                                    showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+                                    showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
+                                    activity.startActivity(showDoctorIntent);
+                                    activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

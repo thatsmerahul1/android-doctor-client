@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.ecarezone.android.doctor.AppointmentActivity;
 import com.ecarezone.android.doctor.CallActivity;
 import com.ecarezone.android.doctor.ChatActivity;
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.VideoActivity;
 import com.ecarezone.android.doctor.config.Constants;
@@ -125,7 +126,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
 
         viewId = v.getId();
-        if(isNetworkAvailable(mActivity)) {
+        if(NetworkCheck.isNetworkAvailable(mActivity)) {
             switch (viewId) {
                 case R.id.btn_doctor_chat_id:
                     chatButtonClicked();
@@ -150,10 +151,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
     }
 
-    public boolean isNetworkAvailable(final Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
     private void callVideoButtonClicked() {
         if (PermissionUtil.isPermissionRequired() && PermissionUtil.getAllpermissionRequired(mActivity, PermissionUtil.SINCH_PERMISSIONS).length > 0) {
             PermissionUtil.setAllPermission(mActivity, PermissionUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS, PermissionUtil.SINCH_PERMISSIONS);

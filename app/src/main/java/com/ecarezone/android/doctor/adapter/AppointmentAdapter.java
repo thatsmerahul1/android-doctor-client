@@ -1,6 +1,7 @@
 package com.ecarezone.android.doctor.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,25 +11,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
+import com.ecarezone.android.doctor.model.Appointment;
+import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
+import com.ecarezone.android.doctor.model.pojo.AppointmentListItem;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
+import com.ecarezone.android.doctor.model.rest.Patient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 20109804 on 5/9/2016.
  */
 public class AppointmentAdapter extends BaseAdapter {
     private Activity activity;
-    private ArrayList<PatientListItem> patientList;
     private static LayoutInflater inflater;
+    private Context mContext;
+    private List<AppointmentListItem> mAppointmentList;
+    private OnButtonClickedListener mOnButtonClickedListener;
 
 
-    public AppointmentAdapter(){
-
+    public AppointmentAdapter(Context context, List<AppointmentListItem> appointmentList,
+                              OnButtonClickedListener onButtonClickedListener){
+        mContext = context;
+        this.mAppointmentList = appointmentList;
+        mOnButtonClickedListener = onButtonClickedListener;
+        inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
-        return patientList.size();
+        return mAppointmentList.size();
     }
 
     @Override
@@ -45,50 +57,54 @@ public class AppointmentAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View view = convertView;
-        PatientListItem patient = patientList.get(position);
+        AppointmentListItem appointment = mAppointmentList.get(position);
 //        if (view == null) {
 //            holder = new ViewHolder();
-        if (patient.isPending) {
+        if (! appointment.isConfirmed) {
 
             view = inflater.inflate(R.layout.appointment_pending_list_item, null, false);
 //              holder.pendingPatientAvatar.setImageURI(patient.a);
         } else {
             view = inflater.inflate(R.layout.appointment_accepted_list_item, null, false);
         }
-//            view.setTag(holder);
-//        } else {
-//            holder = (ViewHolder) view.getTag();
-//        }
 
-        if (patient.isPending) {
+
+        if (! appointment.isConfirmed) {
             ImageView pendingPatientAvatar = (ImageView) view.findViewById(R.id.appointment_patient_avatar_of_request);
             TextView appointmentPendingTime = (TextView) view.findViewById(R.id.appointment_time);
             TextView appointmentTypeOfCall = (TextView) view.findViewById(R.id.type_of_call);
             TextView appointmentPatientName = (TextView) view.findViewById(R.id.patient_name);
 
             Button accept = (Button) view.findViewById(R.id.patient_appointment_request_accept);
+            accept.setTag(position);
             Button reject = (Button) view.findViewById(R.id.patient_appointment_request_reject);
+            reject.setTag(position);
+
             //TODO:
-//            accept.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mOnButtonClickedListener.onButtonClickedListener(position, true);
-//                }
-//            });
-//
-//            reject.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mOnButtonClickedListener.onButtonClickedListener(position, false);
-//                }
-//            });
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnButtonClickedListener.onButtonClickedListener((Integer)v.getTag(), true);
+                }
+            });
 
-//            appointmentPatientName.setText(patient.name);
-//            appointmentPendingTime.setText(patient.);
-//            appointmentTypeOfCall.setText(patient.name);
-//            pendingPatientAvatar.setImageResource(R.drawable.request_icon);
+            reject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnButtonClickedListener.onButtonClickedListener((Integer)v.getTag(), false);
+                }
+            });
+            PatientProfileDbApi db = PatientProfileDbApi.getInstance(mContext);
+            Patient patient = db.getProfileByProfileId(String.valueOf(appointment.patientId));
+            if(patient != null) {
+                appointmentPatientName.setText("Patient: "+patient.name);
+            }
+            appointmentPendingTime.setText(appointment.dateTime);
+            appointmentTypeOfCall.setText(appointment.callType + " call");
+            pendingPatientAvatar.setImageResource(R.drawable.request_icon);
 
-        } else {
+        }
+        else {
             ImageView patientAvatar = (ImageView) view.findViewById(R.id.appointment_patient_avatar_of_request);
             TextView appointmentTime = (TextView) view.findViewById(R.id.appointment_accepted_time);
             TextView appointedPatientName = (TextView) view.findViewById(R.id.accepted_patient_name);

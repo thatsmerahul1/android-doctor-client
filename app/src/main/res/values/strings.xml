@@ -218,6 +218,10 @@
     <string name="password_mismatch">New password and confirm password fields do not match</string>
     <string name="array_name">Specialized areas</string>
 
+    <!-- TAG KEYS -->
+    <string name="message_adapter_key">message_adapter_key</string>
+    <string name="message_adapter_viewholder_key">message_adapter_viewholder_key</string>
+
     <string-array name="array_name">
         <item>Select</item>
         <item>Brain</item>

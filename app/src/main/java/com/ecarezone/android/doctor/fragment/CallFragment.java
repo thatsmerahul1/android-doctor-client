@@ -99,11 +99,11 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             answerButton.setOnClickListener(this);
             declineButton.setOnClickListener(this);
         }
-        PatientProfileDbApi profileDbApi = new PatientProfileDbApi(mActivity);
+        PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(mActivity);
         String email = incomingCallArguments.getString("email");
         Patient tempProfiles;
         if(email != null){
-            tempProfiles = profileDbApi.getProfile(email);
+            tempProfiles = profileDbApi.getProfileByEmail(email);
             if(tempProfiles != null) {
                 String imageUrl = tempProfiles.avatarUrl;
                 int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
@@ -114,9 +114,11 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
                             .error(R.drawable.news_other)
                             .into(doctorAvatar);
                 }
+                topPanel.setText(tempProfiles.name);
             }
         } else{
-            tempProfiles = profileDbApi.getProfile(incomingCallArguments.getString("INCOMING_CALL_USER"));
+//            tempProfiles = profileDbApi.getProfile(incomingCallArguments.getString("INCOMING_CALL_USER"));
+            tempProfiles = profileDbApi.getProfileByEmail(incomingCallArguments.getString("INCOMING_CALL_USER"));
             if(tempProfiles != null) {
                 inComingVideoCallRemoteUser.setText(tempProfiles.name);
                 String imageUrl = tempProfiles.avatarUrl;
@@ -133,10 +135,9 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
                             .error(R.drawable.news_other)
                             .into(doctorAvatar);
                 }
+                topPanel.setText(tempProfiles.name);
             }
-
         }
-        topPanel.setText(tempProfiles.name);
 
         endcallButton.setOnClickListener(this);
         topPanel.setVisibility(View.GONE);

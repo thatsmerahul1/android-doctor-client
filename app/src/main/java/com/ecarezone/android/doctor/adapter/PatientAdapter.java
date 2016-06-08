@@ -83,13 +83,13 @@ public class PatientAdapter extends BaseAdapter {
         ViewHolder holder;
         int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
         PatientListItem patient = patientList.get(position);
-        if (patient.isPending) {
+        if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
 
             view = inflater.inflate(R.layout.patient_pending_list_item, null, false);
         } else {
             view = inflater.inflate(R.layout.doctor_list_item_layout, null, false);
         }
-         if (patient.isPending) {
+         if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
                 ImageView pendingPatientAvatar = (ImageView) view.findViewById(R.id.patient_avatar_of_request);
                 TextView pendingPatientName = (TextView) view.findViewById(R.id.myPatient_name);
                 Button accept = (Button) view.findViewById(R.id.patient_request_accept);

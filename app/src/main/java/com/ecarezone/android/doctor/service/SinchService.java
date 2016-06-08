@@ -1,5 +1,6 @@
 package com.ecarezone.android.doctor.service;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -95,6 +96,12 @@ public class SinchService extends Service {
     * @param username
     * */
     private void createClient(String userName) {
+
+        SharedPreferences perPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
+        if(! perPreferences.getBoolean(Constants.IS_LOGIN, true)){
+            return;
+        }
+
         mUserId = userName;
         mSinchClient = Sinch.getSinchClientBuilder().context(getApplicationContext()).userId(userName)
                 .applicationKey(APP_KEY)
@@ -116,6 +123,7 @@ public class SinchService extends Service {
     /* stop sinch client*/
     private void stop() {
         if (mSinchClient != null) {
+            mSinchClient.stopListeningOnActiveConnection();;
             mSinchClient.terminate();
             mSinchClient = null;
         }
@@ -221,7 +229,8 @@ public class SinchService extends Service {
         public NotificationResult relayRemotePushNotificationPayload(Intent intent) {
             if (mSinchClient == null && !mSettings.getUsername().isEmpty()) {
                 createClient(mSettings.getUsername());
-            } else if (mSinchClient == null && mSettings.getUsername().isEmpty()) {
+            }
+            if (mSinchClient == null) {
                 Log.e(TAG, "Can't start a SinchClient as no username is available, unable to relay push.");
                 return null;
             }

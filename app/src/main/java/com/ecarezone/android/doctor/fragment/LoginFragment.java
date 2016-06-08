@@ -34,6 +34,7 @@ import com.ecarezone.android.doctor.utils.PasswordUtil;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.ecarezone.android.doctor.utils.SinchUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sinch.android.rtc.SinchError;
@@ -167,6 +168,8 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v == null) return;
+
+        Util.hideKeyboard(getActivity());
 
         final int viewId = v.getId();
         if (viewId == R.id.button_login) {

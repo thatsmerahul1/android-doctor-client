@@ -77,8 +77,13 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             setHasOptionsMenu(true);
         } catch (Exception e) {
         }
-        ((MainActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getString(R.string.main_side_menu_my_patients));
+        try {
+            ((MainActivity) getActivity()).getSupportActionBar()
+                    .setTitle(getResources().getString(R.string.main_side_menu_my_patients));
+        }
+        catch (Exception ex){
+            ex.printStackTrace();;
+        }
         pullDBFromdevice();
 
     }
@@ -189,10 +194,11 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
                 Patient patient = null;
+                PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
                 while(iter.hasNext()){
                     patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
-                    patientItem.isPending = false;
+                    patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPROVED;
                     patientItem.email = patient.email;
                     patientItem.name = patient.name;
                     patientItem.recommandedDoctorId = patient.recommandedDoctorId;
@@ -201,9 +207,12 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
-                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getApplicationContext());
-//                    profileDbApi.saveProfile(LoginInfo.userId, patient);
-                    profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
+                    if(profileDbApi.getProfile(String.valueOf(patient.userId)) == null ) {
+                        profileDbApi.saveProfile(patient.userId, patient);
+                    }
+                    else {
+                        profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
+                    }
                 }
 //                if(patient != null) {
 //                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getApplicationContext());
@@ -241,7 +250,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
                                 showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-                                activity.startActivity(showDoctorIntent);
+                                activity.startActivityForResult(showDoctorIntent, 100);
                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                             }
                         }
@@ -278,10 +287,11 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
                 Patient patient = null;
+                PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getActivity());
                 while(iter.hasNext()){
                     patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
-                    patientItem.isPending = true;
+                    patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_PENDING;
                     patientItem.email = patient.email;
                     patientItem.name = patient.name;
                     patientItem.recommandedDoctorId = patient.recommandedDoctorId;
@@ -291,7 +301,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
 
-                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getActivity());
                     Patient id = profileDbApi.getProfile(patient.email);
                     if(id == null || patient.userId != id.userId ) {
                         profileDbApi.saveProfile(patient.userId/*LoginInfo.userId*/, patient);

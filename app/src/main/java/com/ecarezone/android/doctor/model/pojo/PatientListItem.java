@@ -27,7 +27,18 @@ public class PatientListItem {
     public String recommandedDoctorId;
     @Expose
     public String userSettings;
-    public boolean isPending;
     @Expose
     public String avatarUrl;
+
+    public int listItemType;
+    public int patientId;
+    public int appointmentId;
+    public String callType;
+    public String dateTime;
+
+    public static final int LIST_ITEM_TYPE_PENDING = 1;
+    public static final int LIST_ITEM_TYPE_APPROVED = 2;
+    public static final int LIST_ITEM_TYPE_MESSAGE = 3;
+    public static final int LIST_ITEM_TYPE_APPOINTMENT = 4;
+
 }

@@ -34,7 +34,7 @@
             android:id="@+id/appointment_time"
             android:textSize="20sp"
             android:textColor="@color/text_black_color_selector"
-            android:padding="5dp"/>
+            />
 
         <TextView
             android:id="@+id/type_of_call"

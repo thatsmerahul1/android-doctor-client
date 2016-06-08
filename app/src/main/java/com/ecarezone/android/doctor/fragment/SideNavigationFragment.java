@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.RegistrationActivity;
@@ -21,7 +22,9 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.rest.LoginRequest;
 import com.ecarezone.android.doctor.model.rest.LoginResponse;
+import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
+import com.ecarezone.android.doctor.utils.SinchUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -31,7 +34,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 public class SideNavigationFragment extends EcareZoneBaseFragment implements NavigationItem.OnNavigationItemClickListener,
         View.OnClickListener,
         FragmentManager.OnBackStackChangedListener {
-    public static final String FRAGMENT_NAME="fragmentName";
+    public static final String FRAGMENT_NAME = "fragmentName";
     private ProgressDialog progressDialog;
 
     @Override
@@ -55,18 +58,25 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frag_side_navigation, container, false);
+
         view.findViewById(R.id.navigation_user_profile).setOnClickListener(this);
+
         mHome = (NavigationItem) view.findViewById(R.id.navigation_messages);
         mHome.setOnNavigationItemClickListener(this);
-        mAppointments = (NavigationItem)view.findViewById(R.id.navigation_appointments);
+
+        mAppointments = (NavigationItem) view.findViewById(R.id.navigation_appointments);
         mAppointments.setOnNavigationItemClickListener(this);
-        mAppointments.setEnabled(false);
+//        mAppointments.setEnabled(false);
+
         mDoctors = (NavigationItem) view.findViewById(R.id.navigation_my_patients);
         mDoctors.setOnNavigationItemClickListener(this);
+
         mSettings = (NavigationItem) view.findViewById(R.id.navigation_settings);
         mSettings.setOnNavigationItemClickListener(this);
+
         mLogout = (NavigationItem) view.findViewById(R.id.navigation_logout);
         mLogout.setOnNavigationItemClickListener(this);
+
         mHome.highlightItem(true);
         highlightNavigationItem(null);
 
@@ -85,6 +95,8 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                 layoutResId = R.layout.frag_news_categories;
             } else if (getString(R.string.main_side_menu_my_patients).equals(tag)) {
                 layoutResId = R.layout.frag_doctor_list;
+            } else if (getString(R.string.main_side_menu_appointments).equals(tag)) {
+                layoutResId = R.layout.frag_appointment;
             } else if (getString(R.string.main_side_menu_logout).equals(tag)) {
                 doLogout();
 
@@ -127,7 +139,9 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                         editor.putBoolean(Constants.IS_LOGIN, false);
                         editor.commit();
 
-                        activity.startActivity(new Intent(activity.getApplicationContext(), RegistrationActivity.class));
+                        Intent intent = new Intent(activity.getApplicationContext(), RegistrationActivity.class);
+                        intent.putExtra("stop_sinch", true);
+                        activity.startActivity(intent);
                         activity.finish();
                     }
 
@@ -147,6 +161,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     private void highlightNavigationItem(NavigationItem navigationItem) {
         mHome.highlightItem(false);
         mDoctors.highlightItem(false);
+        mAppointments.highlightItem(false);
         mSettings.highlightItem(false);
         mLogout.highlightItem(false);
         if (navigationItem != null) {
@@ -173,7 +188,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                 highlightNavigationItem(mDoctors);
             } else if (getString(R.string.main_side_menu_messages).equals(tag)) {
                 highlightNavigationItem(mHome);
-            }  else if (getString(R.string.main_side_menu_logout).equals(tag)) {
+            } else if (getString(R.string.main_side_menu_logout).equals(tag)) {
             } else if (getString(R.string.main_side_menu_settings).equals(tag)) {
                 highlightNavigationItem(mSettings);
             }

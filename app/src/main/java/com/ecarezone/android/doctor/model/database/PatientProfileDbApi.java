@@ -9,6 +9,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by 20109804 on 5/17/2016.
@@ -16,11 +17,21 @@ import java.sql.SQLException;
 public class PatientProfileDbApi {
 
     private static DbHelper mDbHelper;
-    private Context mContext;
+    private static Context mContext;
+    private static PatientProfileDbApi mPatientProfileDbApi;
 
-    public PatientProfileDbApi(Context context) {
+    private PatientProfileDbApi() {
+
+    }
+
+    public static PatientProfileDbApi getInstance(Context context) {
         mContext = context;
-        mDbHelper = new DbHelper(context);
+        if (mDbHelper == null || mPatientProfileDbApi == null) {
+            mDbHelper = new DbHelper(context);
+            mPatientProfileDbApi = new PatientProfileDbApi();
+        }
+        return mPatientProfileDbApi;
+
     }
 
 
@@ -61,7 +72,7 @@ public class PatientProfileDbApi {
             updateBuilder.updateColumnValue(DbContract.PatientProfiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
             updateBuilder.updateColumnValue(DbContract.PatientProfiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
 
-            updateBuilder.update();
+            int updatedRowCount = updateBuilder.update();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,11 +82,41 @@ public class PatientProfileDbApi {
 
     /* retrieve the details of a particular profile */
     public Patient getProfile(String userId /*String profileId*/) {
+        if(userId != null) {
+            try {
+                Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
+                QueryBuilder<Patient, Integer> queryBuilder = userProfileDao.queryBuilder();
+                return queryBuilder.where()
+                        .eq(DbContract.PatientProfiles.COLUMN_NAME_USER_ID, userId)
+                        .queryForFirst();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /* retrieve the details of a particular profile */
+    public Patient getProfileByEmail(String email) {
         try {
             Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
             QueryBuilder<Patient, Integer> queryBuilder = userProfileDao.queryBuilder();
             return queryBuilder.where()
-                    .eq(DbContract.PatientProfiles.COLUMN_NAME_EMAIL, userId)
+                    .eq(DbContract.PatientProfiles.COLUMN_NAME_EMAIL, email)
+                    .queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /* retrieve the details of a particular profile */
+    public Patient getProfileByProfileId(String profileId) {
+        try {
+            Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
+            QueryBuilder<Patient, Integer> queryBuilder = userProfileDao.queryBuilder();
+            return queryBuilder.where()
+                    .eq(DbContract.PatientProfiles.COLUMN_NAME_USER_ID, profileId)
                     .queryForFirst();
         } catch (SQLException e) {
             e.printStackTrace();

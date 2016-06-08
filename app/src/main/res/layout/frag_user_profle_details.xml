@@ -29,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical"
-                android:layout_marginStart="4dp">
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -46,6 +47,7 @@
                         style="@style/ProfileFormEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
                         android:textSize="16sp"/>
                 </FrameLayout>
 
@@ -148,7 +150,6 @@
                 android:layout_width="94dp"
                 android:gravity="end"
                 android:layout_height="wrap_content"
-                android:entries="@array/array_name"
                 android:textSize="16sp"
                />
         </LinearLayout>

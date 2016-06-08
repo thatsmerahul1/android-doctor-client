@@ -43,6 +43,7 @@ import com.ecarezone.android.doctor.utils.EcareZoneLog;
 import com.ecarezone.android.doctor.utils.PasswordUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.ecarezone.android.doctor.utils.SinchUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.sinch.android.rtc.SinchError;
@@ -171,6 +172,8 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     @Override
     public void onClick(View v) {
         if (v == null) return;
+
+        Util.hideKeyboard(getActivity());
 
         final int viewId = v.getId();
         if (viewId == R.id.button_register) {
@@ -389,7 +392,12 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             });
             Log.d(TAG, "Login Success");
         }
-    }
+
+            @Override
+            protected Object clone() throws CloneNotSupportedException {
+                return super.clone();
+            }
+        }
     private void nextScreen(Activity activity) {
         activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
         activity.finish();

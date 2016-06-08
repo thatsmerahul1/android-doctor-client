@@ -19,6 +19,8 @@ import com.ecarezone.android.doctor.adapter.MessageAdapter;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.Appointment;
+import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.model.rest.SearchDoctorsRequest;
@@ -28,6 +30,8 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -115,7 +119,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 while(iter.hasNext()){
                     Patient patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
-                    patientItem.isPending = true;
+                    patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_PENDING;
                     patientItem.email = patient.email;
                     patientItem.name = patient.name;
                     patientItem.recommandedDoctorId = patient.recommandedDoctorId;
@@ -187,7 +191,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 while(iter.hasNext()){
                     Patient patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
-                    patientItem.isPending = false;
+                    patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_MESSAGE;
                     patientItem.email = patient.email;
                     patientItem.name = patient.name;
                     patientItem.recommandedDoctorId = patient.recommandedDoctorId;
@@ -195,6 +199,23 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
                     patientLists.add(patientItem);
+                }
+
+                for(PatientListItem patient : patientLists) {
+                    List<Appointment> appointmentList = AppointmentDbApi.getInstance(getActivity()).
+                            getAppointmentHistory(patient.userId, new Date());
+                    int size = appointmentList.size();
+                    for (int i = 0; i < size; i++) {
+
+                        Appointment appointment = appointmentList.get(i);
+                        PatientListItem patientItem = new PatientListItem();
+                        patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPOINTMENT;
+                        patientItem.userId = patient.userId;
+                        patientItem.patientId = appointment.getPatientId();
+                        patientItem.appointmentId = appointment.getAppointmentId();
+                        patientItem.callType = appointment.getCallType();
+                        patientLists.add(patientItem);
+                    }
                 }
 
                 if (patientLists.size() == 0) {

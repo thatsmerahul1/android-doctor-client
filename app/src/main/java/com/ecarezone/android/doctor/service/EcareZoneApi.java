@@ -2,6 +2,7 @@ package com.ecarezone.android.doctor.service;
 
 import com.ecarezone.android.doctor.model.rest.AddDoctorRequest;
 import com.ecarezone.android.doctor.model.rest.AddDoctorResponse;
+import com.ecarezone.android.doctor.model.rest.AppointmentResponse;
 import com.ecarezone.android.doctor.model.rest.CreateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.CreateProfileResponse;
 import com.ecarezone.android.doctor.model.rest.DeleteProfileRequest;
@@ -101,6 +102,8 @@ public interface EcareZoneApi {
     @GET("/users/{doctorid}/pendingpatients")
     SearchDoctorsResponse getPendingRequest(@Path("doctorid") Long doctorid);
 
+    @GET("/pendingappointments/doctors/{doctorId}")
+    AppointmentResponse getAppointmentDate(@Path("doctorId") Long doctorId);
 
 }
 

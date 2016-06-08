@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/patient_layout_"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="14dp"
     android:background="@drawable/blue_rectangle_layout_selector"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:weightSum="1">
+    android:padding="8dp">
 
 
     <ImageView
         android:id="@+id/messageIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/request_icon"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/request_icon" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="97dp"
+        android:id="@+id/infoLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="8dp"
-        android:weightSum="1">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/messageTitle"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:text="@string/new_patient_request"
             android:textColor="@color/text_black_color_selector"
             android:textSize="18sp" />
+
         <TextView
             android:id="@+id/messagesenderName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="name"
-            android:textSize="16sp"/>
-
+            android:textSize="16sp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/updateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="-10dp"
+        android:text="dsfkb" />
 </LinearLayout>
 

@@ -215,7 +215,7 @@
                 side:niIconImage="@drawable/side_menu_arrow"
                 side:niIndicator="@+id/check_box_indicator_my_patients"
                 side:niLabel="@+id/text_view_content_title_my_patients"
-                side:niTitle="@string/main_side_menu_appointments" >
+                side:niTitle="@string/main_side_menu_appointments">
 
                 <View
                     android:layout_width="match_parent"

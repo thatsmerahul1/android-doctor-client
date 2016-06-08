@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +27,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +51,7 @@ import com.ecarezone.android.doctor.utils.ImageUtil;
 import com.ecarezone.android.doctor.utils.MD5Util;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -113,10 +117,25 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
         mProfile = profileDbApi.getProfile(LoginInfo.userId.toString());
 
+        spec = (Spinner) view.findViewById(R.id.specializedArea);
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mActivity,
+                R.array.array_name, R.layout.right_aligned_simple_spinner_item);
+        spec.setAdapter(adapter);
+        spec.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         if (mProfile != null) {
             setProfileValuesToFormFields(mProfile);
         } else {
             // This is creating new profile. So, disabling the delete profile button
+            spec.setSelection(0);
         }
 
         view.findViewById(R.id.dob).setOnClickListener(this);
@@ -159,6 +178,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.action_check) {
+            Util.hideKeyboard(getActivity());
             saveProfile();
         }
         return true;
@@ -251,20 +271,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         ((EditText) view.findViewById(R.id.registrationID)).setText(profile.registrationId);
         ((EditText) view.findViewById(R.id.myBio)).setText(profile.doctorDescription);
 
-        spec = (Spinner) view.findViewById(R.id.specializedArea);
-        /*final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mActivity,
-                R.array.array_name, android.R.layout.simple_spinner_item);
-        spec.setAdapter(adapter);*/
-        spec.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         if (profile.category.equalsIgnoreCase("Brain")) {
             spec.setSelection(1);
         } else if (profile.category.equalsIgnoreCase("Surgery")) {
@@ -275,6 +281,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             spec.setSelection(4);
         } else if (profile.category.equalsIgnoreCase("Lungs")) {
             spec.setSelection(5);
+        }
+        else{
+            spec.setSelection(0);
         }
 
     }
@@ -313,7 +322,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
 
             Toast.makeText(mActivity, "Please enter all the fields", Toast.LENGTH_LONG).show();
 
-        } else {
+        }
+        if(spec.getSelectedItemPosition() == 0){
+            Toast.makeText(mActivity, "Please select a valid specialized area", Toast.LENGTH_LONG).show();
+        }
+        else {
             SaveProfileAsyncTask saveProfileAsyncTask = new SaveProfileAsyncTask();
             saveProfileAsyncTask.execute(userProfile);
 
@@ -362,8 +375,13 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 SharedPreferences perPreferences =
                         getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
                 String userId = perPreferences.getString(Constants.PROFILE_ID, null);
-                long profileId = Long.parseLong(userId);
-                updateProfileInServer(profileId, userProfile);
+                if(userId == null){
+                    userId = String.valueOf(LoginInfo.userId);
+                }
+                if(userId != null) {
+                    long profileId = Long.parseLong(userId);
+                    updateProfileInServer(profileId, userProfile);
+                }
             }
             return null;
         }

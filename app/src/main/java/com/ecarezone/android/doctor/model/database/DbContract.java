@@ -49,4 +49,16 @@ public final class DbContract {
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
     }
+
+    /*Inner class that defines appointment table content*/
+    public static abstract class Appointments implements BaseColumns {
+        public static final String TABLE_NAME = "Appointment";
+
+        public static final String COLUMN_NAME_APPOINTMENT_ID = "id";
+        public static final String COLUMN_NAME_DATE_TIME = "dateTime";
+        public static final String COLUMN_NAME_CALL_TYPE = "callType";
+        public static final String COLUMN_NAME_PATIENT_ID = "patientId";
+        public static final String COLUMN_NAME_MESSAGE = "message";
+        public static final String COLUMN_NAME_IS_CONFIRMED = "isConfirmed";
+    }
 }

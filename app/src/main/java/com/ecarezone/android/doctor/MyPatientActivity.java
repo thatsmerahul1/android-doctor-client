@@ -62,6 +62,8 @@ public class MyPatientActivity extends EcareZoneBaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = getIntent();
+            setResult(RESULT_OK, intent);
             finish();
             overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
             return true;

@@ -101,10 +101,10 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
             declineButton.setOnClickListener(this);
 
         }
-        PatientProfileDbApi profileDbApi = new PatientProfileDbApi(mActivity);
+        PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(mActivity);
         Patient tempProfiles;
         String email = inComingvideoArguments.getString("INCOMING_CALL_USER");
-        tempProfiles = profileDbApi.getProfile(email);
+        tempProfiles = profileDbApi.getProfileByEmail(email);
         if(tempProfiles != null) {
             String imageUrl = tempProfiles.avatarUrl;
             int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);

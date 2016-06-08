@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.MyPatientActivity;
 import com.ecarezone.android.doctor.MainActivity;
-import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
@@ -79,13 +77,8 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             setHasOptionsMenu(true);
         } catch (Exception e) {
         }
-        try {
-            ((MainActivity) getActivity()).getSupportActionBar()
-                    .setTitle(getResources().getString(R.string.main_side_menu_my_patients));
-        }
-        catch (Exception ex){
-            ex.printStackTrace();;
-        }
+        ((MainActivity) getActivity()).getSupportActionBar()
+                .setTitle(getResources().getString(R.string.main_side_menu_my_patients));
         pullDBFromdevice();
 
     }
@@ -108,16 +101,11 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
         pullDBFromdevice();
     }
 
-    private void initListWithData() {
+    private void initListWithData(){
 
         patientLists.clear();
-        if (NetworkCheck.isNetworkAvailable(getActivity())) {
-            populatePendingPatientList();
-            populateMyCarePatientList();
-        } else {
-            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
-        }
-        progressDialog.dismiss();
+        populatePendingPatientList();
+        populateMyCarePatientList();
     }
 
     @Override
@@ -201,7 +189,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
                 Patient patient = null;
-                PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
                 while(iter.hasNext()){
                     patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
@@ -214,12 +201,9 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
-                    if(profileDbApi.getProfile(String.valueOf(patient.userId)) == null ) {
-                        profileDbApi.saveProfile(patient.userId, patient);
-                    }
-                    else {
-                        profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
-                    }
+                    PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
+//                    profileDbApi.saveProfile(LoginInfo.userId, patient);
+                    profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
                 }
 //                if(patient != null) {
 //                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getApplicationContext());
@@ -243,12 +227,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
-                            if(NetworkCheck.isNetworkAvailable(getActivity())){
-                                PatientListItem patientListItem = patientLists.get(position);
-                                Patient patient = new Patient(patientListItem.userId, patientListItem.email,
-                                        patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
-                                        patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-                                        patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
 
                             PatientListItem patientListItem = patientLists.get(position);
                             Patient patient = new Patient(patientListItem.userId, patientListItem.email,
@@ -263,7 +241,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                                 Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
                                 showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-                                activity.startActivityForResult(showDoctorIntent, 100);
+                                activity.startActivity(showDoctorIntent);
                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                             }
                         }
@@ -300,7 +278,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
                 Patient patient = null;
-                PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getActivity());
                 while(iter.hasNext()){
                     patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
@@ -314,6 +291,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
 
+                    PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getActivity());
                     Patient id = profileDbApi.getProfile(patient.email);
                     if(id == null || patient.userId != id.userId ) {
                         profileDbApi.saveProfile(patient.userId/*LoginInfo.userId*/, patient);
@@ -339,25 +317,21 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
-                            if(NetworkCheck.isNetworkAvailable(getActivity())) {
-                                PatientListItem patientListItem = patientLists.get(position);
-                                Patient patient = new Patient(patientListItem.userId, patientListItem.email,
-                                        patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
-                                        patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-                                        patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
+                            PatientListItem patientListItem = patientLists.get(position);
+                            Patient patient = new Patient(patientListItem.userId, patientListItem.email,
+                                    patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
+                                    patientListItem.isCallAllowed, patientListItem.userDevicesCount,
+                                    patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
 
-                                data.putParcelable(Constants.DOCTOR_DETAIL, patient);
-                                data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
-                                final Activity activity = getActivity();
-                                if (activity != null) {
-                                    Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
-                                    showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
-                                    showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-                                    activity.startActivity(showDoctorIntent);
-                                    activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                }
-                            } else {
-                                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                            data.putParcelable(Constants.DOCTOR_DETAIL, patient);
+                            data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
+                            final Activity activity = getActivity();
+                            if (activity != null) {
+                                Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
+                                showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+                                showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
+                                activity.startActivity(showDoctorIntent);
+                                activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                             }
                         }
                     });

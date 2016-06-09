@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 
+//import com.crittercism.app.Crittercism;
 import com.crittercism.app.Crittercism;
 import com.ecarezone.android.doctor.fragment.SplashScreenFragment;
 import com.ecarezone.android.doctor.utils.SinchUtil;

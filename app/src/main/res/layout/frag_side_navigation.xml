@@ -158,10 +158,10 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                side:niIcon="@+id/image_view_item_icon_my_patients"
+                side:niIcon="@+id/image_view_item_icon_my_appointments"
                 side:niIconImage="@drawable/side_menu_arrow"
-                side:niIndicator="@+id/check_box_indicator_my_patients"
-                side:niLabel="@+id/text_view_content_title_my_patients"
+                side:niIndicator="@+id/check_box_indicator_my_appointments"
+                side:niLabel="@+id/text_view_content_title_my_appointments"
                 side:niTitle="@string/main_side_menu_appointments">
 
                 <View
@@ -182,7 +182,7 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@+id/image_view_item_icon_my_patients"
+                    android:id="@+id/image_view_item_icon_my_appointments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -192,11 +192,11 @@
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@+id/text_view_content_title_my_patients"
+                    android:id="@+id/text_view_content_title_my_appointments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/image_view_item_icon_my_patients"
+                    android:layout_toRightOf="@+id/image_view_item_icon_my_appointments"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"

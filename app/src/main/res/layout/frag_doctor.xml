@@ -51,30 +51,31 @@
 
             </LinearLayout>
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
                 <com.ecarezone.android.doctor.view.CircleImageView
                     android:id="@+id/doctor_profile_pic_id"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
+                    android:layout_centerInParent="true"
                     android:src="@drawable/dr_john_photo"></com.ecarezone.android.doctor.view.CircleImageView>
 
-            </FrameLayout>
+                <TextView
+                    android:id="@+id/doctor_name_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/doctor_profile_pic_id"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/doctor_name1"
+                    android:textColor="@color/text_blue_color_selector"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/doctor_name_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="@string/doctor_name1"
-                android:textColor="@color/text_blue_color_selector"
-                android:textSize="20sp" />
+            </RelativeLayout>
 
 
         </LinearLayout>

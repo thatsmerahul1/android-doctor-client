@@ -77,9 +77,9 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                             SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
 //commented to run this on android M emulator
                         } /*else {*/
-                            Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            activity.finish();
+                        Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        activity.finish();
                         /*}*/
                     } else {
                         if (user != null) {
@@ -102,8 +102,14 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
 
     @Override
     public void onStarted() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-        getActivity().finish();
+        if (getActivity() != null) {
+            try {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

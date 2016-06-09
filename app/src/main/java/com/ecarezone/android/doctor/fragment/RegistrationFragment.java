@@ -160,9 +160,9 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.checkbox_registration_terms);
 
         mCheckBoxTerms.setOnCheckedChangeListener(this);
-        String txt = "<HTML>"+getString(R.string.registration_agreement_you_agree)+
-                " <b><a href=\"http://ecarezone.com\">"+getString(R.string.terms)+"</a></b> " +getString(R.string.and)+"<b>" +
-                " <a href=\"http://ecarezone.com\">"+getString(R.string.privacy_policy)+"</a></b></HTML>";
+        String txt = "<HTML>" + getString(R.string.registration_agreement_you_agree) +
+                " <b><a href=\"http://ecarezone.com\">" + getString(R.string.terms) + "</a></b> " + getString(R.string.and) + "<b>" +
+                " <a href=\"http://ecarezone.com\">" + getString(R.string.privacy_policy) + "</a></b></HTML>";
         mCheckBoxTerms.setText(Html.fromHtml(txt));
         mCheckBoxTerms.setMovementMethod(LinkMovementMethod.getInstance());
         return view;
@@ -181,8 +181,9 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             final String password = mEditTextPassword.getEditableText().toString();
             //Client side validation for username and password
             if (TextUtils.isEmpty(username)
-                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())
-                    || (TextUtils.isEmpty(password) || (password.trim().length() < 8))) {
+                    || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())) {
+                Toast.makeText(v.getContext(), R.string.error_user_name, Toast.LENGTH_LONG).show();
+            } else if ((TextUtils.isEmpty(password) || (password.trim().length() < 8))) {
                 Toast.makeText(v.getContext(), R.string.error_password_less_than_registration, Toast.LENGTH_LONG).show();
             } else {
                 mButtonRegister.setEnabled(false);
@@ -294,7 +295,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.registration_successful_dialog);
-        mStartService = (TextView)dialog.findViewById(R.id.start_service);
+        mStartService = (TextView) dialog.findViewById(R.id.start_service);
         mStartService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,7 +312,8 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         dialog.show();
         progressDialog.dismiss();
     }
-        //Login response listner
+
+    //Login response listner
     public final class LoginRequestListener implements RequestListener<LoginResponse> {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -393,15 +395,17 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             Log.d(TAG, "Login Success");
         }
 
-            @Override
-            protected Object clone() throws CloneNotSupportedException {
-                return super.clone();
-            }
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
         }
+    }
+
     private void nextScreen(Activity activity) {
         activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
         activity.finish();
     }
+
     @Override
     public void onStartFailed(SinchError error) {
 
@@ -459,8 +463,8 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
                     String password = LoginInfo.hashedPassword;
                     doLogin(username, password);
 
-                 }
-            }else {
+                }
+            } else {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

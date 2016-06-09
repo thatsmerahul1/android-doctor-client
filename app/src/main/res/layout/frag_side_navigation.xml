@@ -64,7 +64,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_messages"
+                    android:id="@+id/check_box_indicator_messages"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -76,21 +76,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_home"
+                    android:id="@+id/image_view_item_icon_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_messages"
+                    android:layout_toRightOf="@+id/check_box_indicator_messages"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_messages"
+                    android:id="@+id/text_view_content_title_messages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_home"
+                    android:layout_toRightOf="@+id/image_view_item_icon_home"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -98,59 +98,6 @@
                     android:textSize="18sp"
                     tools:ignore="UnusedAttribute" />
             </com.ecarezone.android.doctor.app.widget.NavigationItem>
-
-           <!-- <com.ecarezone.android.doctor.app.widget.NavigationItem
-                android:id="@+id/navigation_news"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                side:niIcon="@+id/image_view_item_icon_news"
-                side:niIconImage="@drawable/side_menu_arrow"
-                side:niIndicator="@+id/check_box_indicator_news"
-                side:niLabel="@+id/text_view_content_title_news"
-                side:niTitle="@string/main_side_menu_news" >
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@drawable/navigation_item_color_selector" />
-
-                <CheckBox
-                    android:id="@id/check_box_indicator_news"
-                    android:layout_width="2dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:button="@null"
-                    android:checked="false"
-                    android:clickable="false"
-                    android:duplicateParentState="true"
-                    android:minHeight="56dp" />
-
-                <ImageView
-                    android:id="@id/image_view_item_icon_news"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_news"
-                    android:scaleType="fitXY" />
-
-                <TextView
-                    android:id="@id/text_view_content_title_news"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_news"
-                    android:gravity="center_vertical"
-                    android:singleLine="false"
-                    android:textColor="@android:color/white"
-                    android:textIsSelectable="false"
-                    android:textSize="18sp"
-                    tools:ignore="UnusedAttribute" />
-            </com.ecarezone.android.doctor.app.widget.NavigationItem>-->
 
             <com.ecarezone.android.doctor.app.widget.NavigationItem
                 android:id="@+id/navigation_my_patients"
@@ -170,7 +117,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_my_patients"
+                    android:id="@+id/check_box_indicator_my_patients"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -182,21 +129,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_my_patients"
+                    android:id="@+id/image_view_item_icon_my_patients"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_my_patients"
+                    android:layout_toRightOf="@+id/check_box_indicator_my_patients"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_my_patients"
+                    android:id="@+id/text_view_content_title_my_patients"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_my_patients"
+                    android:layout_toRightOf="@+id/image_view_item_icon_my_patients"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -223,7 +170,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_my_patients"
+                    android:id="@+id/check_box_indicator_my_appointments"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -235,21 +182,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_my_patients"
+                    android:id="@+id/image_view_item_icon_my_patients"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_my_patients"
+                    android:layout_toRightOf="@+id/check_box_indicator_my_appointments"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_my_patients"
+                    android:id="@+id/text_view_content_title_my_patients"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_my_patients"
+                    android:layout_toRightOf="@+id/image_view_item_icon_my_patients"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -280,7 +227,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_settings"
+                    android:id="@+id/check_box_indicator_settings"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -292,21 +239,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_settings"
+                    android:id="@+id/image_view_item_icon_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_settings"
+                    android:layout_toRightOf="@+id/check_box_indicator_settings"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_settings"
+                    android:id="@+id/text_view_content_title_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_settings"
+                    android:layout_toRightOf="@+id/image_view_item_icon_settings"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
@@ -333,7 +280,7 @@
                     android:background="@drawable/navigation_item_color_selector" />
 
                 <CheckBox
-                    android:id="@id/check_box_indicator_logout"
+                    android:id="@+id/check_box_indicator_logout"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -345,21 +292,21 @@
                     android:minHeight="56dp" />
 
                 <ImageView
-                    android:id="@id/image_view_item_icon_logout"
+                    android:id="@+id/image_view_item_icon_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_toRightOf="@id/check_box_indicator_logout"
+                    android:layout_toRightOf="@+id/check_box_indicator_logout"
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:id="@id/text_view_content_title_logout"
+                    android:id="@+id/text_view_content_title_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/image_view_item_icon_logout"
+                    android:layout_toRightOf="@+id/image_view_item_icon_logout"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"

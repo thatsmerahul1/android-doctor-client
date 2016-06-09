@@ -6,16 +6,15 @@
     <LinearLayout
         android:id="@+id/message_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
         android:orientation="vertical"
         android:visibility="visible">
 
-
         <ListView
             android:id="@+id/message_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
             android:dividerHeight="14dp"
             android:padding="16dp" />

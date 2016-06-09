@@ -43,7 +43,7 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
             invokeNavigationChanged(layoutResId, b);
         } else {
             noMessage.setVisibility(View.GONE);
-            welcom_layout.setVisibility(View.GONE);
+            welcom_layout.setVisibility(View.VISIBLE);
         }
         return view;
     }

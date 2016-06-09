@@ -136,10 +136,10 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 myPatientListView.setAdapter(mycareDoctorAdapter);
                 if (patientLists.size() == 0) {
                     progressDialog.dismiss();
-                    noMessage.setVisibility(View.VISIBLE);
+//                    noMessage.setVisibility(View.VISIBLE);
 
                 } else if (patientLists.size() > 0) {
-                    noMessage.setVisibility(View.GONE);
+//                    noMessage.setVisibility(View.GONE);
                     myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

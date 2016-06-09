@@ -36,8 +36,11 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
         boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
         if(hasProfiles){
+            Bundle b = null;
             noMessage.setVisibility(View.VISIBLE);
             welcom_layout.setVisibility(View.GONE);
+            int layoutResId = R.layout.frag_message_list;
+            invokeNavigationChanged(layoutResId, b);
         } else {
             noMessage.setVisibility(View.GONE);
             welcom_layout.setVisibility(View.VISIBLE);

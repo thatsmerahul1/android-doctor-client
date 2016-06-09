@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.MainActivity;
@@ -21,6 +22,7 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
+import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.model.rest.SearchDoctorsRequest;
@@ -47,6 +49,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
     private ArrayList<PatientListItem> patientLists = new ArrayList<PatientListItem>();
     private MessageAdapter mycareDoctorAdapter;
     private ListView myPatientListView = null;
+    private TextView noMessage;
     private static final String TAG = MyPatientListFragment.class.getSimpleName();
     public static final String ADD_DOCTOR_DISABLE_CHECK = "addDocotrDisablecheck";
 
@@ -73,7 +76,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
 
         messageContainer = view.findViewById(R.id.message_container);
         myPatientListView = (ListView)view.findViewById(R.id.message_list);
-
+        noMessage = (TextView)view.findViewById(R.id.emptyMessages);
         return view;
     }
 
@@ -133,8 +136,10 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 myPatientListView.setAdapter(mycareDoctorAdapter);
                 if (patientLists.size() == 0) {
                     progressDialog.dismiss();
-                } else if (patientLists.size() > 0) {
+//                    noMessage.setVisibility(View.VISIBLE);
 
+                } else if (patientLists.size() > 0) {
+//                    noMessage.setVisibility(View.GONE);
                     myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -220,9 +225,17 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
 
                 if (patientLists.size() == 0) {
                     myPatientListView.setVisibility(View.GONE);
+                    noMessage.setVisibility(View.VISIBLE);
                     progressDialog.dismiss();
 
                 } else if (patientLists.size() > 0) {
+                    ChatDbApi chatDbApi = ChatDbApi.getInstance(getApplicationContext());
+
+                    if(chatDbApi.getUnReadChatCount() == 0){
+                        noMessage.setVisibility(View.VISIBLE);
+                    } else {
+                        noMessage.setVisibility(View.GONE);
+                    }
                     if(mycareDoctorAdapter != null) {
                         mycareDoctorAdapter.notifyDataSetChanged();
                     }

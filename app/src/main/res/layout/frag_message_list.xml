@@ -3,27 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-   <LinearLayout
-                android:id="@+id/message_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="10dp"
-                android:visibility="visible">
+    <LinearLayout
+        android:id="@+id/message_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:visibility="visible">
 
+        <ListView
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="14dp"
+            android:padding="16dp" />
 
-                <ListView
-                    android:id="@+id/message_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:divider="@android:color/transparent"
-                    android:dividerHeight="14dp"
-                    android:padding="16dp" />
+    </LinearLayout>
 
-            </LinearLayout>
+    <TextView
+        android:id="@+id/emptyMessages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_empty_message"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="183dp"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        />
 
-
- </FrameLayout>
+</FrameLayout>
 
 
 

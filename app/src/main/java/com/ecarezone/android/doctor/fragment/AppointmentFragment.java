@@ -139,34 +139,34 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
             if (appointmentResponse != null) {
                 AppointmentDbApi profileDbApi = AppointmentDbApi.getInstance(getApplicationContext());
                 ArrayList<Appointment> appointments = (ArrayList<Appointment>) appointmentResponse.data;
-                ListIterator<Appointment> iter = appointments.listIterator();
-                Appointment appointment = null;
-                while (iter.hasNext()) {
-                    appointment = iter.next();
+                if (appointments != null) {
+                    ListIterator<Appointment> iter = appointments.listIterator();
+                    Appointment appointment = null;
+                    while (iter.hasNext()) {
+                        appointment = iter.next();
 
-                    AppointmentListItem appointmentItem = new AppointmentListItem();
-                    appointmentItem.appointmentId = appointment.getAppointmentId();
-                    appointmentItem.callType = appointment.getCallType();
-                    appointmentItem.dateTime = appointment.getTimeStamp();
-                    appointmentItem.patientId = appointment.getPatientId();
+                        AppointmentListItem appointmentItem = new AppointmentListItem();
+                        appointmentItem.appointmentId = appointment.getAppointmentId();
+                        appointmentItem.callType = appointment.getCallType();
+                        appointmentItem.dateTime = appointment.getTimeStamp();
+                        appointmentItem.patientId = appointment.getPatientId();
 
-                    if (profileDbApi.isAppointmentPresent(appointmentItem.appointmentId)) {
-                        profileDbApi.updateAppointment(appointmentItem.appointmentId, appointment);
-                    } else {
-                        profileDbApi.saveAppointment(appointment);
+                        if (profileDbApi.isAppointmentPresent(appointmentItem.appointmentId)) {
+                            profileDbApi.updateAppointment(appointmentItem.appointmentId, appointment);
+                        } else {
+                            profileDbApi.saveAppointment(appointment);
+                        }
+
+                        Appointment app = profileDbApi.getAppointment(appointmentItem.appointmentId);
+                        if (app.isConfirmed()) {
+                            appointmentItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPROVED;
+                        } else {
+                            appointmentItem.listItemType = PatientListItem.LIST_ITEM_TYPE_PENDING;
+                        }
+
+                        mAppointmentList.add(appointmentItem);
                     }
-
-                    Appointment app = profileDbApi.getAppointment(appointmentItem.appointmentId);
-                    if(app.isConfirmed()){
-                        appointmentItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPROVED;
-                    }
-                    else{
-                        appointmentItem.listItemType = PatientListItem.LIST_ITEM_TYPE_PENDING;
-                    }
-
-                    mAppointmentList.add(appointmentItem);
                 }
-
             } else {
                 Toast.makeText(getApplicationContext(), "Failed to get appointments: " + appointmentResponse.data, Toast.LENGTH_LONG).show();
             }

@@ -118,7 +118,8 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
             }
         } else{
 //            tempProfiles = profileDbApi.getProfile(incomingCallArguments.getString("INCOMING_CALL_USER"));
-            tempProfiles = profileDbApi.getProfileByEmail(incomingCallArguments.getString("INCOMING_CALL_USER"));
+            String emailId = incomingCallArguments.getString("INCOMING_CALL_USER");
+            tempProfiles = profileDbApi.getProfileByEmail(emailId);
             if(tempProfiles != null) {
                 inComingVideoCallRemoteUser.setText(tempProfiles.name);
                 String imageUrl = tempProfiles.avatarUrl;

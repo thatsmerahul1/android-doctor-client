@@ -75,12 +75,7 @@ public class MainActivity extends EcareZoneBaseActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setTitle(Constants.ECARE_ZONE);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        /* queries the db and checks whether to show welcome screen or to show home screen.
+         /* queries the db and checks whether to show welcome screen or to show home screen.
            Check is based on whether the user has created a profile or not. */
         if(!isNavigationChanged) {
             new AsyncTask<Void, Void, Boolean>() {
@@ -107,6 +102,12 @@ public class MainActivity extends EcareZoneBaseActivity {
         else{
             isNavigationChanged = false;
         }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override

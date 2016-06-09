@@ -202,8 +202,12 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientLists.add(patientItem);
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
-//                    profileDbApi.saveProfile(LoginInfo.userId, patient);
-                    profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
+                    if(profileDbApi.getProfileByEmail(patient.email) == null) {
+                        profileDbApi.saveProfile(LoginInfo.userId, patient);
+                    }
+                   else {
+                        profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
+                    }
                 }
 //                if(patient != null) {
 //                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getApplicationContext());
@@ -292,7 +296,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientLists.add(patientItem);
 
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getActivity());
-                    Patient id = profileDbApi.getProfile(patient.email);
+                    Patient id = profileDbApi.getProfileByEmail(patient.email);
                     if(id == null || patient.userId != id.userId ) {
                         profileDbApi.saveProfile(patient.userId/*LoginInfo.userId*/, patient);
                     }

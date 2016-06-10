@@ -20,6 +20,7 @@ import com.ecarezone.android.doctor.ChatActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.VideoActivity;
 import com.ecarezone.android.doctor.config.Constants;
+import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
 import com.ecarezone.android.doctor.utils.SinchUtil;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
@@ -42,6 +43,7 @@ import com.sinch.android.rtc.video.VideoController;
 import com.sinch.android.rtc.video.VideoScalingType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -67,6 +69,7 @@ public class SinchService extends Service {
     private PersistedSettings mSettings;
     private int numMessages = 0;
     Intent resultIntent;
+    private HashMap<String, Integer> notificationCount = new HashMap<String, Integer>();
 
     @Override
     public void onCreate() {
@@ -412,8 +415,20 @@ public class SinchService extends Service {
                 .setColor(Color.BLUE)
                 .setAutoCancel(true);
 
+        if(! notificationCount.containsKey(message.getSenderId())){
+            notificationCount.put(message.getSenderId(), 1);
+        }
+        else{
+            Integer messageCount = notificationCount.get(message.getSenderId());
+            notificationCount.put(message.getSenderId(), ++messageCount);
+        }
+
+
         mNotifyBuilder.setContentText(message.getTextBody())
-                .setNumber(++numMessages);
+                .setNumber(notificationCount.get(message.getSenderId()));
+
+        PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(this);
+        profileDbApi.getProfileIdUsingEmail(message.getSenderId());
 
         resultIntent = new Intent(this, ChatActivity.class);
         resultIntent.putExtra(Constants.EXTRA_EMAIL, message.getSenderId());
@@ -425,7 +440,7 @@ public class SinchService extends Service {
         Notification notification = mNotifyBuilder.build();
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+        notificationManager.notify(profileDbApi.getProfileIdUsingEmail(message.getSenderId()), notification);
 
     }
 

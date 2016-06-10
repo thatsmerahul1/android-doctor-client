@@ -110,6 +110,22 @@ public class PatientProfileDbApi {
         return null;
     }
 
+    public int getProfileIdUsingEmail(String emailId) {
+        Patient[] profiles = new Patient[0];
+        try {
+            Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
+            QueryBuilder<Patient, Integer> queryBuilder = userProfileDao.queryBuilder();
+            List<Patient> userProfilesList = queryBuilder.where()
+                    .eq(DbContract.PatientProfiles.COLUMN_NAME_EMAIL, emailId)
+                    .query();
+            if(userProfilesList!=null && userProfilesList.size() > 0){
+                return Integer.parseInt(String.valueOf(userProfilesList.get(0).userId));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     /* retrieve the details of a particular profile */
     public Patient getProfileByProfileId(String profileId) {
         try {

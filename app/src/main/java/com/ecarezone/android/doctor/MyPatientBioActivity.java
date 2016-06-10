@@ -15,6 +15,7 @@ import com.ecarezone.android.doctor.fragment.MyPatientBioFragment;
 import com.ecarezone.android.doctor.fragment.dialog.AddDoctorRequestDialog;
 import com.ecarezone.android.doctor.model.rest.AddDoctorRequest;
 import com.ecarezone.android.doctor.model.rest.AddDoctorResponse;
+import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -41,6 +42,7 @@ public class MyPatientBioActivity extends EcareZoneBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_doctor);
+//        Bundle bundle = getIntent().getBundleExtra(Constants.PATIENT_BIO_DETAIL);
 
         onNavigationChanged(R.layout.frag_doctor_bio, getIntent().getBundleExtra("doctorBioDetail"));
         Log.i(TAG, "bio data = " + getIntent().getBundleExtra("doctorBioDetail"));
@@ -64,8 +66,8 @@ public class MyPatientBioActivity extends EcareZoneBaseActivity {
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setTitle(getResources().getString(R.string.doctor_bio));
-//        doctorName = ((Patient) getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL).getParcelable(Constants.DOCTOR_DETAIL)).name;
-//        doctorId = ((Patient) getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL).getParcelable(Constants.DOCTOR_DETAIL)).doctorId;
+        doctorName = ((Patient) getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL).getParcelable(Constants.DOCTOR_DETAIL)).name;
+        doctorId = ((Patient) getIntent().getBundleExtra(Constants.DOCTOR_BIO_DETAIL).getParcelable(Constants.DOCTOR_DETAIL)).userId;
         addSupportOnBackStackChangedListener(this);
     }
 

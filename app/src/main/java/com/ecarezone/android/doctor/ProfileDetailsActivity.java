@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.UserProfileDetailsFragment;
 
 import java.io.File;
@@ -81,5 +82,17 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         userProfileDetailsFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
     }
 }

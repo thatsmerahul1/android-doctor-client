@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.model.rest.base.UpdatePasswordRequest;
@@ -149,5 +150,16 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
                 LoginInfo.hashedPassword = newPwd;
             }
         }
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
     }
 }

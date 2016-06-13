@@ -3,6 +3,8 @@ package com.ecarezone.android.doctor;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+import com.ecarezone.android.doctor.config.Constants;
+
 /**
  * Created by L&T Technology Services on 2/29/2016.
  */
@@ -27,5 +29,17 @@ public class AboutEcareZoneActivity extends EcareZoneBaseActivity {
         webView.loadUrl(ABOUT_ECAREZONE_URL);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
     }
 }

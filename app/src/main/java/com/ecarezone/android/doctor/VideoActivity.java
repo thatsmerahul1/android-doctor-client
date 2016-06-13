@@ -162,11 +162,18 @@ public class VideoActivity extends EcareZoneBaseActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
     @Override
-    protected void onStop() {
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
+    @Override
+    public void onStop() {
         super.onStop();
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         SinchUtil.getSinchAudioPlayer().stopRingtone();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+
     }
+
 }

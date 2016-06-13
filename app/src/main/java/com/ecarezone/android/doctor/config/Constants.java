@@ -26,9 +26,8 @@ public class Constants {
     public static String ITEM_CODE = "item_code";
 
     public static String GRAVATOR_URL = "http://www.gravatar.com/avatar/";
-    public static String DEFAULT_GRAVATOR_IMAGE_URL = "http%3A%2F%2F188.166.55.204%2Fimages%2Fnews%2Fothers1.jpg";
-
-    //Doctor Details Constants
+    public static String DEFAULT_GRAVATOR_IMAGE_URL = "http%3A%2F%2F188.166.55.204%2Fimages%2Fpatient%2Fdefault_profile_pic";
+     //Doctor Details Constants
     public  static String PATIENT_ALREADY_ADDED = "patientAlreadyAdded";
     public static String DOCTOR_DETAIL = "doctorDetail";
     public static String DOCTOR_BIO_DETAIL = "doctorBioDetail";
@@ -48,4 +47,10 @@ public class Constants {
 
     //Registration Constants
     public static String REGISTRATION_DIALOG_TAG = "RegDiaFragment";
+    public static String STATUS_CHANGE = "statusChange";
+
+    public static final int OFFLINE = 0;
+    public static final int ONLINE = 1;
+    public static final int IDLE = 2;
+
 }

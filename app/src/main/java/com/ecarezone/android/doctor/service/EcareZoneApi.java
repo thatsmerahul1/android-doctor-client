@@ -19,6 +19,7 @@ import com.ecarezone.android.doctor.model.rest.SignupRequest;
 import com.ecarezone.android.doctor.model.rest.UpdateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.UploadImageResponse;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
+import com.ecarezone.android.doctor.model.rest.base.ChangeStatusRequest;
 import com.ecarezone.android.doctor.model.rest.base.UpdatePasswordRequest;
 
 import java.lang.annotation.Documented;
@@ -105,6 +106,8 @@ public interface EcareZoneApi {
     @GET("/pendingappointments/doctors/{doctorId}")
     AppointmentResponse getAppointmentDate(@Path("doctorId") Long doctorId);
 
+    @POST("/changeStatus")
+    BaseResponse changeStatus(@Body ChangeStatusRequest request);
 }
 
 /**

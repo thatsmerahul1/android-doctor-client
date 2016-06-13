@@ -102,5 +102,15 @@ public class ChatActivity extends EcareZoneBaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         chatFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+    }
 }

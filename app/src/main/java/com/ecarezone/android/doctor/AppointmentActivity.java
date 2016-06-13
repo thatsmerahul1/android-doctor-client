@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.AppointmentFragment;
 
 /**
@@ -55,5 +56,16 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
     }
 }

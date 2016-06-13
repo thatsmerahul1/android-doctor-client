@@ -92,4 +92,17 @@ public class MyPatientActivity extends EcareZoneBaseActivity {
         finish();
         overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+    }
 }
+
+

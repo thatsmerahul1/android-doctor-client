@@ -102,11 +102,12 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (patient != null) {
             setDoctorPresenceIcon(patient.status);
-            if(patient.status.equalsIgnoreCase("1")) {
-                doctorStatusText.setText(R.string.doctor_available);
-            }
-            else{
+            if(patient.status.equalsIgnoreCase("0")) {
                 doctorStatusText.setText(R.string.doctor_busy);
+            } else if(patient.status.equalsIgnoreCase("1")) {
+                doctorStatusText.setText(R.string.doctor_available);
+            } else{
+                doctorStatusText.setText(R.string.doctor_idle);
             }
             doctorNameView.setText(patient.name);
         }
@@ -202,6 +203,10 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_red));
             doctorVideo.setEnabled(false);
             doctorVoice.setEnabled(false);
+        } else {
+            doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_amber));
+            doctorVideo.setEnabled(true);
+            doctorVoice.setEnabled(true);
         }
     }
 

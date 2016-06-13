@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +23,12 @@ import com.ecarezone.android.doctor.fragment.FirstTimeUserProfileFragment;
 import com.ecarezone.android.doctor.fragment.MessagesListFragment;
 import com.ecarezone.android.doctor.fragment.WelcomeFragment;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
+import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
+import com.ecarezone.android.doctor.model.rest.base.ChangeStatusRequest;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.util.HashMap;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -35,6 +43,8 @@ public class MainActivity extends EcareZoneBaseActivity {
     private boolean isBackStackRequired;
     private boolean isWelcomeMainRequired;
     public static int VIEW_PROFILE_REQUEST_CODE = 1001;
+
+    //    HashMap<String,Boolean> nameValuePair;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +87,7 @@ public class MainActivity extends EcareZoneBaseActivity {
 
          /* queries the db and checks whether to show welcome screen or to show home screen.
            Check is based on whether the user has created a profile or not. */
-        if(!isNavigationChanged) {
+        if (!isNavigationChanged) {
             new AsyncTask<Void, Void, Boolean>() {
 
                 @Override
@@ -98,16 +108,19 @@ public class MainActivity extends EcareZoneBaseActivity {
                     super.onPostExecute(aBoolean);
                 }
             }.execute();
-        }
-        else{
+        } else {
             isNavigationChanged = false;
         }
+        DoctorApplication.lastAvailablityStaus = Constants.ONLINE;
+        disconnectHandler.post(disconnectCallback);
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+
     }
 
     @Override
@@ -184,7 +197,7 @@ public class MainActivity extends EcareZoneBaseActivity {
                     getString(R.string.main_side_menu_settings), args, false);
             isBackStackRequired = true;
         } else if (fragmentLayoutResId == R.layout.list_view) {
-            Long profileId =  (LoginInfo.userId);
+            Long profileId = (LoginInfo.userId);
             startActivityForResult(new Intent(getApplicationContext(), ProfileDetailsActivity.class)
                     .putExtra(ProfileDetailsActivity.IS_NEW_PROFILE, false)
                     .putExtra(ProfileDetailsActivity.PROFILE_ID, profileId), VIEW_PROFILE_REQUEST_CODE);
@@ -221,14 +234,78 @@ public class MainActivity extends EcareZoneBaseActivity {
     }
 
     private boolean isNavigationChanged = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 100 && resultCode == RESULT_OK){// coming back from patient screen
-            onNavigationChanged( R.layout.frag_doctor_list, null);
+        if (requestCode == 100 && resultCode == RESULT_OK) {// coming back from patient screen
+            onNavigationChanged(R.layout.frag_doctor_list, null);
             isNavigationChanged = true;
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+
+    }
+
+    public static final long DISCONNECT_TIMEOUT = 15000; // 1 min = 1 * 60 * 1000 ms
+
+    private Handler disconnectHandler = new Handler() {
+        public void handleMessage(Message msg) {
+        }
+    };
+
+    private Runnable disconnectCallback = new Runnable() {
+        @Override
+        public void run() {
+            // Perform any required operation on disconnect
+            Log.d(TAG, "status" + "status update called");
+            stopDisconnectTimer();
+        }
+    };
+
+    public void stopDisconnectTimer() {
+        disconnectHandler.removeCallbacks(disconnectCallback);
+//        if(DoctorApplication.nameValuePair)
+        int status = 1;
+        if (!DoctorApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
+            status = 2;
+        }
+
+        if (DoctorApplication.lastAvailablityStaus != status) {
+
+            ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
+                    LoginInfo.userName, LoginInfo.role);
+            getSpiceManager().execute(request, new DoUpdatePasswordRequestListener());
+            Log.d(TAG, "statuschange " + "changed");
+        }
+
+        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
+    }
+
+    public final class DoUpdatePasswordRequestListener implements RequestListener<BaseResponse> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+//            progressDialog.dismiss();
+
+        }
+
+        @Override
+        public void onRequestSuccess(final BaseResponse baseResponse) {
+            Log.d(TAG, "statuschange " + "changed");
+
+//            progressDialog.dismiss();
+//            mTextViewerror.setVisibility(View.VISIBLE);
+//            mTextViewerror.setText(baseResponse.status.message);
+//            if (baseResponse.status.code == 200) {
+//                LoginInfo.hashedPassword = newPwd;
+//            }
+//            DoctorApplication.lastAvailablityStaus = ;
+        }
+    }
 }

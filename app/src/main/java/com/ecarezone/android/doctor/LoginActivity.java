@@ -2,6 +2,7 @@ package com.ecarezone.android.doctor;
 
 import android.os.Bundle;
 
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.LoginFragment;
 
 
@@ -30,4 +31,15 @@ public class LoginActivity extends EcareZoneBaseActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+    }
 }

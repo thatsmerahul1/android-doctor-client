@@ -12,6 +12,7 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.service.RoboEcareSpiceServices;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.SinchUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.SpiceManager;
 
 /**
@@ -72,17 +73,5 @@ public abstract class EcareZoneBaseActivity extends AbstractBaseActivity impleme
 
     protected void onServiceDisconnected() {
         // for subclasses
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
     }
 }

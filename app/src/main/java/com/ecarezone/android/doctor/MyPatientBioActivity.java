@@ -17,6 +17,7 @@ import com.ecarezone.android.doctor.model.rest.AddDoctorRequest;
 import com.ecarezone.android.doctor.model.rest.AddDoctorResponse;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -126,12 +127,12 @@ public class MyPatientBioActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        Util.changeStatus(true,this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        Util.changeStatus(false,this);
     }
 }

@@ -47,8 +47,9 @@ public class Constants {
 
     //Registration Constants
     public static String REGISTRATION_DIALOG_TAG = "RegDiaFragment";
-    public static String STATUS_CHANGE = "statusChange";
 
+    //status changes
+    public static String STATUS_CHANGE = "statusChange";
     public static final int OFFLINE = 0;
     public static final int ONLINE = 1;
     public static final int IDLE = 2;

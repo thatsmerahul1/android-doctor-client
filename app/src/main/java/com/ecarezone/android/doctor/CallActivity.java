@@ -14,6 +14,7 @@ import com.ecarezone.android.doctor.fragment.VideoFragment;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
 import com.ecarezone.android.doctor.utils.SinchUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.calling.Call;
 
@@ -155,14 +156,14 @@ public class CallActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        Util.changeStatus(true, this);
     }
     @Override
     public void onStop() {
         super.onStop();
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         SinchUtil.getSinchAudioPlayer().stopRingtone();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        Util.changeStatus(false, this);
     }
 
 

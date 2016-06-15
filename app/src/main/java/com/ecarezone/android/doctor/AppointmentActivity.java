@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.AppointmentFragment;
+import com.ecarezone.android.doctor.utils.Util;
 
 /**
  * Created by L&T Technology Services.
@@ -60,12 +61,12 @@ public class AppointmentActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        Util.changeStatus(true,this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        Util.changeStatus(false, this);
     }
 }

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.doctor.fragment.NewsListFragment;
+import com.ecarezone.android.doctor.utils.Util;
 
 /**
  * Created by CHAO WEI on 5/31/2015.
@@ -60,12 +61,12 @@ public class NewsListActivity extends EcareZoneBaseActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        Util.changeStatus(true,this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        Util.changeStatus(false,this);
     }
 }

@@ -25,6 +25,7 @@ import com.ecarezone.android.doctor.fragment.WelcomeFragment;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.model.rest.base.ChangeStatusRequest;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -43,6 +44,9 @@ public class MainActivity extends EcareZoneBaseActivity {
     private boolean isBackStackRequired;
     private boolean isWelcomeMainRequired;
     public static int VIEW_PROFILE_REQUEST_CODE = 1001;
+    int status = 1;
+
+    public static final long DISCONNECT_TIMEOUT = 15000; // 1 min = 1 * 60 * 1000 ms
 
     //    HashMap<String,Boolean> nameValuePair;
     @Override
@@ -111,16 +115,13 @@ public class MainActivity extends EcareZoneBaseActivity {
         } else {
             isNavigationChanged = false;
         }
-        DoctorApplication.lastAvailablityStaus = Constants.ONLINE;
         disconnectHandler.post(disconnectCallback);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
-
+        Util.changeStatus(true,this);
     }
 
     @Override
@@ -248,11 +249,9 @@ public class MainActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
-
+        Util.changeStatus(false,this);
     }
 
-    public static final long DISCONNECT_TIMEOUT = 15000; // 1 min = 1 * 60 * 1000 ms
 
     private Handler disconnectHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -271,41 +270,36 @@ public class MainActivity extends EcareZoneBaseActivity {
     public void stopDisconnectTimer() {
         disconnectHandler.removeCallbacks(disconnectCallback);
 //        if(DoctorApplication.nameValuePair)
-        int status = 1;
+
         if (!DoctorApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
             status = 2;
+        } else {
+            status = 1;
         }
 
         if (DoctorApplication.lastAvailablityStaus != status) {
-
             ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
                     LoginInfo.userName, LoginInfo.role);
             getSpiceManager().execute(request, new DoUpdatePasswordRequestListener());
             Log.d(TAG, "statuschange " + "changed");
         }
 
+        DoctorApplication.lastAvailablityStaus = status ;
+        Log.d(TAG, "statuschangelastAvailablityStaus " + status);
         disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
     }
 
     public final class DoUpdatePasswordRequestListener implements RequestListener<BaseResponse> {
-
         @Override
         public void onRequestFailure(SpiceException spiceException) {
 //            progressDialog.dismiss();
-
         }
 
         @Override
         public void onRequestSuccess(final BaseResponse baseResponse) {
             Log.d(TAG, "statuschange " + "changed");
 
-//            progressDialog.dismiss();
-//            mTextViewerror.setVisibility(View.VISIBLE);
-//            mTextViewerror.setText(baseResponse.status.message);
-//            if (baseResponse.status.code == 200) {
-//                LoginInfo.hashedPassword = newPwd;
-//            }
-//            DoctorApplication.lastAvailablityStaus = ;
+//            DoctorApplication.lastAvailablityStaus = status ;
         }
     }
 }

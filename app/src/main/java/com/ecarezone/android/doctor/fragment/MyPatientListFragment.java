@@ -393,7 +393,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     dst.transferFrom(src, 0, src.size());
                     src.close();
                     dst.close();
-
             }
         } catch (Exception e) {
             Log.e("", e.toString());

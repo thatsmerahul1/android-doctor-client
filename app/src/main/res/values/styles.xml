@@ -6,6 +6,7 @@
         <item name="android:windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="navigationIcon">@drawable/back_</item>
     </style>
 
     <style name="ToolBarStyle" parent="">
@@ -20,9 +21,8 @@
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@android:color/black</item>
+        <item name="color">@android:color/holo_blue_light</item>
     </style>
-
 
     <!--custom component-->
     <style name="Button" parent="android:Widget.Button">

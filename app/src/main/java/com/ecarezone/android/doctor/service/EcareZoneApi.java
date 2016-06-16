@@ -2,6 +2,7 @@ package com.ecarezone.android.doctor.service;
 
 import com.ecarezone.android.doctor.model.rest.AddDoctorRequest;
 import com.ecarezone.android.doctor.model.rest.AddDoctorResponse;
+import com.ecarezone.android.doctor.model.rest.AppointmentAcceptRequest;
 import com.ecarezone.android.doctor.model.rest.AppointmentResponse;
 import com.ecarezone.android.doctor.model.rest.CreateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.CreateProfileResponse;
@@ -12,6 +13,7 @@ import com.ecarezone.android.doctor.model.rest.LoginRequest;
 import com.ecarezone.android.doctor.model.rest.LoginResponse;
 import com.ecarezone.android.doctor.model.rest.PatientAcceptRequest;
 import com.ecarezone.android.doctor.model.rest.Repo;
+import com.ecarezone.android.doctor.model.rest.AppointmentRejectRequest;
 import com.ecarezone.android.doctor.model.rest.SearchDoctorsRequest;
 import com.ecarezone.android.doctor.model.rest.SearchDoctorsResponse;
 import com.ecarezone.android.doctor.model.rest.SettingsRequest;
@@ -108,6 +110,12 @@ public interface EcareZoneApi {
 
     @POST("/changeStatus")
     BaseResponse changeStatus(@Body ChangeStatusRequest request);
+
+    @DELETE("/deleteappointment/doctors/{appointmentId}")
+    BaseResponse rejectAppointmentRequest(@Path("appointmentId") Long appointmentId, @Body AppointmentRejectRequest request);
+
+    @PUT("/acceptappointment/doctors/{appointmentId}")
+    BaseResponse acceptAppointmentRequest(@Path("appointmentId") Long appointmentId, @Body AppointmentAcceptRequest request);
 }
 
 /**

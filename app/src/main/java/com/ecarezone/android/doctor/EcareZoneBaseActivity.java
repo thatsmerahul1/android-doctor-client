@@ -77,12 +77,16 @@ public abstract class EcareZoneBaseActivity extends AbstractBaseActivity impleme
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        if(DoctorApplication.nameValuePair != null) {
+            DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        if(DoctorApplication.nameValuePair != null) {
+            DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        }
     }
 }

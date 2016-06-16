@@ -19,7 +19,7 @@ public class SplashScreenActivty extends EcareZoneBaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_splash);
-
+        float density = getResources().getDisplayMetrics().density;
         Crittercism.initialize(getApplicationContext(),
                 "56b49f2fb35f950b00e1ad37");
         splashScreenFragment = SplashScreenFragment.newInstance();

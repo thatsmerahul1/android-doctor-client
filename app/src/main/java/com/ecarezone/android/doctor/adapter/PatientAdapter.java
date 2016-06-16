@@ -138,11 +138,12 @@ public class PatientAdapter extends BaseAdapter {
                 patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
             }
             patientName.setText(patient.name);
-            String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email));
-            if(!count.equalsIgnoreCase("0")){
-                chatCount.setText(count);
+            int count = ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email);
+            if(count > 0){
+                chatCount.setText(String.valueOf(count));
                 chatCount.setVisibility(View.VISIBLE);
             } else {
+                chatCount.setText(String.valueOf(0));
                 chatCount.setVisibility(View.GONE);
              }
             String imageUrl = patient.avatarUrl;

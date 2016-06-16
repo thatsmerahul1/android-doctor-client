@@ -1,4 +1,4 @@
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/appointment_accepted_layout_"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,53 +7,50 @@
     android:orientation="horizontal"
     android:padding="8dp"
     android:weightSum="1">
-    <ImageView
+
+    <com.ecarezone.android.doctor.view.CircleImageView
         android:id="@+id/appointment_patient_avatar_of_request"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:minWidth="72dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/dr_john_photo" />
+        android:layout_width="@dimen/appointment_thumbnail_edge_size"
+        android:layout_height="@dimen/appointment_thumbnail_edge_size"
+        android:layout_margin="4dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/dr_john_photo"></com.ecarezone.android.doctor.view.CircleImageView>
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_weight="0.75"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="8dp"
-        android:layout_weight="0.75">
+        android:padding="8dp">
 
 
         <TextView
-            android:layout_width="219dp"
+            android:id="@+id/appointment_accepted_time"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/appointment_time"
-            android:id="@+id/appointment_accepted_time"
-            android:textSize="20sp"
             android:textColor="@color/text_black_color_selector"
-            android:padding="5dp"/>
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/accepted_type_of_call"
-            android:layout_width="216dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/doctor_name1"
-            android:textSize="16sp"
-            />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/accepted_patient_name"
-            android:layout_width="219dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/doctor_name1"
-            android:textSize="16sp"
             android:paddingBottom="5dp"
-            />
+            android:text="@string/doctor_name1"
+            android:textSize="16sp" />
 
 
     </LinearLayout>

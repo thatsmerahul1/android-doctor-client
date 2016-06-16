@@ -13,6 +13,7 @@ public class AppointmentListItem {
     public int patientId;
     public int listItemType;
     public boolean isConfirmed;
+    public String patientName;
 
     public static final int LIST_ITEM_TYPE_PENDING = 1;
     public static final int LIST_ITEM_TYPE_APPROVED = 2;

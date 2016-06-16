@@ -77,12 +77,14 @@ public class MyPatientActivity extends EcareZoneBaseActivity {
         return true;
     }
 
+    private DoctorFragment mDoctorFragment;
     @Override
     public void onNavigationChanged(int fragmentLayoutResId, Bundle args) {
         if (fragmentLayoutResId < 0) return;
 
         if (fragmentLayoutResId == R.layout.frag_doctor) {
-            changeFragment(R.id.screen_container, new DoctorFragment(),
+            mDoctorFragment = new DoctorFragment();
+            changeFragment(R.id.screen_container, mDoctorFragment,
                     DoctorFragment.class.getSimpleName(), args);
         }
     }
@@ -96,6 +98,10 @@ public class MyPatientActivity extends EcareZoneBaseActivity {
     protected void onStart() {
         super.onStart();
         DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        if(mDoctorFragment != null) {
+            mDoctorFragment.updateChatCount();
+        }
+
     }
 
     @Override

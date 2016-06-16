@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="14dp"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="14dp"
     android:weightSum="1">
 
     <ImageView
         android:id="@+id/imageview_registration"
-        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/login_logo"
-        />
+        android:layout_marginTop="24dp"
+        android:src="@drawable/login_logo" />
 
     <TextView
         android:id="@+id/textview_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
         android:text="@string/registration_title"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edit_text_registration_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:inputType="textEmailAddress"
         android:hint="@string/registration_username"
-        android:textSize="16sp"
-        />
+        android:inputType="textEmailAddress"
+        android:textSize="16sp" />
 
 
     <EditText
@@ -39,54 +39,72 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:inputType="textPassword"
         android:hint="@string/login_password"
-        android:textSize="16sp"
-        />
+        android:inputType="textPassword"
+        android:textSize="16sp" />
 
-
-    <EditText
-        android:id="@+id/country_spinner"
-        android:layout_marginTop="14dp"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/settings_country"
-        android:textSize="16sp"
-        android:focusable="false"
-        />
-<!--
-    style="@style/spinnerCustomStyle"
--->
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/spinner_language"
-        android:layout_marginTop="14dp"
+        <EditText
+            android:id="@+id/country_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:focusable="false"
+            android:hint="@string/settings_country"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/arrow_spinner" />
+    </FrameLayout>
+    <!--
+        style="@style/spinnerCustomStyle"
+    -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/settings_language"
-        android:textSize="16sp"
-        android:focusable="false"
-        />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/spinner_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:focusable="false"
+            android:hint="@string/settings_language"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/arrow_spinner" />
+    </FrameLayout>
+
     <Button
         android:id="@+id/button_register"
+        style="@style/EcareZoneGreenButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="220dp"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:minWidth="220dp"
         android:text="@string/registration_create_account"
-        android:textAllCaps="true"
-        style="@style/EcareZoneGreenButton"
-        />
+        android:textAllCaps="true" />
 
     <CheckBox
         android:id="@+id/checkbox_registration_terms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_gravity="center"
-        android:text="@string/registration_agreement"/>
-
+        android:layout_marginTop="16dp"
+        android:text="@string/registration_agreement" />
 
 
 </LinearLayout>

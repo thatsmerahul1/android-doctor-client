@@ -3,11 +3,14 @@ package com.ecarezone.android.doctor.fragment;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.ecarezone.android.doctor.VideoActivity;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.fragment.dialog.AddDoctorRequestDialog;
+import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.rest.AddDoctorRequest;
 import com.ecarezone.android.doctor.model.rest.AddDoctorResponse;
 import com.ecarezone.android.doctor.model.rest.Patient;
@@ -55,6 +59,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private Long doctorId;
     private String doctorName;
     private Patient patient;
+    private TextView unreadChatCount;
 
     private Activity mActivity;
     private int viewId;
@@ -77,6 +82,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         doctorDetailData = getArguments();
         patient = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
+        IntentFilter intentFilter = new IntentFilter("send");
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(message, intentFilter);
         getAllComponent(view, patient);
         return view;
     }
@@ -90,6 +97,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         doctorVideo = (Button) view.findViewById(R.id.btn_doctor_video_id);
         doctorVoice = (Button) view.findViewById(R.id.btn_doctor_voice_id);
 //        buttonAppointment = (Button) view.findViewById(R.id.button_appointment);
+
+        unreadChatCount = (TextView) view.findViewById(R.id.chat_count);
 
         doctorChat.setOnClickListener(this);
         doctorVideo.setOnClickListener(this);
@@ -220,6 +229,23 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
     }
 
+    public void updateChatCount() {
+
+        if(unreadChatCount != null && patient != null){
+            ChatDbApi chatDbApi = ChatDbApi.getInstance(getApplicationContext());
+            int unreadCount = chatDbApi.getUnReadChatCountByUserId(patient.email);
+            if(unreadCount > 0) {
+                unreadChatCount.setText(String.valueOf(unreadCount));
+                unreadChatCount.setVisibility(View.VISIBLE);
+            }
+            else{
+                unreadChatCount.setText(String.valueOf(0));
+                unreadChatCount.setVisibility(View.GONE);
+            }
+        }
+
+    }
+
     /*
             Add Doctor request response
      */
@@ -243,4 +269,21 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             }
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        IntentFilter intentFilter = new IntentFilter("send");
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(message);
+    }
+
+    /*Incoming chat message receiver*/
+    BroadcastReceiver message = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equalsIgnoreCase("send")) {
+                updateChatCount();
+            }
+        }
+    };
 }

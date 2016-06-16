@@ -22,6 +22,7 @@
     <string name="terms">Terms</string>
     <string name="and">and</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="bottom_arrow">&#129171;</string>
     <!-- side menu  -->
     <string name="main_profile_title">Profile</string>
     <string name="main_side_menu_messages">Messages</string>
@@ -223,6 +224,10 @@
     <!-- TAG KEYS -->
     <string name="message_adapter_key">message_adapter_key</string>
     <string name="message_adapter_viewholder_key">message_adapter_viewholder_key</string>
+
+    <!-- APPOINTMENT -->
+    <string name="appointment_accepted">Appointment accepted</string>
+    <string name="appointment_rejected">Appointment rejected</string>
 
     <string-array name="array_name">
         <item>Select</item>

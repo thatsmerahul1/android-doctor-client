@@ -2,9 +2,11 @@ package com.ecarezone.android.doctor.model.database;
 
 import android.content.Context;
 
+import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 
@@ -34,23 +36,9 @@ public class PatientProfileDbApi {
 
     }
 
-
-    /* Saves a user profile in local database. Returns success failure response. */
-    public boolean saveProfile(long userId, Patient userProfile, String profileId) {
+    public static boolean saveProfile(Patient userProfile) {
         try {
             Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
-            userProfile.userId = userId;
-            int status = userProfileDao.create(userProfile);
-            return status != 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    public static boolean saveProfile(Long userId, Patient userProfile) {
-        try {
-            Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
-            userProfile.userId = userId;
             int status = userProfileDao.create(userProfile);
             return status != 0;
         } catch (SQLException e) {
@@ -70,7 +58,6 @@ public class PatientProfileDbApi {
             updateBuilder.updateColumnValue(DbContract.PatientProfiles.COLUMN_NAME_EMAIL, userProfile.email);
             updateBuilder.updateColumnValue(DbContract.PatientProfiles.COLUMN_NAME_STATUS, userProfile.status);
             updateBuilder.updateColumnValue(DbContract.PatientProfiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
-            updateBuilder.updateColumnValue(DbContract.PatientProfiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
 
             int updatedRowCount = updateBuilder.update();
             return true;
@@ -80,8 +67,28 @@ public class PatientProfileDbApi {
         return false;
     }
 
+    /**
+     * Deletes the profile of the user bearing the user id
+     * @param userId
+     * @return
+     */
+    public boolean deleteProfile(String userId){
+        try {
+            Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
+            DeleteBuilder<Patient, Integer> deleteBuilder = userProfileDao.deleteBuilder();
+            deleteBuilder.where()
+                    .eq(DbContract.PatientProfiles.COLUMN_NAME_USER_ID, userId);
+
+            int numOfRowsDeleted = deleteBuilder.delete();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /* retrieve the details of a particular profile */
-    public Patient getProfile(String userId /*String profileId*/) {
+    public Patient getProfile(Long userId) {
         if(userId != null) {
             try {
                 Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();

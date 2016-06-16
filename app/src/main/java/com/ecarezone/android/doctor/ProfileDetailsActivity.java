@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.UserProfileDetailsFragment;
+import com.ecarezone.android.doctor.utils.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -87,12 +88,12 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        Util.changeStatus(true,this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        Util.changeStatus(false,this);
     }
 }

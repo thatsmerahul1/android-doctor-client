@@ -72,11 +72,14 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                         LoginInfo.userName = user.email;
                         LoginInfo.hashedPassword = user.password;
                         LoginInfo.role = user.role;
-                        if (!SinchUtil.getSinchServiceInterface().isStarted()) {
-                            Log.i(TAG, "userId::" + userId);
-                            SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
+                        if(SinchUtil.getSinchServiceInterface()!=null) {
+
+                            if (!SinchUtil.getSinchServiceInterface().isStarted()) {
+                                Log.i(TAG, "userId::" + userId);
+                                SinchUtil.getSinchServiceInterface().startClient(LoginInfo.userName);
 //commented to run this on android M emulator
-                        } /*else {*/
+                            }
+                        }/*else {*/
                         Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         activity.finish();

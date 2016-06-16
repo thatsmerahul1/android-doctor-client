@@ -18,6 +18,7 @@ import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.model.rest.base.UpdatePasswordRequest;
 import com.ecarezone.android.doctor.utils.PasswordUtil;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -154,12 +155,12 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, true);
+        Util.changeStatus(true,this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DoctorApplication.nameValuePair.put(Constants.STATUS_CHANGE, false);
+        Util.changeStatus(false,this);
     }
 }

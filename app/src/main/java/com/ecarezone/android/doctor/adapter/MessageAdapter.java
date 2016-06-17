@@ -77,6 +77,7 @@ public class MessageAdapter extends BaseAdapter {
             TextView messageSenderName = (TextView) view.findViewById(R.id.messagesenderName);
             TextView timeStamp = (TextView) view.findViewById(R.id.updateTime);
             messageSenderName.setText(patient.name);
+            timeStamp.setText(patient.dateTime);
 
         } else if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_MESSAGE) {
             String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email));

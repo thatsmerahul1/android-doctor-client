@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+          android:orientation="vertical"
+    android:background="@color/ecarezone_blue_dark"
+     >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/pending_req"
+        android:gravity="center_horizontal"
+        android:textColor="@color/ecarezone_semi_white_transparent"
+        android:textSize="20sp"/>
+    <LinearLayout
         android:id="@+id/patient_layout_"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -7,7 +20,9 @@
         android:background="@drawable/blue_rectangle_layout_selector"
         android:orientation="horizontal"
         android:padding="8dp"
-        android:weightSum="1">
+        android:weightSum="1"
+        >
+
     <com.ecarezone.android.doctor.view.CircleImageView
         android:id="@+id/patient_avatar_of_request"
         android:layout_width="@dimen/profile_thumbnail_edge_size"
@@ -70,5 +85,6 @@
             </LinearLayout>
 
         </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 

@@ -3,6 +3,7 @@ package com.ecarezone.android.doctor;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -53,9 +54,12 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
     private TextView mTextViewAbout = null;
     public static final Integer COUNTRY_RESULT = 100;
     public static final Integer LANGUAGE_RESULT = 101;
+    ImageView arrow_down_for_country;
+    ImageView arrow_down_for_language;
     private User user;
     private UserTable userTable;
-
+    private TextView ecare_account = null;
+    private TextView ecare_account_email = null;
     @Override
     protected String getCallerName() {
         return SettingsFragment.class.getSimpleName();
@@ -72,7 +76,10 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mButtonRegister = view.findViewById(R.id.button_register);
         mButtonRegister.setOnClickListener(this);
         mButtonRegister.setVisibility(View.GONE);
-
+        arrow_down_for_country = (ImageView)view.findViewById(R.id.arrow_down);
+        arrow_down_for_language = (ImageView)view.findViewById(R.id.arrow_down2);
+        arrow_down_for_country.setImageResource(R.drawable.black_arrow);
+        arrow_down_for_language.setImageResource(R.drawable.black_arrow);
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_registration_username);
         mEditTextUsername.setEnabled(false);
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);
@@ -93,6 +100,20 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         mSpinnerLanguage.setOnClickListener(this);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.checkbox_registration_terms);
         mCheckBoxTerms.setVisibility(View.GONE);
+
+        ecare_account = (TextView)view.findViewById(R.id.ecare_account);
+        ecare_account_email = (TextView)view.findViewById(R.id.ecare_account_email);
+        ecare_account.setVisibility(View.VISIBLE);
+        ecare_account_email.setVisibility(View.VISIBLE);
+        ecare_account_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND, Uri.fromParts(
+                        "mailto", String.valueOf(R.string.email_id), null));
+                emailIntent.setType("text/plain");
+                startActivity(emailIntent);
+            }
+        });
 //        mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
 //        mTextViewAbout.setVisibility(View.VISIBLE);
 //        mTextViewAbout.setOnClickListener(this);

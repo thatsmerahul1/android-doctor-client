@@ -12,7 +12,7 @@
         android:layout_gravity="left"
         android:background="@drawable/outgoing_message_bg"
         >
-
+<!--
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             android:id="@+id/chatUser"
             android:layout_gravity="top"
             android:text="hi"
-            />
+            />-->
 
         <TextView
             android:layout_width="wrap_content"

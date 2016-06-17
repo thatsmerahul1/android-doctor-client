@@ -204,6 +204,9 @@
         <item>Capture from camera</item>
     </string-array>
 
+    <string name="take_photo">Take photo</string>
+    <string name="choose_photo">Choose photo</string>
+
     <string name="reset_password_email_hint">Enter Your Email</string>
     <string name="reset_password">Reset password</string>
     <string name="reset_password_notification">Your new password will be sent \nto by email</string>
@@ -237,4 +240,10 @@
         <item>Kidney</item>
         <item>Lungs</item>
     </string-array>
+
+    <string name="email_to">For any Support with the EcareZone Account,\n  please mail to </string>
+    <string name="email_id"><u>Customersupport@Ecarezone.com</u></string>
+
+    <string name="pending_req">Pending request</string>
+
 </resources>

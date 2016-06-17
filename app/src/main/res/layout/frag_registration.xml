@@ -177,7 +177,5 @@
             android:textColor="@color/ecarezone_blue_dark"
             android:visibility="gone"/>
 
-
-
     </LinearLayout>
 </ScrollView>

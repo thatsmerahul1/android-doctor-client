@@ -64,7 +64,8 @@
     <string name="profile_add_people_you_care">Add people you care</string>
     <string name="ProfileFormEditTextStyle">Specialized areas</string>
     <string name="profile_details_registration_id">Registration ID</string>
-    <string name="profile_details_my_bio">My Bio</string>
+    <string name="profile_details_my_bio">My bio</string>
+    <string name="profile_details_edit">Edit</string>
 
     <string name="imageutil_camera_not_found">Camera application not found</string>
 
@@ -245,5 +246,6 @@
     <string name="email_id"><u>Customersupport@Ecarezone.com</u></string>
 
     <string name="pending_req">Pending request</string>
+    <string name="language">Language:</string>
 
 </resources>

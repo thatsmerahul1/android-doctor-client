@@ -81,8 +81,9 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
         cameraPanel = (RelativeLayout) view.findViewById(R.id.cameraPanel);
         progressPanel = (TextView) view.findViewById(R.id.progressPanel);
         hangupButton = (Button) view.findViewById(R.id.hangupButton);
+        TextView callingUser = (TextView) view.findViewById(R.id.VideoUserName);
 
-        topPanel.setVisibility(View.GONE);
+                topPanel.setVisibility(View.GONE);
         bootomPanel.setVisibility(View.GONE);
         cameraPanel.setVisibility(View.GONE);
 
@@ -99,7 +100,6 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
 
             answerButton.setOnClickListener(this);
             declineButton.setOnClickListener(this);
-
         }
         PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(mActivity);
         Patient tempProfiles;
@@ -116,6 +116,7 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
                         .into(incomingUserProfilePic);
             }
             inComingVideoCallRemoteUser.setText(tempProfiles.name);
+            callingUser.setText(tempProfiles.name);
         }
         hangupButton.setOnClickListener(this);
     }

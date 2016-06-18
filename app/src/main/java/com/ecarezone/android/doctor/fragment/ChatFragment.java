@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.ChatActivity;
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.ChatAdapter;
 import com.ecarezone.android.doctor.config.Constants;
@@ -219,7 +220,11 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         chat.setChatUserId(message.getSenderId());
         if (message.getTextBody().contains(Constants.ENDPOINTURL)) {
             chat.setInComingImageUrl(message.getTextBody());
-            downloadFile(chat.getInComingImageUrl(), message.getTimestamp());
+            if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                downloadFile(chat.getInComingImageUrl(), message.getTimestamp());
+            } else {
+                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            }
         } else {
             chat.setMessageText(message.getTextBody());
         }

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.MyPatientActivity;
 import com.ecarezone.android.doctor.MainActivity;
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
@@ -102,10 +103,13 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
     }
 
     private void initListWithData(){
-
         patientLists.clear();
-        populatePendingPatientList();
-        populateMyCarePatientList();
+        if(NetworkCheck.isNetworkAvailable(getActivity())) {
+            populatePendingPatientList();
+            populateMyCarePatientList();
+        } else {
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -361,11 +365,19 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             PatientListItem patientItem = patientLists.get(position);
 
             if(isAccept){
-                acceptedPatientRequest(patientItem.userId, "approved");
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    acceptedPatientRequest(patientItem.userId, "approved");
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
                 mycareDoctorAdapter.notifyDataSetChanged();
             }
             else{
-                acceptedPatientRequest(patientItem.userId, "rejected");
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    acceptedPatientRequest(patientItem.userId, "rejected");                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
+
             }
 
         }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.DoctorApplication;
 import com.ecarezone.android.doctor.MainActivity;
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.RegistrationActivity;
@@ -99,8 +100,11 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
             } else if (getString(R.string.main_side_menu_appointments).equals(tag)) {
                 layoutResId = R.layout.frag_appointment;
             } else if (getString(R.string.main_side_menu_logout).equals(tag)) {
-                doLogout();
-
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    doLogout();
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
             } else if (getString(R.string.main_side_menu_settings).equals(tag)) {
                 layoutResId = R.layout.frag_settings;
             }

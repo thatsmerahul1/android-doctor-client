@@ -42,6 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
@@ -184,7 +185,11 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.action_check) {
             Util.hideKeyboard(getActivity());
-            saveProfile();
+            if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                saveProfile();
+            } else {
+                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            }
         }
         return true;
     }

@@ -108,9 +108,10 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         ecare_account_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND, Uri.fromParts(
-                        "mailto", String.valueOf(R.string.email_id), null));
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"Customersupport@Ecarezone.com"});
+                emailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(emailIntent);
             }
         });
@@ -233,9 +234,11 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         if (item.getItemId() == R.id.action_check) {
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextPassword.getEditableText().toString();
-
-            doSettingsUpdate(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
-
+            if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                doSettingsUpdate(username, password, (String) mSpinnerCountry.getTag(), (String) mSpinnerLanguage.getTag());
+            } else {
+                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.MyPatientActivity;
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.MessageAdapter;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
@@ -86,8 +87,12 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getText(R.string.progress_dialog_loading).toString());
         patientLists.clear();
-        populatePendingPatientList();
-        populateMyCarePatientList();
+        if(NetworkCheck.isNetworkAvailable(getActivity())) {
+            populatePendingPatientList();
+            populateMyCarePatientList();
+        } else {
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void populatePendingPatientList() {

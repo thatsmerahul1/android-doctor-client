@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.MainActivity;
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
@@ -168,9 +169,7 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v == null) return;
-
         Util.hideKeyboard(getActivity());
-
         final int viewId = v.getId();
         if (viewId == R.id.button_login) {
             textView_error.setVisibility(View.INVISIBLE);
@@ -188,9 +187,12 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                 Toast.makeText(v.getContext(), R.string.error_user_login, Toast.LENGTH_LONG).show();
                 return;
             } else {
-                doLogin(username, password);
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    doLogin(username, password);
+                } else {
+                    Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
             }
-
         } else if (viewId == R.id.button_create_account) {
             // change to account creation
             invokeNavigationChanged(R.layout.frag_registration, null);

@@ -12,6 +12,7 @@
     <!--registration-->
     <string name="registration_title">Register as eCareZone doctor</string>
     <string name="registration_username">@string/login_username</string>
+    <string name="registration_email">Your email</string>
     <string name="registration_password">@string/login_password</string>
     <string name="registration_country">Country:</string>
     <string name="registration_create_account">Register</string>

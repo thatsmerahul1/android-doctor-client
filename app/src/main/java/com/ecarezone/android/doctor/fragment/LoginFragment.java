@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ecarezone.android.doctor.DoctorApplication;
 import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;

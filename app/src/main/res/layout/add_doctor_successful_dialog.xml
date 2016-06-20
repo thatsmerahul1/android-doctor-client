@@ -9,7 +9,8 @@
         android:id="@+id/add_doctor_success_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_check_normal"/>
+        android:src="@drawable/save"
+        />
 
     <TextView
         android:id="@+id/add_doctor_success_text"

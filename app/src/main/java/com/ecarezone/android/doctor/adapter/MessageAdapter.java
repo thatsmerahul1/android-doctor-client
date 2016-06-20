@@ -2,6 +2,7 @@ package com.ecarezone.android.doctor.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ecarezone.android.doctor.AppointmentActivity;
+import com.ecarezone.android.doctor.ChatActivity;
 import com.ecarezone.android.doctor.R;
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.Chat;
 import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
@@ -76,7 +80,7 @@ public class MessageAdapter extends BaseAdapter {
         if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
             TextView messageSenderName = (TextView) view.findViewById(R.id.messagesenderName);
             TextView timeStamp = (TextView) view.findViewById(R.id.updateTime);
-            messageSenderName.setText(patient.name);
+            messageSenderName.setText("From:" + patient.name);
             timeStamp.setText(patient.dateTime);
 
         } else if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_MESSAGE) {
@@ -90,6 +94,20 @@ public class MessageAdapter extends BaseAdapter {
                 messageSenderName_chat.setText(patient.name);
                 message_detail.setText(patient.msgText);
                 messageTimestamp.setText(patient.dateTime);
+                view.setTag(patient);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (v.getTag() != null) {
+                            PatientListItem patient = (PatientListItem) v.getTag();
+                            Intent chatIntent = new Intent(activity, ChatActivity.class);
+                            chatIntent.putExtra(Constants.EXTRA_NAME, patient.name);
+                            chatIntent.putExtra(Constants.EXTRA_EMAIL, patient.email);
+                            activity.startActivity(chatIntent);
+                            activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                        }
+                    }
+                });
 
             }
         } else if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_APPOINTMENT) {
@@ -97,14 +115,31 @@ public class MessageAdapter extends BaseAdapter {
             TextView messageSenderName_chat = (TextView) view.findViewById(R.id.messageSenderName_chat);
             TextView message_detail = (TextView) view.findViewById(R.id.messageDetail);
             TextView messageTimestamp = (TextView) view.findViewById(R.id.timeStamp);
+            ImageView imgView = (ImageView) view.findViewById(R.id.messageIcon);
 
-            Appointment appointment = AppointmentDbApi.getInstance(activity).getAppointment(patient.appointmentId);
+            imgView.setImageResource(R.drawable.notification_appointment);
 
             messageSenderName_chat.setText("Appointment Request");
             message_detail.setText("From:" + patient.name);
-            messageTimestamp.setText(mTimeFormat.format(appointment.getTimeStamp()));
+            try {
+                messageTimestamp.setText(patient.dateTime);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
-            view.setTag(R.string.message_adapter_key, appointment);
+//            view.setTag(R.string.message_adapter_key, appointment);
+//            view.setTag(patient);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+//                        Appointment appointment = (Appointment) v.getTag(R.string.message_adapter_key);
+                    Intent chatIntent = new Intent(activity, AppointmentActivity.class);
+                    activity.startActivity(chatIntent);
+                    activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                }
+            });
         }
         return view;
     }

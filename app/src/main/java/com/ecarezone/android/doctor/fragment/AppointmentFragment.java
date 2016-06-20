@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.ecarezone.android.doctor.AppointmentActivity;
 import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.AppointmentAdapter;
@@ -75,8 +76,14 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements View.O
         final View view = inflater.inflate(R.layout.frag_appointment, container, false);
 
 
-        ((MainActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getText(R.string.doctor_appointment_header));
+        if(getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).getSupportActionBar()
+                    .setTitle(getResources().getText(R.string.doctor_appointment_header));
+        }
+        else if(getActivity() instanceof AppointmentActivity){
+            ((AppointmentActivity) getActivity()).getSupportActionBar()
+                    .setTitle(getResources().getText(R.string.doctor_appointment_header));
+        }
 
         mCalendarView = (CalendarView) view.findViewById(R.id.calendarView);
         mCalendarView.setDate(System.currentTimeMillis());

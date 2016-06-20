@@ -48,11 +48,25 @@ public class AppointmentDbApi {
     }
 
     /* retrieve the AppointmentHistory of a particular user */
-    public List<Appointment> getAppointmentHistory(int patientId) {
+    public List<Appointment> getAppointmentHistory(long patientId) {
         try {
             Dao<Appointment, Integer> chatDao = mDbHelper.getAppointmentDao();
             QueryBuilder<Appointment, Integer> queryBuilder = chatDao.queryBuilder();
             return queryBuilder.where().eq(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, patientId).query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /* retrieve the AppointmentHistory of a particular user */
+    public List<Appointment> getAppointmentHistory(long patientId, boolean isConfirmed) {
+        try {
+            Dao<Appointment, Integer> chatDao = mDbHelper.getAppointmentDao();
+            QueryBuilder<Appointment, Integer> queryBuilder = chatDao.queryBuilder();
+            return queryBuilder.where().eq(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, patientId)
+                    .and()
+                    .eq(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, isConfirmed).query();
         } catch (SQLException e) {
             e.printStackTrace();
         }

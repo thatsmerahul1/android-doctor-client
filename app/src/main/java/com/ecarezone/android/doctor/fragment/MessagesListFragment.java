@@ -68,10 +68,11 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         super.onCreate(savedInstanceState);
         try {
             setHasOptionsMenu(true);
+            ((MainActivity) getActivity()).getSupportActionBar()
+                    .setTitle(getResources().getString(R.string.main_side_menu_messages));
         } catch (Exception e) {
+            e.printStackTrace();
         }
-        ((MainActivity) getActivity()).getSupportActionBar()
-                .setTitle(getResources().getString(R.string.main_side_menu_messages));
     }
 
     @Override
@@ -79,8 +80,34 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         final View view = inflater.inflate(R.layout.frag_message_list, container, false);
 
         messageContainer = view.findViewById(R.id.message_container);
-        myPatientListView = (ListView)view.findViewById(R.id.message_list);
-        noMessage = (TextView)view.findViewById(R.id.emptyMessages);
+        myPatientListView = (ListView) view.findViewById(R.id.message_list);
+        noMessage = (TextView) view.findViewById(R.id.emptyMessages);
+
+//        myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.i(TAG, "position = " + position);
+//                Bundle data = new Bundle();
+//
+//                PatientListItem patientListItem = patientLists.get(position);
+//                Patient patient = new Patient(patientListItem.userId, patientListItem.email,
+//                        patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
+//                        patientListItem.isCallAllowed, patientListItem.userDevicesCount,
+//                        patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
+//
+//                data.putParcelable(Constants.DOCTOR_DETAIL, patient);
+//                data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
+//                final Activity activity = getActivity();
+//                if (activity != null) {
+//                    Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
+//                    showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+//                    showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
+//                    activity.startActivity(showDoctorIntent);
+//                    activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+//                }
+//            }
+//        });
+
         return view;
     }
 
@@ -90,7 +117,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
                 getText(R.string.progress_dialog_loading).toString());
         patientLists.clear();
-        if(NetworkCheck.isNetworkAvailable(getActivity())) {
+        if (NetworkCheck.isNetworkAvailable(getActivity())) {
             populatePendingPatientList();
             populateMyCarePatientList();
         } else {
@@ -106,7 +133,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
 
     private void populateMyCarePatientList() {
         SearchDoctorsRequest request =
-                new SearchDoctorsRequest(LoginInfo.userId, null, null, null, null, null,true);
+                new SearchDoctorsRequest(LoginInfo.userId, null, null, null, null, null, true);
         getSpiceManager().execute(request, new PopulateMyCareDoctorListRequestListener());
     }
 
@@ -127,7 +154,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
 
-                while(iter.hasNext()){
+                while (iter.hasNext()) {
                     Patient patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
                     patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_PENDING;
@@ -169,6 +196,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                                 showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
                                 activity.startActivity(showDoctorIntent);
                                 activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                
                             }
                         }
                     });
@@ -181,7 +209,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
             } else {
                 progressDialog.dismiss();
             }
-         }
+        }
     }
 
     public final class PopulateMyCareDoctorListRequestListener implements RequestListener<SearchDoctorsResponse> {
@@ -205,19 +233,20 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm");
                 SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 ChatDbApi chatDbi = ChatDbApi.getInstance(getActivity());
-                while(iter.hasNext()){
+                while (iter.hasNext()) {
                     Patient patient = iter.next();
-                    PatientListItem patientItem = new PatientListItem();
-                    patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_MESSAGE;
-                    patientItem.email = patient.email;
-                    patientItem.name = patient.name;
-                    patientItem.recommandedDoctorId = patient.recommandedDoctorId;
-                    patientItem.status = patient.status;
-                    patientItem.userDevicesCount = patient.userDevicesCount;
-                    patientItem.userId = patient.userId;
-
                     int count = chatDbi.getUnReadChatCountByUserId(patient.email);
                     if (count > 0) {
+                        PatientListItem patientItem = new PatientListItem();
+                        patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_MESSAGE;
+                        patientItem.email = patient.email;
+                        patientItem.name = patient.name;
+                        patientItem.recommandedDoctorId = patient.recommandedDoctorId;
+                        patientItem.status = patient.status;
+                        patientItem.userDevicesCount = patient.userDevicesCount;
+                        patientItem.userId = patient.userId;
+
+
                         List<Chat> mMessages = chatDbi.getChatHistory(patient.email);
 
                         Chat lastMsg = mMessages.get(mMessages.size() - 1);
@@ -234,15 +263,13 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                             timeStamp = mDateFormat.format(lastMsg.getTimeStamp());
                         }
                         patientItem.dateTime = timeStamp;
-
+                        patientLists.add(patientItem);
                     }
-
-                    patientLists.add(patientItem);
                 }
 
-                for(PatientListItem patient : patientLists) {
+                for (Patient patient : tempPatient) {
                     List<Appointment> appointmentList = AppointmentDbApi.getInstance(getActivity()).
-                            getAppointmentHistory(patient.userId, new Date());
+                            getAppointmentHistory(patient.userId, false);
                     int size = appointmentList.size();
                     for (int i = 0; i < size; i++) {
 
@@ -253,6 +280,19 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                         patientItem.patientId = appointment.getPatientId();
                         patientItem.appointmentId = appointment.getAppointmentId();
                         patientItem.callType = appointment.getCallType();
+                        patientItem.name = patient.name;
+
+                        String timeStamp;
+                        Calendar calendar = Calendar.getInstance();
+                        Date currDate = new Date(Long.parseLong(appointment.getTimeStamp()));
+                        calendar.setTime(currDate);
+                        if (todayDate == calendar.get(Calendar.DATE)) {
+                            timeStamp = mTimeFormat.format(currDate);
+                        } else {
+                            timeStamp = mDateFormat.format(currDate);
+                        }
+
+                        patientItem.dateTime = timeStamp;
                         patientLists.add(patientItem);
                     }
                 }
@@ -265,39 +305,14 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 } else if (patientLists.size() > 0) {
                     ChatDbApi chatDbApi = ChatDbApi.getInstance(getApplicationContext());
 
-                    if(chatDbApi.getUnReadChatCount() == 0){
-                        noMessage.setVisibility(View.VISIBLE);
-                    } else {
-                        noMessage.setVisibility(View.GONE);
-                    }
-                    if(mycareDoctorAdapter != null) {
+//                    if (chatDbApi.getUnReadChatCount() == 0) {
+//                        noMessage.setVisibility(View.VISIBLE);
+//                    } else {
+//                        noMessage.setVisibility(View.GONE);
+//                    }
+                    if (mycareDoctorAdapter != null) {
                         mycareDoctorAdapter.notifyDataSetChanged();
                     }
-                    myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.i(TAG, "position = " + position);
-                            Bundle data = new Bundle();
-
-                            PatientListItem patientListItem = patientLists.get(position);
-                            Patient patient = new Patient(patientListItem.userId, patientListItem.email,
-                                    patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
-                                    patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-                                    patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
-
-                            data.putParcelable(Constants.DOCTOR_DETAIL, patient);
-                            data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
-                            final Activity activity = getActivity();
-                            if (activity != null) {
-                                Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
-                                showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
-                                showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-                                activity.startActivity(showDoctorIntent);
-                                activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                            }
-                        }
-                    });
-
                 }
 
             } else {

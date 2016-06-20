@@ -36,6 +36,10 @@ public class PatientListItem {
     public String callType;
     public String dateTime;
 
+    //message data
+    public String msgText;
+    public int unreadMsgCount = 0;
+
     public static final int LIST_ITEM_TYPE_PENDING = 1;
     public static final int LIST_ITEM_TYPE_APPROVED = 2;
     public static final int LIST_ITEM_TYPE_MESSAGE = 3;

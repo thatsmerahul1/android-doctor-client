@@ -22,6 +22,7 @@ import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.Appointment;
+import com.ecarezone.android.doctor.model.Chat;
 import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
 import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
@@ -32,7 +33,9 @@ import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
@@ -195,9 +198,13 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         @Override
         public void onRequestSuccess(SearchDoctorsResponse getDoctorsResponse) {
             if (getDoctorsResponse.status.code == HTTP_STATUS_OK) {
+
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
-
+                int todayDate = Calendar.getInstance().get(Calendar.DATE);
+                SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm");
+                SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                ChatDbApi chatDbi = ChatDbApi.getInstance(getActivity());
                 while(iter.hasNext()){
                     Patient patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
@@ -208,6 +215,28 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                     patientItem.status = patient.status;
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
+
+                    int count = chatDbi.getUnReadChatCountByUserId(patient.email);
+                    if (count > 0) {
+                        List<Chat> mMessages = chatDbi.getChatHistory(patient.email);
+
+                        Chat lastMsg = mMessages.get(mMessages.size() - 1);
+                        patientItem.unreadMsgCount = count;
+                        patientItem.name = patient.name;
+                        patientItem.msgText = lastMsg.getMessageText();
+
+                        String timeStamp;
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(lastMsg.getTimeStamp());
+                        if (todayDate == calendar.get(Calendar.DATE)) {
+                            timeStamp = mTimeFormat.format(lastMsg.getTimeStamp());
+                        } else {
+                            timeStamp = mDateFormat.format(lastMsg.getTimeStamp());
+                        }
+                        patientItem.dateTime = timeStamp;
+
+                    }
+
                     patientLists.add(patientItem);
                 }
 

@@ -39,11 +39,15 @@ public class Patient implements Parcelable, Serializable {
     @Expose
     @DatabaseField
     public String avatarUrl;
+    @DatabaseField
+    public long dateTime;
     public Patient(){
 
     }
 
-    public Patient(Long userId, String email, String name, String recommandedDoctorId, String status, String isCallAllowed, String userDevicesCount, String userSettings, String userProfile, String avatarUrl) {
+    public Patient(Long userId, String email, String name, String recommandedDoctorId, String status,
+                   String isCallAllowed, String userDevicesCount, String userSettings, String userProfile,
+                   String avatarUrl) {
         this.userId = userId;
         this.email = email;
         this.name = name;

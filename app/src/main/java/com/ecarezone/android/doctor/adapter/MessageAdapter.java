@@ -80,30 +80,17 @@ public class MessageAdapter extends BaseAdapter {
             timeStamp.setText(patient.dateTime);
 
         } else if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_MESSAGE) {
-            String count = String.valueOf(ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email));
-            if (!count.equalsIgnoreCase("0")) {
-                List<Chat> mMessages = ChatDbApi.getInstance(activity).getChatHistory(patient.email);
 
-                Chat lastMsg = mMessages.get(mMessages.size() - 1);
+            if (patient.unreadMsgCount > 0) {
+
                 TextView messageSenderName_chat = (TextView) view.findViewById(R.id.messageSenderName_chat);
                 TextView message_detail = (TextView) view.findViewById(R.id.messageDetail);
                 TextView messageTimestamp = (TextView) view.findViewById(R.id.timeStamp);
 
                 messageSenderName_chat.setText(patient.name);
-                message_detail.setText(lastMsg.getMessageText());
+                message_detail.setText(patient.msgText);
+                messageTimestamp.setText(patient.dateTime);
 
-                String timeStamp;
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(lastMsg.getTimeStamp());
-                if (todayDate == calendar.get(Calendar.DATE)) {
-                    timeStamp = mTimeFormat.format(lastMsg.getTimeStamp());
-                } else {
-                    timeStamp = mDateFormat.format(lastMsg.getTimeStamp());
-                }
-                messageTimestamp.setText(timeStamp);
-
-            } else {
-                view.setVisibility(View.GONE);
             }
         } else if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_APPOINTMENT) {
 

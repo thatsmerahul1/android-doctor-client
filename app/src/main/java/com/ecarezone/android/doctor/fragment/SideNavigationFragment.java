@@ -147,7 +147,6 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                         Intent intent = new Intent(activity.getApplicationContext(), RegistrationActivity.class);
                         intent.putExtra("stop_sinch", true);
                         activity.startActivity(intent);
-                        DoctorApplication.nameValuePair = null;
                         DoctorApplication.lastAvailablityStaus = -1;
                         activity.finish();
                     }

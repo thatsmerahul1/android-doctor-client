@@ -97,6 +97,10 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         country = (TextView)view.findViewById(R.id.country);
         language = (TextView)view.findViewById(R.id.language);
 
+        email.setVisibility(View.VISIBLE);
+        password.setVisibility(View.VISIBLE);
+        country.setVisibility(View.VISIBLE);
+        language.setVisibility(View.VISIBLE);
         mEditTextUsername = (EditText) view.findViewById(R.id.edit_text_registration_username);
         mEditTextUsername.setEnabled(false);
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_registration_password);

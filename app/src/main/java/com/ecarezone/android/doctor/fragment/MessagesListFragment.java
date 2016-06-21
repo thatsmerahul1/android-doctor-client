@@ -120,6 +120,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         if (NetworkCheck.isNetworkAvailable(getActivity())) {
             populatePendingPatientList();
             populateMyCarePatientList();
+            progressDialog.dismiss();
         } else {
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
         }

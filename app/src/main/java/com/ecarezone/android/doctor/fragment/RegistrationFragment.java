@@ -3,6 +3,7 @@ package com.ecarezone.android.doctor.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,16 +14,20 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +79,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
     public static final Integer LANGUAGE_RESULT = 101;
     private String hashedPassword;
     private UserTable userTable;
-    private TextView mStartService;
+    private Button mStartService;
     private LocationFinder locationFinder;
     int flag = 0;
 
@@ -300,7 +305,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.registration_successful_dialog);
-        mStartService = (TextView) dialog.findViewById(R.id.start_service);
+        mStartService = (Button) dialog.findViewById(R.id.start_service);
         mStartService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,6 +319,11 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
 
             }
         });
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        int width = display.getWidth();
+        int dp = getActivity().getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+        dialog.getWindow().setLayout(width - dp, LinearLayout.LayoutParams.WRAP_CONTENT);
         dialog.show();
         progressDialog.dismiss();
     }

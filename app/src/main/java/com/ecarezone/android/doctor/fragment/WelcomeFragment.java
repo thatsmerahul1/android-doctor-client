@@ -19,7 +19,8 @@ import com.ecarezone.android.doctor.model.database.ProfileDbApi;
  * Created by CHAO WEI on 5/1/2015.
  */
 public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnClickListener {
-
+    LinearLayout welcom_layout;
+    TextView noMessage;
     @Override
     protected String getCallerName() {
         return WelcomeFragment.class.getSimpleName();
@@ -30,9 +31,21 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
         final View view = inflater.inflate(R.layout.frag_welcome, container, false);
         view.findViewById(R.id.button_welcome_not_now).setOnClickListener(this);
         view.findViewById(R.id.button_welcome_ok).setOnClickListener(this);
-        LinearLayout welcom_layout = (LinearLayout) view.findViewById(R.id.welcome_page);
-        TextView noMessage = (TextView)view.findViewById(R.id.nomessage);
+        welcom_layout = (LinearLayout) view.findViewById(R.id.welcome_page);
+        noMessage = (TextView)view.findViewById(R.id.nomessage);
+        isProfilePresent();
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isProfilePresent();
+
+    }
+
+    public void isProfilePresent() {
         ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
         boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
         if(hasProfiles){
@@ -45,8 +58,8 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
             noMessage.setVisibility(View.GONE);
             welcom_layout.setVisibility(View.VISIBLE);
         }
-        return view;
     }
+
 
     @Override
     public void onClick(View v) {

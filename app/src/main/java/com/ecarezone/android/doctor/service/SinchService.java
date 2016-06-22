@@ -21,6 +21,7 @@ import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.VideoActivity;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
+import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.utils.SinchUtil;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.ClientRegistration;
@@ -407,8 +408,11 @@ public class SinchService extends Service {
     /*Show the notfication while the user is offline*/
     private void showNotification(Message message) {
         int notifyID = 1;
+        PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(this);
+        Patient tempProfiles;
+        tempProfiles = profileDbApi.getProfileByEmail(message.getSenderId());
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Message from " + message.getSenderId())
+                .setContentTitle("Message from " + tempProfiles.name)
                 .setContentText("You've received new messages.")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(Notification.DEFAULT_SOUND)
@@ -427,7 +431,6 @@ public class SinchService extends Service {
         mNotifyBuilder.setContentText(message.getTextBody())
                 .setNumber(notificationCount.get(message.getSenderId()));
 
-        PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(this);
         profileDbApi.getProfileIdUsingEmail(message.getSenderId());
 
         resultIntent = new Intent(this, ChatActivity.class);

@@ -1,7 +1,10 @@
 package com.ecarezone.android.doctor;
 
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.utils.Util;
@@ -26,12 +29,26 @@ public class AboutEcareZoneActivity extends EcareZoneBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_about_ecare);
+
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         WebView webView=(WebView)findViewById(R.id.webview_about_ecare);
         webView.loadUrl(ABOUT_ECAREZONE_URL);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
-    }
 
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+
+        webView.setWebViewClient(new WebViewClient() {
+
+            public void onPageFinished(WebView view, String url) {
+
+                progressBar.setVisibility(View.GONE);
+            }
+
+        });
+    }
     @Override
     protected void onStart() {
         super.onStart();

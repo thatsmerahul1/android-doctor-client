@@ -231,8 +231,8 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
                 int todayDate = Calendar.getInstance().get(Calendar.DATE);
-                SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm");
-                SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//                SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm");
+                SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 ChatDbApi chatDbi = ChatDbApi.getInstance(getActivity());
                 while (iter.hasNext()) {
                     Patient patient = iter.next();
@@ -255,14 +255,14 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                         patientItem.name = patient.name;
                         patientItem.msgText = lastMsg.getMessageText();
 
-                        String timeStamp;
+                        String timeStamp = null;
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(lastMsg.getTimeStamp());
-                        if (todayDate == calendar.get(Calendar.DATE)) {
-                            timeStamp = mTimeFormat.format(lastMsg.getTimeStamp());
-                        } else {
+//                        if (todayDate == calendar.get(Calendar.DATE)) {
+                           /* timeStamp = mTimeFormat.format(lastMsg.getTimeStamp());
+                        } else {*/
                             timeStamp = mDateFormat.format(lastMsg.getTimeStamp());
-                        }
+//                        }
                         patientItem.dateTime = timeStamp;
                         patientLists.add(patientItem);
                     }
@@ -287,11 +287,11 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                         Calendar calendar = Calendar.getInstance();
                         Date currDate = new Date(Long.parseLong(appointment.getTimeStamp()));
                         calendar.setTime(currDate);
-                        if (todayDate == calendar.get(Calendar.DATE)) {
-                            timeStamp = mTimeFormat.format(currDate);
-                        } else {
+//                        if (todayDate == calendar.get(Calendar.DATE)) {
+//                            timeStamp = mTimeFormat.format(currDate);
+//                        } else {
                             timeStamp = mDateFormat.format(currDate);
-                        }
+//                        }
 
                         patientItem.dateTime = timeStamp;
                         patientLists.add(patientItem);

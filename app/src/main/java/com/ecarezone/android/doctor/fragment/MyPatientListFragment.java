@@ -26,7 +26,9 @@ import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
+import com.ecarezone.android.doctor.model.database.PatientUserProfileDbiApi;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
@@ -204,12 +206,16 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
+                    patientItem.userProfile = patient.userProfiles;
                     patientLists.add(patientItem);
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
 
                     profileDbApi.deleteProfile(String.valueOf(patient.userId));
 //                    if(profileDbApi.getProfileByEmail(patient.email) == null) {
                         profileDbApi.saveProfile(patient);
+//                    PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
+//
+//                    userProfileDbApi.saveProfile(patient.userProfiles);
 //                    }
 //                   else {
 //                        profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
@@ -299,12 +305,17 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
+                    patientItem.userProfile = patient.userProfiles;
+
                     patientLists.add(patientItem);
 
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getActivity());
                     Patient id = profileDbApi.getProfileByEmail(patient.email);
                     if(id == null || patient.userId != id.userId ) {
                         profileDbApi.saveProfile(patient);
+//                        PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
+//
+//                        userProfileDbApi.saveProfile((PatientProfile) patient.userProfiles);
                     }
                     else {
                         profileDbApi.updateProfile(String.valueOf(patient.userId), patient);

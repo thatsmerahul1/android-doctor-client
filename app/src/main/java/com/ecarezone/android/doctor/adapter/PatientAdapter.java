@@ -44,9 +44,6 @@ public class PatientAdapter extends BaseAdapter {
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
-
-
     @Override
     public int getCount() {
         return patientList.size();
@@ -69,18 +66,12 @@ public class PatientAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-//        PatientListItem patient = (PatientListItem) getItem(position);
-//        if(patient.isPending)
-//            return TYPE_PENDING;
-//        else
-//            return  TYPE_MY_CARE;
         return super.getItemViewType(position);
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        ViewHolder holder;
         int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
         PatientListItem patient = patientList.get(position);
         if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
@@ -157,20 +148,6 @@ public class PatientAdapter extends BaseAdapter {
             }
         }
         return view;
-    }
-
-    class ViewHolder {
-        TextView patientName;
-        ImageView patientAvatar;
-        TextView pendingPatientName;
-        ImageView pendingPatientAvatar;
-        TextView patientStatus;
-        TextView chatCount;
-        View patientPresence;
-        Button accept;
-        Button reject;
-
-
     }
 }
 

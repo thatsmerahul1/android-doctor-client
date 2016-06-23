@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.Chat;
+import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.User;
 import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.rest.Patient;
@@ -30,6 +31,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
     private Dao<User, Integer> mUserDao = null;
     private Dao<Chat, Integer> mChatDao = null;
     private Dao<Appointment, Integer> mAppointmentDao = null;
+    private Dao<PatientProfile, Integer> mPatientUserProfile = null;
 
     private static final String SQL_DELETE_PROFILES =
             "DELETE FROM " + DbContract.Profiles.TABLE_NAME;
@@ -85,6 +87,13 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             mPatientProfileDao = getDao(Patient.class);
         }
         return mPatientProfileDao;
+    }
+
+    public Dao<PatientProfile, Integer> getPatientUserProfileDao() throws SQLException {
+        if (mPatientUserProfile == null) {
+            mPatientUserProfile = getDao(PatientProfile.class);
+        }
+        return mPatientUserProfile;
     }
     // user data-access-object(Dao).
     public Dao<User, Integer> getUserDao() throws SQLException {

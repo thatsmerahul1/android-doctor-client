@@ -2,7 +2,10 @@ package com.ecarezone.android.doctor.model.pojo;
 
 import android.os.Parcelable;
 
+import com.ecarezone.android.doctor.model.PatientProfile;
 import com.google.gson.annotations.Expose;
+
+import java.util.List;
 
 /**
  * Created by 20109804 on 5/5/2016.
@@ -10,7 +13,7 @@ import com.google.gson.annotations.Expose;
 public class PatientListItem {
 
     @Expose
-    public String userProfile;
+    public List<PatientProfile> userProfile;
     @Expose
     public String isCallAllowed;
     @Expose

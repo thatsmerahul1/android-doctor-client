@@ -185,6 +185,16 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         if (viewId == R.id.button_register) {
             final String username = mEditTextUsername.getEditableText().toString();
             final String password = mEditTextPassword.getEditableText().toString();
+
+            Object mSpinnerCountryTag = mSpinnerCountry.getTag();
+            if(mSpinnerCountryTag == null){
+                mSpinnerCountry.setTag(mSpinnerCountry.getText().toString());
+            }
+
+            Object mSpinnerLanguageTag = mSpinnerLanguage.getTag();
+            if(mSpinnerLanguageTag == null){
+                mSpinnerLanguage.setTag(mSpinnerLanguage.getText().toString());
+            }
             //Client side validation for username and password
             if (TextUtils.isEmpty(username)
                     || (!android.util.Patterns.EMAIL_ADDRESS.matcher(username.trim()).matches())) {

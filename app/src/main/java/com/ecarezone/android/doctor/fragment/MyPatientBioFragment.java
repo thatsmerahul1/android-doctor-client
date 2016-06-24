@@ -16,10 +16,12 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.database.PatientUserProfileDbiApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
+import com.ecarezone.android.doctor.model.pojo.PatientUserProfileListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by L&T Technology Services on 22-02-2016.
@@ -33,6 +35,7 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
     ListView profileList;
     PatientProfileAdapter patientProfileAdapter;
     private ArrayList<PatientProfile> patientLists = new ArrayList<PatientProfile>();
+    private ArrayList<PatientUserProfileListItem> patientProfileLists = new ArrayList<PatientUserProfileListItem>();
 
     @Override
     protected String getCallerName() {
@@ -49,18 +52,47 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
         patientBioData = getArguments();
         Patient patient  = patientBioData.getParcelable(Constants.DOCTOR_DETAIL);
         Log.i(TAG, "doctor in BIO = " + patient);
-//        doctorDescriptionView = (TextView) view.findViewById(R.id.doctor_description);
         doctorBioNameView = (TextView) view.findViewById(R.id.doctor_bio_name_id);
         doctorBioImage = (ImageView)view.findViewById(R.id.doctor_bio_profile_pic_id);
         doctorBioNameView.setText(patient.name);
 
         patientLists = (ArrayList<PatientProfile>) patient.userProfiles;
-        patientProfileAdapter = new PatientProfileAdapter(getActivity(), patientLists);
-        profileList.setAdapter(patientProfileAdapter);
 
-//        PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
-//
-//        userProfileDbApi.saveProfile(patientLists);
+
+        ListIterator<PatientProfile> iter = patientLists.listIterator();
+        PatientProfile patientProfile = null;
+
+        while(iter.hasNext()) {
+            patientProfile = iter.next();
+            PatientUserProfileListItem patientItem = new PatientUserProfileListItem();
+            patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_PENDING;
+            patientItem.email = patientProfile.email;
+            patientItem.name = patientProfile.name;
+            patientItem.address = patientProfile.address;
+            patientItem.birthdate = patientProfile.birthdate;
+            patientItem.ethnicity = patientProfile.ethnicity;
+            patientItem.height = patientProfile.height;
+            patientItem.weight = patientProfile.weight;
+            patientItem.profileId = patientProfile.profileId;
+            patientItem.userId = patientProfile.userId;
+            patientProfileLists.add(patientItem);
+            PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
+            PatientProfile id = userProfileDbApi.getProfileByEmail(patientProfile.email);
+
+            if(id == null ||  patientProfile.profileId != id.profileId ) {
+                userProfileDbApi.saveProfile(patientProfile);
+                Log.i(TAG, "Patient profile = " + patientProfile);
+//                Log.i(TAG, "Patient profileId = " + patientProfile.profileId);
+//                Log.i(TAG, "Patient id = " + id.profileId);
+            } else{
+                userProfileDbApi.updateProfile(String.valueOf(patientProfile.profileId), patientProfile);
+                Log.i(TAG, "Patient updateProfile = " + patientProfile);
+            }
+            patientProfileAdapter = new PatientProfileAdapter(getActivity(), patientProfileLists);
+            profileList.setAdapter(patientProfileAdapter);
+            patientProfileAdapter.notifyDataSetChanged();
+        }
+
         String imageUrl = patient.avatarUrl;
 
         if (imageUrl != null && imageUrl.trim().length() > 8) {
@@ -71,16 +103,6 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
                     .error(R.drawable.news_other)
                     .into(doctorBioImage);
         }
-//        doctorBioCategoryView.setText(patient.doctorCategory);
-//        doctorDescriptionView.setText(patient.doctorDescription);
-//        doctorBioData = getArguments();
-//        Doctor doctor = doctorBioData.getParcelable(Constants.DOCTOR_DETAIL);
-//        Log.i(TAG, "doctor in BIO = " + doctor);
-//        doctorDescriptionView = (TextView) view.findViewById(R.id.doctor_description);
-//        doctorBioNameView = (TextView) view.findViewById(R.id.doctor_bio_name_id);
-//        doctorBioCategoryView = (TextView) view.findViewById(R.id.doctor_bio_specialist_id);
-//        doctorBioNameView.setText(doctor.name);
-
         return view;
     }
 }

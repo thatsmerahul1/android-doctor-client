@@ -94,23 +94,30 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-                getText(R.string.progress_dialog_loading).toString());
+//        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+//                getText(R.string.progress_dialog_loading).toString());
         checkProgress = true;
 
         initListWithData();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
                 new IntentFilter("send"));
         pullDBFromdevice();
+//        mycareDoctorAdapter.notifyDataSetChanged();
+//        progressDialog.dismiss();
     }
 
     private void initListWithData(){
         patientLists.clear();
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+                getText(R.string.progress_dialog_loading).toString());
         if(NetworkCheck.isNetworkAvailable(getActivity())) {
             populatePendingPatientList();
             populateMyCarePatientList();
+            progressDialog.dismiss();
         } else {
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+
         }
     }
 
@@ -313,9 +320,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     Patient id = profileDbApi.getProfileByEmail(patient.email);
                     if(id == null || patient.userId != id.userId ) {
                         profileDbApi.saveProfile(patient);
-//                        PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
-//
-//                        userProfileDbApi.saveProfile((PatientProfile) patient.userProfiles);
                     }
                     else {
                         profileDbApi.updateProfile(String.valueOf(patient.userId), patient);

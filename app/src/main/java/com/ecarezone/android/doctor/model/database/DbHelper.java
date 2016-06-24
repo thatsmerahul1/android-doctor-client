@@ -39,6 +39,9 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
     private static final String SQL_DELETE_PATIENT_PROFILES =
             "DELETE FROM " + DbContract.PatientProfiles.TABLE_NAME;
 
+    private static final String SQL_DELETE_PATIENT_USER_PROFILES =
+            "DELETE FROM " + DbContract.PatientUerProfile.TABLE_NAME;
+
     /* Constructor */
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -53,6 +56,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Chat.class);
             TableUtils.createTable(connectionSource, Patient.class);
             TableUtils.createTable(connectionSource, Appointment.class);
+            TableUtils.createTable(connectionSource, PatientProfile.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,6 +72,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Chat.class, true);
             TableUtils.dropTable(connectionSource, Patient.class, true);
             TableUtils.dropTable(connectionSource, Appointment.class, true);
+            TableUtils.dropTable(connectionSource, PatientProfile.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

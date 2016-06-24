@@ -59,7 +59,7 @@ public final class DbContract {
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
         public static final String COLUMN_NAME_PROFILE_NAME = "profileName";
-        public static final String COLUMN_NAME_HIGHT = "hight";
+        public static final String COLUMN_NAME_HIGHT = "height";
         public static final String COLUMN_NAME_WEIGHT = "weight";
         public static final String COLUMN_NAME_ETHNICITY = "ethnicity";
         public static final String COLUMN_NAME_GENDER = "gender";

@@ -16,6 +16,7 @@ import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
 import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
+import com.ecarezone.android.doctor.model.pojo.PatientUserProfileListItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,13 +27,13 @@ import java.util.ArrayList;
 public class PatientProfileAdapter extends BaseAdapter {
     private final static String TAG = PatientProfileAdapter.class.getSimpleName();
     private Activity activity;
-    private ArrayList<PatientProfile> patientList;
+    private ArrayList<PatientUserProfileListItem> patientList;
     private static LayoutInflater inflater;
     private boolean fromMessage;
 
 
 
-    public PatientProfileAdapter(Activity activity, ArrayList<PatientProfile> patientList) {
+    public PatientProfileAdapter(Activity activity, ArrayList<PatientUserProfileListItem> patientList) {
         this.activity = activity;
         this.patientList = patientList;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -61,7 +62,7 @@ public class PatientProfileAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        PatientProfile patient = patientList.get(position);
+        PatientUserProfileListItem patient = patientList.get(position);
         view = inflater.inflate(R.layout.patient_bio_item, null, false);
 
         TextView patientProfileName = (TextView)view.findViewById(R.id.editText_profile_name);

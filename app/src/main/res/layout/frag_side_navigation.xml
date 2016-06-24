@@ -226,7 +226,7 @@
                     android:layout_height="56dp"
                     android:background="@drawable/navigation_item_color_selector" />
 
-                <CheckBox
+                 <CheckBox
                     android:id="@+id/check_box_indicator_settings"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
@@ -253,13 +253,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/image_view_item_icon_settings"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
                     android:textIsSelectable="false"
                     android:textSize="18sp"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute"
+                    android:drawableLeft="@drawable/account_settings"
+                    android:drawablePadding="4dip"
+                    />
             </com.ecarezone.android.doctor.app.widget.NavigationItem>
 
             <com.ecarezone.android.doctor.app.widget.NavigationItem
@@ -272,6 +274,7 @@
                 side:niIconImage="@drawable/side_menu_arrow"
                 side:niIndicator="@+id/check_box_indicator_logout"
                 side:niLabel="@+id/text_view_content_title_logout"
+                android:drawablePadding="4dip"
                 side:niTitle="@string/main_side_menu_logout" >
 
                 <View
@@ -300,19 +303,21 @@
                     android:layout_marginRight="8dp"
                     android:layout_toRightOf="@+id/check_box_indicator_logout"
                     android:scaleType="fitXY" />
-
                 <TextView
                     android:id="@+id/text_view_content_title_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/image_view_item_icon_logout"
                     android:gravity="center_vertical"
                     android:singleLine="false"
                     android:textColor="@android:color/white"
                     android:textIsSelectable="false"
                     android:textSize="18sp"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute"
+                    android:drawableLeft="@drawable/logo_out"
+                    android:drawablePadding="4dip"
+                    />
+
             </com.ecarezone.android.doctor.app.widget.NavigationItem>
 
         </LinearLayout>

@@ -1,37 +1,42 @@
 package com.ecarezone.android.doctor.model.pojo;
 
-import android.os.Parcelable;
-
 import com.ecarezone.android.doctor.model.PatientProfile;
+import com.ecarezone.android.doctor.model.database.DbContract;
 import com.google.gson.annotations.Expose;
+import com.j256.ormlite.field.DatabaseField;
 
 import java.util.List;
 
 /**
- * Created by 20109804 on 5/5/2016.
+ * Created by 20109804 on 6/24/2016.
  */
-public class PatientListItem {
-
+public class PatientUserProfileListItem {
     @Expose
-    public List<PatientProfile> userProfile;
+    public long userId;
     @Expose
-    public String isCallAllowed;
-    @Expose
-    public String status;
+    public String profileName;
     @Expose
     public String email;
     @Expose
-    public String userDevicesCount;
-    @Expose
-    public Long userId;
+    public String height;
     @Expose
     public String name;
     @Expose
-    public String recommandedDoctorId;
+    public String address;
     @Expose
-    public String userSettings;
+    public String weight;
     @Expose
     public String avatarUrl;
+    @Expose
+    public String profileId;
+    @Expose
+    public String ethnicity;
+    @Expose
+    public String gender;
+    @Expose
+    public String birthdate;
+    @Expose
+    public List<DbContract.PatientUerProfile> userProfile;
 
     public int listItemType;
     public int patientId;
@@ -48,4 +53,6 @@ public class PatientListItem {
     public static final int LIST_ITEM_TYPE_MESSAGE = 3;
     public static final int LIST_ITEM_TYPE_APPOINTMENT = 4;
 
+
 }
+

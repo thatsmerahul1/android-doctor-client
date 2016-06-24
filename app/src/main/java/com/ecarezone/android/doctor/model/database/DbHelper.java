@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.Chat;
+import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.User;
 import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.rest.Patient;
@@ -30,12 +31,16 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
     private Dao<User, Integer> mUserDao = null;
     private Dao<Chat, Integer> mChatDao = null;
     private Dao<Appointment, Integer> mAppointmentDao = null;
+    private Dao<PatientProfile, Integer> mPatientUserProfile = null;
 
     private static final String SQL_DELETE_PROFILES =
             "DELETE FROM " + DbContract.Profiles.TABLE_NAME;
 
     private static final String SQL_DELETE_PATIENT_PROFILES =
             "DELETE FROM " + DbContract.PatientProfiles.TABLE_NAME;
+
+    private static final String SQL_DELETE_PATIENT_USER_PROFILES =
+            "DELETE FROM " + DbContract.PatientUerProfile.TABLE_NAME;
 
     /* Constructor */
     public DbHelper(Context context) {
@@ -51,6 +56,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Chat.class);
             TableUtils.createTable(connectionSource, Patient.class);
             TableUtils.createTable(connectionSource, Appointment.class);
+            TableUtils.createTable(connectionSource, PatientProfile.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,6 +72,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Chat.class, true);
             TableUtils.dropTable(connectionSource, Patient.class, true);
             TableUtils.dropTable(connectionSource, Appointment.class, true);
+            TableUtils.dropTable(connectionSource, PatientProfile.class, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,6 +92,13 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             mPatientProfileDao = getDao(Patient.class);
         }
         return mPatientProfileDao;
+    }
+
+    public Dao<PatientProfile, Integer> getPatientUserProfileDao() throws SQLException {
+        if (mPatientUserProfile == null) {
+            mPatientUserProfile = getDao(PatientProfile.class);
+        }
+        return mPatientUserProfile;
     }
     // user data-access-object(Dao).
     public Dao<User, Integer> getUserDao() throws SQLException {

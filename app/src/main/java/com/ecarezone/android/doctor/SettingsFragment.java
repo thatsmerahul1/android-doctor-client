@@ -97,6 +97,9 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
         country = (TextView)view.findViewById(R.id.country);
         language = (TextView)view.findViewById(R.id.language);
 
+        mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
+        mTextViewAbout.setVisibility(View.VISIBLE);
+        mTextViewAbout.setOnClickListener(this);
         email.setVisibility(View.VISIBLE);
         password.setVisibility(View.VISIBLE);
         country.setVisibility(View.VISIBLE);
@@ -185,9 +188,13 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
 
         } else if (viewId == R.id.spinner_language) {
             createRegestrationDialog(Constants.LANGUAGE);
-        } /*else if (viewId == R.id.textview_registration_about) {
-            getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
-        }*/ else if(viewId == R.id.edit_text_registration_password)
+        } else if (viewId == R.id.textview_registration_about) {
+            if(NetworkCheck.isNetworkAvailable(getActivity())){
+                getActivity().startActivity(new Intent(getActivity(), AboutEcareZoneActivity.class));
+            } else {
+                Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            }
+        }  else if(viewId == R.id.edit_text_registration_password)
         {
             Log.d("Naga","Updating Password ");
             getActivity().startActivity(new Intent(getActivity(), UpdatePasswordActivity.class));

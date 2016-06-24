@@ -3,18 +3,21 @@ package com.ecarezone.android.doctor.model.rest;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ecarezone.android.doctor.model.PatientProfile;
+import com.ecarezone.android.doctor.model.UserProfile;
 import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 20109804 on 4/21/2016.
  */
 public class Patient implements Parcelable, Serializable {
     @Expose
-    @DatabaseField
-    public String userProfile;
+    public List<PatientProfile> userProfiles;
     @Expose
     @DatabaseField
     public String isCallAllowed;
@@ -38,15 +41,21 @@ public class Patient implements Parcelable, Serializable {
     public String userSettings;
     @Expose
     @DatabaseField
-    public String avatarUrl;
+    public String country;
     @DatabaseField
     public long dateTime;
+    @Expose
+    @DatabaseField
+    public String language;
+    @Expose
+    @DatabaseField
+    public String avatarUrl;
     public Patient(){
 
     }
 
     public Patient(Long userId, String email, String name, String recommandedDoctorId, String status,
-                   String isCallAllowed, String userDevicesCount, String userSettings, String userProfile,
+                   String isCallAllowed, String userDevicesCount, String userSettings, List<PatientProfile> userProfile,
                    String avatarUrl) {
         this.userId = userId;
         this.email = email;
@@ -56,14 +65,18 @@ public class Patient implements Parcelable, Serializable {
         this.isCallAllowed = isCallAllowed;
         this.userDevicesCount = userDevicesCount;
         this.userSettings = userSettings;
-        this.userProfile = userProfile;
+        this.userProfiles = userProfile;
         this.avatarUrl = avatarUrl;
     }
     public Patient(Parcel in) {
+        userProfiles = new ArrayList<PatientProfile>();
         this.userId = in.readLong();
         this.email = in.readString();
         this.name = in.readString();
-        this.userProfile = in.readString();
+//        this.userProfiles = in.readParcelable(userProfiles.getClass().getClassLoader());
+                /*this.userProfiles = */
+
+        in.readList(userProfiles, Patient.class.getClassLoader());
         this.status = in.readString();
         this.isCallAllowed = in.readString();
         this.userDevicesCount = in.readString();
@@ -82,7 +95,8 @@ public class Patient implements Parcelable, Serializable {
         dest.writeLong(userId);
         dest.writeString(email);
         dest.writeString(name);
-        dest.writeString(userProfile);
+        dest.writeList(userProfiles);
+//        dest.writeParcelable((Parcelable) userProfiles, flags);
         dest.writeString(status);
         dest.writeString(isCallAllowed);
         dest.writeString(userDevicesCount);

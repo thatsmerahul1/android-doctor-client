@@ -26,7 +26,9 @@ import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
+import com.ecarezone.android.doctor.model.database.PatientUserProfileDbiApi;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
@@ -92,23 +94,30 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-                getText(R.string.progress_dialog_loading).toString());
+//        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+//                getText(R.string.progress_dialog_loading).toString());
         checkProgress = true;
 
         initListWithData();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(message,
                 new IntentFilter("send"));
         pullDBFromdevice();
+//        mycareDoctorAdapter.notifyDataSetChanged();
+//        progressDialog.dismiss();
     }
 
     private void initListWithData(){
         patientLists.clear();
+        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+                getText(R.string.progress_dialog_loading).toString());
         if(NetworkCheck.isNetworkAvailable(getActivity())) {
             populatePendingPatientList();
             populateMyCarePatientList();
+            progressDialog.dismiss();
         } else {
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+
         }
     }
 
@@ -204,12 +213,16 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
+                    patientItem.userProfile = patient.userProfiles;
                     patientLists.add(patientItem);
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
 
                     profileDbApi.deleteProfile(String.valueOf(patient.userId));
 //                    if(profileDbApi.getProfileByEmail(patient.email) == null) {
                         profileDbApi.saveProfile(patient);
+//                    PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
+//
+//                    userProfileDbApi.saveProfile(patient.userProfiles);
 //                    }
 //                   else {
 //                        profileDbApi.updateProfile(String.valueOf(patient.userId)/*String.valueOf(LoginInfo.userId)*/, patient);
@@ -299,6 +312,8 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
+                    patientItem.userProfile = patient.userProfiles;
+
                     patientLists.add(patientItem);
 
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getActivity());

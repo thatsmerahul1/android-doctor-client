@@ -50,6 +50,22 @@ public final class DbContract {
         public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
     }
 
+    public static abstract class PatientUerProfile implements BaseColumns {
+        public static final String TABLE_NAME = "PatientUerProfile";
+
+        public static final String COLUMN_NAME_USER_ID = "userId";
+        public static final String COLUMN_NAME_PROFILE_ID = "profileId";
+        public static final String COLUMN_NAME_EMAIL = "email";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_AVATAR_URL = "avatarUrl";
+        public static final String COLUMN_NAME_PROFILE_NAME = "profileName";
+        public static final String COLUMN_NAME_HIGHT = "height";
+        public static final String COLUMN_NAME_WEIGHT = "weight";
+        public static final String COLUMN_NAME_ETHNICITY = "ethnicity";
+        public static final String COLUMN_NAME_GENDER = "gender";
+        public static final String COLUMN_NAME_BIRTH_DATE = "birthDate";
+    }
+
     /*Inner class that defines appointment table content*/
     public static abstract class Appointments implements BaseColumns {
         public static final String TABLE_NAME = "Appointment";

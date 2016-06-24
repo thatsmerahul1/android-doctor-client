@@ -54,12 +54,15 @@
     <!-- Profile details -->
     <string name="profile_details_name">Name</string>
     <string name="profile_details_gender">Gender</string>
-    <string name="profile_details_address">Address</string>
+    <string name="patient_profile_details_gender">Gender : </string>
+    <string name="profile_details_address">Address : </string>
     <string name="profile_details_birth">Date of Birth</string>
-    <string name="profile_details_ethnicity">Ethnicity</string>
-    <string name="profile_details_height">Height</string>
-    <string name="profile_details_weight">Weight</string>
+    <string name="patient_profile_details_birth">Date of Birth : </string>
+    <string name="profile_details_ethnicity">Ethnicity : </string>
+    <string name="profile_details_height">Height : </string>
+    <string name="profile_details_weight">Weight : </string>
     <string name="profile_details_profile_name">Profile Name</string>
+    <string name="patient_profile_details_profile_name">Profile Name : </string>
     <string name="profile_details_hint">-</string>
     <string name="profile_details_delete_profile">Delete Profile</string>
     <string name="profile_add_people_you_care">Add people you care</string>

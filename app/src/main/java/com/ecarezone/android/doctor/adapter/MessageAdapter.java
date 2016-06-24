@@ -47,8 +47,8 @@ public class MessageAdapter extends BaseAdapter {
         this.patientList = patientList;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        mTimeFormat = new SimpleDateFormat("HH:mm");
-        mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        mTimeFormat = new SimpleDateFormat("HH:mm");
+        mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     }
 
     @Override

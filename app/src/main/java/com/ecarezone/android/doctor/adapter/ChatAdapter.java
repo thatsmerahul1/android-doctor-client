@@ -194,6 +194,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             } else {
                 Picasso.with(mContext)
                         .load(chat.getInComingImageUrl())
+                        .resize(200,200)
                         .into(new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -213,6 +214,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         });
             }
             final String finalImagePath = imagePath;
+ 
             holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -284,6 +286,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             chat.setDiscImageFile(file);
             Picasso.with(mContext)
                     .load(file)
+                    .resize(200,200)
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

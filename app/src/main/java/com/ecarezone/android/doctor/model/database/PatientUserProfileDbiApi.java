@@ -81,7 +81,7 @@ private static PatientUserProfileDbiApi mPatientProfileDbApi;
                 Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
                 DeleteBuilder<PatientProfile, Integer> deleteBuilder = userProfileDao.deleteBuilder();
                 deleteBuilder.where()
-                        .eq(DbContract.PatientProfiles.COLUMN_NAME_USER_ID, userId);
+                        .eq(DbContract.PatientUerProfile.COLUMN_NAME_USER_ID, userId);
 
                 int numOfRowsDeleted = deleteBuilder.delete();
                 return true;
@@ -98,7 +98,7 @@ private static PatientUserProfileDbiApi mPatientProfileDbApi;
                     Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
                     QueryBuilder<PatientProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
                     return queryBuilder.where()
-                            .eq(DbContract.PatientProfiles.COLUMN_NAME_USER_ID, userId)
+                            .eq(DbContract.PatientUerProfile.COLUMN_NAME_USER_ID, userId)
                             .queryForFirst();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -113,7 +113,7 @@ private static PatientUserProfileDbiApi mPatientProfileDbApi;
                 Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
                 QueryBuilder<PatientProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
                 return queryBuilder.where()
-                        .eq(DbContract.PatientProfiles.COLUMN_NAME_EMAIL, email)
+                        .eq(DbContract.PatientUerProfile.COLUMN_NAME_EMAIL, email)
                         .queryForFirst();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -127,7 +127,7 @@ private static PatientUserProfileDbiApi mPatientProfileDbApi;
                 Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
                 QueryBuilder<PatientProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
                 List<PatientProfile> userProfilesList = queryBuilder.where()
-                        .eq(DbContract.PatientProfiles.COLUMN_NAME_EMAIL, emailId)
+                        .eq(DbContract.PatientUerProfile.COLUMN_NAME_EMAIL, emailId)
                         .query();
                 if(userProfilesList!=null && userProfilesList.size() > 0){
                     return Integer.parseInt(String.valueOf(userProfilesList.get(0).userId));
@@ -143,7 +143,7 @@ private static PatientUserProfileDbiApi mPatientProfileDbApi;
                 Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
                 QueryBuilder<PatientProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
                 return queryBuilder.where()
-                        .eq(DbContract.PatientProfiles.COLUMN_NAME_USER_ID, profileId)
+                        .eq(DbContract.PatientUerProfile.COLUMN_NAME_PROFILE_ID, profileId)
                         .queryForFirst();
             } catch (SQLException e) {
                 e.printStackTrace();

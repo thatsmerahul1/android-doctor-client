@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientProfileAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.model.PatientProfile;
+import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.database.PatientUserProfileDbiApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.pojo.PatientUserProfileListItem;
@@ -61,7 +63,7 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
 
         ListIterator<PatientProfile> iter = patientLists.listIterator();
         PatientProfile patientProfile = null;
-
+        PatientProfile patientUserProfile = null;
         while(iter.hasNext()) {
             patientProfile = iter.next();
             PatientUserProfileListItem patientItem = new PatientUserProfileListItem();
@@ -77,21 +79,20 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
             patientItem.userId = patientProfile.userId;
             patientProfileLists.add(patientItem);
             PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
-            PatientProfile id = userProfileDbApi.getProfileByEmail(patientProfile.email);
+            PatientProfile id = userProfileDbApi.getProfileByProfileId(patientProfile.profileId);
 
-            if(id == null ||  patientProfile.profileId != id.profileId ) {
+            if(id == null ||  !patientProfile.profileId.equalsIgnoreCase(id.profileId) ) {
                 userProfileDbApi.saveProfile(patientProfile);
                 Log.i(TAG, "Patient profile = " + patientProfile);
-//                Log.i(TAG, "Patient profileId = " + patientProfile.profileId);
-//                Log.i(TAG, "Patient id = " + id.profileId);
             } else{
                 userProfileDbApi.updateProfile(String.valueOf(patientProfile.profileId), patientProfile);
                 Log.i(TAG, "Patient updateProfile = " + patientProfile);
             }
             patientProfileAdapter = new PatientProfileAdapter(getActivity(), patientProfileLists);
             profileList.setAdapter(patientProfileAdapter);
-            patientProfileAdapter.notifyDataSetChanged();
         }
+//        patientProfileAdapter.notifyDataSetChanged();
+
 
         String imageUrl = patient.avatarUrl;
 
@@ -104,5 +105,11 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
                     .into(doctorBioImage);
         }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        patientProfileAdapter.notifyDataSetChanged();
     }
 }

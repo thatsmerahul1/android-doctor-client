@@ -153,7 +153,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
     private void populateMyCarePatientList() {
         SearchDoctorsRequest request =
                 new SearchDoctorsRequest(LoginInfo.userId, null, null, null, null, null,true);
-        getSpiceManager().execute(request, new PopulateMyCareDoctorListRequestListener());
+        getSpiceManager().execute(request, new PopulatePatientListRequestListener());
     }
 
     private void populatePendingPatientList() {
@@ -185,7 +185,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
         }
     }
 
-    public final class PopulateMyCareDoctorListRequestListener implements RequestListener<SearchDoctorsResponse> {
+    public final class PopulatePatientListRequestListener implements RequestListener<SearchDoctorsResponse> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -214,6 +214,13 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientItem.userProfile = patient.userProfiles;
+
+                    int size = patient.userProfiles.size();
+                    for(PatientProfile patientProfile : patient.userProfiles){
+                        patientProfile.userId = patient.userId;
+                    }
+
+//                    patient.userProfiles.
                     patientLists.add(patientItem);
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
 

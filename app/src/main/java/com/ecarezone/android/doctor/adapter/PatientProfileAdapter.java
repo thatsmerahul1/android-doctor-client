@@ -80,6 +80,7 @@ public class PatientProfileAdapter extends BaseAdapter {
         patientEthnicityName.setText(patient.ethnicity);
         patientGenderName.setText(patient.gender);
         patientBirthDateName.setText(patient.birthdate);
+        notifyDataSetChanged();
         return view;
     }
 }

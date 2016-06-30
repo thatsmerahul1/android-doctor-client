@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewInfo"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="@string/appointment_detail_1"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/text_black_color_selector"
+        android:textStyle="bold" />
+
+    <com.ecarezone.android.doctor.view.CircleImageView
+        android:id="@+id/profilePic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/profile_list_icon" />
+
+    <TextView
+        android:id="@+id/textViewPatientName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:text="Emily Kelley"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/text_black_color_selector"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewTypeOfCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="(Video call)"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/text_black_color_selector" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/ecarezone_green_dark" />
+
+    <Button
+        android:id="@+id/buttonChangeTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/circle_blue_complete"
+        android:text="@string/change_date_n_time"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/circle_red_complete"
+        android:text="@string/cancel_appointment"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
+</LinearLayout>

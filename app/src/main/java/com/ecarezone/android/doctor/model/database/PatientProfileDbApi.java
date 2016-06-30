@@ -88,7 +88,7 @@ public class PatientProfileDbApi {
     }
 
     /* retrieve the details of a particular profile */
-    public Patient getProfile(Long userId) {
+    public Patient getProfile(String userId) {
         if(userId != null) {
             try {
                 Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();

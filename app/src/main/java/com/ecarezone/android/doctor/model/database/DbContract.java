@@ -74,7 +74,6 @@ public final class DbContract {
         public static final String COLUMN_NAME_DATE_TIME = "dateTime";
         public static final String COLUMN_NAME_CALL_TYPE = "callType";
         public static final String COLUMN_NAME_PATIENT_ID = "patientId";
-        public static final String COLUMN_NAME_MESSAGE = "message";
         public static final String COLUMN_NAME_IS_CONFIRMED = "isConfirmed";
     }
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Created by 10603675 on 30-05-2016.
  */
-public class Appointment implements Serializable{
+public class Appointment implements Serializable {
 
     @Expose
     @DatabaseField(canBeNull = false)
@@ -29,14 +29,15 @@ public class Appointment implements Serializable{
     private int patientId;
 
     @Expose
+    private int doctorId;
+
+    @Expose
     private String message;
 
-    @DatabaseField(canBeNull = true, dataType = DataType.BOOLEAN)
+    @DatabaseField(canBeNull = true)
     private boolean isConfirmed;
 
-
     private boolean isAppointmentPresent;
-
 
     public Appointment() {
 
@@ -80,6 +81,14 @@ public class Appointment implements Serializable{
 
     public void setPatientId(int doctorId) {
         this.patientId = patientId;
+    }
+
+    public int getDoctorId() {
+        return this.patientId;
+    }
+
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
     }
 
     public boolean isConfirmed() {

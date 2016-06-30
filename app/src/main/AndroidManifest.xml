@@ -3,7 +3,7 @@
     package="com.ecarezone.android.doctor"
     android:installLocation="auto">
 
-    <!--user permission-->
+    <!-- user permission -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -19,6 +19,7 @@
     <permission
         android:name="com.ecarezone.android.doctor.push.gcm.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.ecarezone.android.doctor.push.gcm.permission.C2D_MESSAGE" />
 
     <uses-feature
@@ -26,143 +27,125 @@
         android:required="true" />
 
     <application
-        android:name="com.ecarezone.android.doctor.DoctorApplication"
+        android:name=".DoctorApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.ecarezone.android.doctor.SplashScreenActivty"
-            android:theme="@style/AppThemeForChat"
+            android:name=".SplashScreenActivty"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeForChat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.ecarezone.android.doctor.MainActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
-        </activity>
-
-        <activity
-            android:name="com.ecarezone.android.doctor.ProfileDetailsActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
-        </activity>
-
-        <activity
-            android:name="com.ecarezone.android.doctor.LoginActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
-        </activity>
-
-        <activity
-            android:name="com.ecarezone.android.doctor.RegistrationActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.ecarezone.android.doctor.AppointmentActivity"
+            android:name=".ProfileDetailsActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-
-
-
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".RegistrationActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AppointmentActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MyPatientActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-
-
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.ecarezone.android.doctor.ChatActivity"
-            android:theme="@style/AppThemeForChat"
+            android:name=".ChatActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeForChat" />
         <activity
-            android:name="com.ecarezone.android.doctor.VideoActivity"
+            android:name=".VideoActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/TransparentCompat" />
-
         <activity
-            android:name="com.ecarezone.android.doctor.CallActivity"
-            android:label="@string/app_name"
+            android:name=".CallActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/TransparentCompat"
-            android:launchMode="singleTask">
-        </activity>
-
+            android:theme="@style/TransparentCompat"></activity>
         <activity
             android:name=".MyPatientBioActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.ecarezone.android.doctor.NewsListActivity"
+            android:name=".NewsListActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AboutEcareZoneActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.RoboEcareSpiceServices"
             android:exported="false" />
-
-        <service android:name=".service.SinchService">
-
-        </service>
+        <service android:name=".service.SinchService"></service>
 
         <receiver
             android:name=".gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.ecarezone.android.doctor.calling" />
             </intent-filter>
         </receiver>
+
         <service android:name=".gcm.GcmIntentService" />
+
         <activity
             android:name=".UpdatePasswordActivity"
             android:label="@string/title_activity_update_password"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
+        <service
+            android:name=".service.FetchAppointmentService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
-

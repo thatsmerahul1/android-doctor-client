@@ -411,13 +411,18 @@ public class SinchService extends Service {
         PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(this);
         Patient tempProfiles;
         tempProfiles = profileDbApi.getProfileByEmail(message.getSenderId());
+        String profileName = message.getSenderId();
+        if(tempProfiles != null){
+            profileName = tempProfiles.name;;
+        }
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Message from " + tempProfiles.name)
+                .setContentTitle("Message from " + profileName)
                 .setContentText("You've received new messages.")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setColor(Color.BLUE)
                 .setAutoCancel(true);
+
 
         if(! notificationCount.containsKey(message.getSenderId())){
             notificationCount.put(message.getSenderId(), 1);

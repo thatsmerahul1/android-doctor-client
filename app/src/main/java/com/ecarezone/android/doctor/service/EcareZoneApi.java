@@ -7,6 +7,8 @@ import com.ecarezone.android.doctor.model.rest.AppointmentResponse;
 import com.ecarezone.android.doctor.model.rest.CreateProfileRequest;
 import com.ecarezone.android.doctor.model.rest.CreateProfileResponse;
 import com.ecarezone.android.doctor.model.rest.DeleteProfileRequest;
+import com.ecarezone.android.doctor.model.rest.EditAppointmentRequest;
+import com.ecarezone.android.doctor.model.rest.EditAppointmentResponse;
 import com.ecarezone.android.doctor.model.rest.ForgetPassRequest;
 import com.ecarezone.android.doctor.model.rest.GetNewsResponse;
 import com.ecarezone.android.doctor.model.rest.LoginRequest;
@@ -111,11 +113,17 @@ public interface EcareZoneApi {
     @POST("/changeStatus")
     BaseResponse changeStatus(@Body ChangeStatusRequest request);
 
-    @DELETE("/deleteappointment/doctors/{appointmentId}")
+    @DELETE("/deleteappointment/{appointmentId}")
     BaseResponse rejectAppointmentRequest(@Path("appointmentId") Long appointmentId, @Body AppointmentRejectRequest request);
 
-    @PUT("/acceptappointment/doctors/{appointmentId}")
-    BaseResponse acceptAppointmentRequest(@Path("appointmentId") Long appointmentId, @Body AppointmentAcceptRequest request);
+    @PUT("/acceptappointment/{appointmentId}")
+    BaseResponse acceptAppointmentRequest(@Path("appointmentId") long appointmentId, @Body AppointmentAcceptRequest request);
+
+    @PUT("/rescheduleappointment/doctors/{doctorId}/users/{userId}")
+    EditAppointmentResponse rescheduleAppointment(@Path("doctorId") long doctorId, @Path("userId") long userId, @Body EditAppointmentRequest request);
+
+    @GET("/appointments/doctors/{doctorId}")
+    AppointmentResponse getAllAppointments(@Path("doctorId") long doctorId);
 }
 
 /**

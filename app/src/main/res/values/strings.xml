@@ -159,14 +159,6 @@
     <string name="doctor_mycare_team">My Care-team</string>
     <string name="doctor_add_request_success">your request has been sent to\nDr. %1$s</string>
 
-    <!-- Appointment -->
-    <string name="doctor_appointment">Make an appointment</string>
-    <string name="doctor_appointment_header">Appointment</string>
-    <string name="appointment_time">Time</string>
-    <string name="appointment_detail">Appointment Detail</string>
-    <string name="change_date_and_time">Change date and time</string>
-    <string name="cancel_appointment">Cancel appointment</string>
-
     <!-- Home -->
     <string name="home_last_news_feed">The latest news feed</string>
     <string name="home_new_messages">New messages</string>
@@ -236,6 +228,16 @@
     <!-- APPOINTMENT -->
     <string name="appointment_accepted">Appointment accepted</string>
     <string name="appointment_rejected">Appointment rejected</string>
+    <string name="change_date_n_time">Change date&amp;time</string>
+    <string name="cancel_appointment">Cancel appointment</string>
+    <string name="appointment_detail_1">Appointment detail</string>
+    <string name="doctor_appointment">Make an appointment</string>
+    <string name="doctor_appointment_header">Appointment</string>
+    <string name="appointment_time">Time</string>
+    <string name="appointment_detail">Appointment Detail</string>
+    <string name="change_date_and_time">Change date and time</string>
+    <string name="appointment_deleted">Appointment successfully cancelled</string>
+    <string name="appointment_rescheduled">Appointment re-scheduled to</string>
 
     <string-array name="array_name">
         <item>Select</item>
@@ -251,5 +253,6 @@
 
     <string name="pending_req">Pending request</string>
     <string name="language">Language:</string>
+    <string name="processing">Processing, please wait...</string>
 
 </resources>

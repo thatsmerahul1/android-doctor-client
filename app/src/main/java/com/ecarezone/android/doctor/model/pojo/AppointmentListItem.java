@@ -14,6 +14,7 @@ public class AppointmentListItem {
     public int listItemType;
     public boolean isConfirmed;
     public String patientName;
+    public String profilePicUrl;
 
     public static final int LIST_ITEM_TYPE_PENDING = 1;
     public static final int LIST_ITEM_TYPE_APPROVED = 2;

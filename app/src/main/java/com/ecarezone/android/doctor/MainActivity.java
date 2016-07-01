@@ -103,11 +103,7 @@ public class MainActivity extends EcareZoneBaseActivity {
 
                 @Override
                 protected void onPostExecute(Boolean aBoolean) {
-//                if (aBoolean) {
                     onNavigationChanged(R.layout.frag_welcome, null);
-//                } else {
-//                    onNavigationChanged(R.layout.frag_welcome, null);
-//                }
                     isWelcomeMainRequired = aBoolean;
                     super.onPostExecute(aBoolean);
                 }

@@ -29,6 +29,7 @@ import com.ecarezone.android.doctor.model.database.UserTable;
 import com.ecarezone.android.doctor.model.rest.Data;
 import com.ecarezone.android.doctor.model.rest.LoginRequest;
 import com.ecarezone.android.doctor.model.rest.LoginResponse;
+import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.service.LocationFinder;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.EcareZoneLog;
@@ -264,11 +265,14 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
             Log.d(TAG, "Status Code " + response.status.code);
             if (response.status.code == 200) {
                 final Activity activity = getActivity();
+
                 Data data = response.data;
                 LoginInfo.userName = data.settings.email;
                 LoginInfo.userId = data.userId;
                 LoginInfo.hashedPassword = hashedPassword;
                 LoginInfo.role = String.valueOf(0);
+
+                FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
 
                 if (activity != null) {
                     // record the app stauts as "is_login" then the next launch will go to main page directly instead of go to registration page

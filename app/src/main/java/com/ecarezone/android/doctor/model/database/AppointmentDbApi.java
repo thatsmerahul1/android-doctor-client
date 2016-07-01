@@ -129,12 +129,18 @@ public class AppointmentDbApi {
     }
 
     public boolean acceptAppointment(int appointmentId) {
+
+        List<Appointment> ap = getAllAppointments(false);
+
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
             UpdateBuilder<Appointment, Integer> updateBuilder = appointmentDao.updateBuilder();
+
+            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, true);
+
             updateBuilder.where()
                     .eq(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, appointmentId);
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, true);
+
             int numOfRowsUpdated = updateBuilder.update();
             return true;
         } catch (SQLException e) {

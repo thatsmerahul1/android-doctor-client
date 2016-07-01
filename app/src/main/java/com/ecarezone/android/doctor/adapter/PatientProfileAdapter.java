@@ -6,18 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
-import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
-import com.ecarezone.android.doctor.model.PatientProfile;
-import com.ecarezone.android.doctor.model.database.ChatDbApi;
-import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.pojo.PatientUserProfileListItem;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 

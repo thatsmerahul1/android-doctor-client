@@ -3,6 +3,7 @@ package com.ecarezone.android.doctor.model.database;
 import android.content.Context;
 
 import com.ecarezone.android.doctor.model.PatientProfile;
+import com.ecarezone.android.doctor.model.pojo.PatientUserProfileListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -92,21 +93,21 @@ private static PatientUserProfileDbiApi mPatientProfileDbApi;
         }
 
         /* retrieve the details of a particular profile */
-        public PatientProfile getProfile(Long userId) {
-            if(userId != null) {
-                try {
-                    Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
-                    QueryBuilder<PatientProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
-                    return queryBuilder.where()
-                            .eq(DbContract.PatientUerProfile.COLUMN_NAME_USER_ID, userId)
-                            .queryForFirst();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+        public PatientProfile getProfile(String userId, String profileId) {
+            try {
+                Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
+                QueryBuilder<PatientProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
+                return queryBuilder.where()
+                        .eq(DbContract.PatientUerProfile.COLUMN_NAME_USER_ID, userId)
+                        .and()
+                        .eq(DbContract.PatientUerProfile.COLUMN_NAME_PROFILE_ID, profileId)
+                        .queryForFirst();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
             return null;
         }
-
+    
         /* retrieve the details of a particular profile */
         public PatientProfile getProfileByEmail(String email) {
             try {
@@ -138,11 +139,13 @@ private static PatientUserProfileDbiApi mPatientProfileDbApi;
             return 0;
         }
         /* retrieve the details of a particular profile */
-        public PatientProfile getProfileByProfileId(String profileId) {
+        public PatientProfile getProfileByProfileId(String profileId, String userId) {
             try {
                 Dao<PatientProfile, Integer> userProfileDao = mDbHelper.getPatientUserProfileDao();
                 QueryBuilder<PatientProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
                 return queryBuilder.where()
+                        .eq(DbContract.PatientUerProfile.COLUMN_NAME_USER_ID, userId)
+                        .and()
                         .eq(DbContract.PatientUerProfile.COLUMN_NAME_PROFILE_ID, profileId)
                         .queryForFirst();
             } catch (SQLException e) {

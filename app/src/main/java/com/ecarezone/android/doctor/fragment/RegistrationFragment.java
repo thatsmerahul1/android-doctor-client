@@ -308,7 +308,6 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         SignupRequest signupRequest = new SignupRequest(username, hashedPassword, 0,
                 country, language, "N/A", "N/A", Constants.API_KEY, Constants.deviceUnique);
         getSpiceManager().execute(signupRequest, new DosSettingsRequestListener());
-        progressDialog.dismiss();
     }
 
     private void doLogin(final String username, final String password) {
@@ -320,7 +319,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
             @Override
             public void onClick(View v) {
                 locationFinder = new LocationFinder(getActivity());
-                hashedPassword = PasswordUtil.getHashedPassword(password);
+                hashedPassword = LoginInfo.hashedPassword; //PasswordUtil.getHashedPassword(password);
                 LoginRequest request =
                         new LoginRequest(username, hashedPassword, 0, Constants.API_KEY, Constants.deviceUnique, locationFinder.getLatitude(), locationFinder.getLongitude());
                 progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Logging ........");
@@ -456,12 +455,12 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             progressDialog.dismiss();
-
+            mButtonRegister.setPressed(false);
         }
 
         @Override
         public void onRequestSuccess(final LoginResponse loginResponse) {
-
+            progressDialog.dismiss();
             if (loginResponse.status.code == 201) {
                 Data data = loginResponse.data;
                 LoginInfo.userName = data.settings.email;

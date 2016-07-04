@@ -25,6 +25,7 @@ import com.ecarezone.android.doctor.fragment.WelcomeFragment;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.model.rest.base.ChangeStatusRequest;
+import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -88,6 +89,12 @@ public class MainActivity extends EcareZoneBaseActivity {
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setTitle(Constants.ECARE_ZONE);
+
+        if(getIntent().getBooleanExtra("from_login_screen", false)){
+            // when a user logs into a different device.
+            // needed to fetch all his/her existing appointments and populate the DB
+            FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
+        }
 
          /* queries the db and checks whether to show welcome screen or to show home screen.
            Check is based on whether the user has created a profile or not. */

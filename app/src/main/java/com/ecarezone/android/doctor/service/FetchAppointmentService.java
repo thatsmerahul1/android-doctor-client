@@ -12,7 +12,9 @@ import com.ecarezone.android.doctor.model.rest.AppointmentResponse;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,9 +66,17 @@ public class FetchAppointmentService extends IntentService{
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_FETCH_APPOINTMENTS.equals(action)) {
+                handlePendingAppointment();
                 handleActionFetchAppointments();
             }
         }
+    }
+
+    private void handlePendingAppointment() {
+
+        FetchPendingAppointmentRequest request =
+                new FetchPendingAppointmentRequest(LoginInfo.userId);
+        getSpiceManager().execute(request, new FetchAppointmentListRequestListener(true));
     }
 
     /**
@@ -75,17 +85,65 @@ public class FetchAppointmentService extends IntentService{
      */
     private void handleActionFetchAppointments() {
 
-        AppointmentRequest request =
-                new AppointmentRequest(LoginInfo.userId);
-        getSpiceManager().execute(request, new FetchAppointmentListRequestListener());
+        FetchAllAppointmentRequest request =
+                new FetchAllAppointmentRequest(LoginInfo.userId);
+        getSpiceManager().execute(request, new FetchAppointmentListRequestListener(false));
 
+    }
+
+    private static class FetchPendingAppointmentRequest extends RetrofitSpiceRequest<AppointmentResponse, EcareZoneApi> implements Serializable {
+
+        private long doctorId;
+
+        public FetchPendingAppointmentRequest(long doctorId) {
+            super(AppointmentResponse.class, EcareZoneApi.class);
+            this.doctorId = doctorId;
+        }
+
+        @Override
+        public AppointmentResponse loadDataFromNetwork() throws Exception {
+            return getService().getAppointmentDate(doctorId);
+        }
+    }
+
+    private static class FetchAllAppointmentRequest extends RetrofitSpiceRequest<AppointmentResponse, EcareZoneApi> implements Serializable {
+
+        private long doctorId;
+
+        public FetchAllAppointmentRequest(long doctorId) {
+            super(AppointmentResponse.class, EcareZoneApi.class);
+            this.doctorId = doctorId;
+        }
+
+        @Override
+        public AppointmentResponse loadDataFromNetwork() throws Exception {
+            return getService().getAllAppointments(doctorId);
+        }
     }
 
 
     private class FetchAppointmentListRequestListener implements RequestListener<AppointmentResponse> {
+
+        private boolean isPendingRequest;
+
+        public FetchAppointmentListRequestListener(boolean isPendingRequest){
+            this.isPendingRequest = isPendingRequest;
+        }
+
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-//          fail silently..
+//          sleep for 10 secs and try again..
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(isPendingRequest){
+                handlePendingAppointment();
+            }
+            else{
+                handleActionFetchAppointments();
+            }
         }
 
         @Override
@@ -108,9 +166,15 @@ public class FetchAppointmentService extends IntentService{
                         }
 
                         if(appointmentDbApi.isAppointmentPresent(appointment.getAppointmentId())){
+                            if(! isPendingRequest){
+                                appointment.setConfirmed(true);
+                            }
                             appointmentDbApi.updateAppointment(appointment.getAppointmentId(), appointment);
                         }
                         else {
+                            if(! isPendingRequest){
+                                appointment.setConfirmed(true);
+                            }
                             appointmentDbApi.saveAppointment(appointment);
                         }
                     }

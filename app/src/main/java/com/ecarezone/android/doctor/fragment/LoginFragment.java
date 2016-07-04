@@ -32,6 +32,7 @@ import com.ecarezone.android.doctor.model.rest.LoginResponse;
 import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.service.LocationFinder;
 import com.ecarezone.android.doctor.service.SinchService;
+import com.ecarezone.android.doctor.utils.AESUtil;
 import com.ecarezone.android.doctor.utils.EcareZoneLog;
 import com.ecarezone.android.doctor.utils.PasswordUtil;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
@@ -272,8 +273,6 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
                 LoginInfo.hashedPassword = hashedPassword;
                 LoginInfo.role = String.valueOf(0);
 
-                FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
-
                 if (activity != null) {
                     // record the app stauts as "is_login" then the next launch will go to main page directly instead of go to registration page
 
@@ -330,7 +329,9 @@ public class LoginFragment extends EcareZoneBaseFragment implements View.OnClick
     }
 
     private void nextScreen(Activity activity) {
-        activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+        Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
+        intent.putExtra("from_login_screen", true);
+        activity.startActivity(intent);
         activity.finish();
     }
 

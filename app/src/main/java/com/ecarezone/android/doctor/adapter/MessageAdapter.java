@@ -81,7 +81,7 @@ public class MessageAdapter extends BaseAdapter {
             TextView messageSenderName = (TextView) view.findViewById(R.id.messagesenderName);
             TextView timeStamp = (TextView) view.findViewById(R.id.updateTime);
             messageSenderName.setText("From:" + patient.name);
-            timeStamp.setText(patient.dateTime);
+            timeStamp.setText(patient.requestedDate);
 
         } else if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_MESSAGE) {
 

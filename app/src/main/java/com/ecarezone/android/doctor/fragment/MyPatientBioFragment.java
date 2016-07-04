@@ -63,7 +63,7 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
 
         ListIterator<PatientProfile> iter = patientLists.listIterator();
         PatientProfile patientProfile = null;
-        PatientProfile patientUserProfile = null;
+        PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
         while(iter.hasNext()) {
             patientProfile = iter.next();
             PatientUserProfileListItem patientItem = new PatientUserProfileListItem();
@@ -78,19 +78,19 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
             patientItem.profileId = patientProfile.profileId;
             patientItem.userId = patientProfile.userId;
             patientProfileLists.add(patientItem);
-            PatientUserProfileDbiApi userProfileDbApi = PatientUserProfileDbiApi.getInstance(getApplicationContext());
-            PatientProfile id = userProfileDbApi.getProfileByProfileId(patientProfile.profileId);
+
+            PatientProfile id = userProfileDbApi.getProfileByProfileId(patientProfile.profileId, String.valueOf(patientProfile.userId));
 
             if(id == null ||  !patientProfile.profileId.equalsIgnoreCase(id.profileId) ) {
                 userProfileDbApi.saveProfile(patientProfile);
-                Log.i(TAG, "Patient profile = " + patientProfile);
             } else{
                 userProfileDbApi.updateProfile(String.valueOf(patientProfile.profileId), patientProfile);
-                Log.i(TAG, "Patient updateProfile = " + patientProfile);
             }
+
             patientProfileAdapter = new PatientProfileAdapter(getActivity(), patientProfileLists);
             profileList.setAdapter(patientProfileAdapter);
         }
+
 //        patientProfileAdapter.notifyDataSetChanged();
 
 

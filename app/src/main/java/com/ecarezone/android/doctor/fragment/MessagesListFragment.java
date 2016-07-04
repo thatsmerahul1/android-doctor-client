@@ -166,6 +166,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                     patientItem.userDevicesCount = patient.userDevicesCount;
                     patientItem.userId = patient.userId;
                     patientItem.avatarUrl = patient.avatarUrl;
+                    patientItem.requestedDate = patient.requestedDate;
                     patientLists.add(patientItem);
                 }
                 mycareDoctorAdapter = new MessageAdapter(getActivity(), patientLists);

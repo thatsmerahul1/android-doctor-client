@@ -50,6 +50,9 @@ public class Patient implements Parcelable, Serializable {
     @Expose
     @DatabaseField
     public String avatarUrl;
+    @Expose
+    @DatabaseField
+    public String requestedDate;
     public Patient(){
 
     }

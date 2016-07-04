@@ -161,8 +161,8 @@ public class CallActivity extends EcareZoneBaseActivity {
     @Override
     public void onStop() {
         super.onStop();
-        SinchUtil.getSinchAudioPlayer().stopProgressTone();
-        SinchUtil.getSinchAudioPlayer().stopRingtone();
+//        SinchUtil.getSinchAudioPlayer().stopProgressTone();
+//        SinchUtil.getSinchAudioPlayer().stopRingtone();
         Util.changeStatus(false, this);
     }
 

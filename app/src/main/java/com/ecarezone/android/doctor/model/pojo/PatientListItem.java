@@ -31,6 +31,8 @@ public class PatientListItem {
     @Expose
     public String userSettings;
     @Expose
+    public String requestedDate;
+    @Expose
     public String avatarUrl;
 
     public int listItemType;

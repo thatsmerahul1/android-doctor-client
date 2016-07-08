@@ -14,17 +14,12 @@ import com.ecarezone.android.doctor.AppointmentActivity;
 import com.ecarezone.android.doctor.ChatActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
-import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.Chat;
-import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
-import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
-import com.ecarezone.android.doctor.model.rest.Patient;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,18 +31,12 @@ public class MessageAdapter extends BaseAdapter {
     private Activity activity;
     private static LayoutInflater inflater;
     private ArrayList<PatientListItem> patientList;
-    private List<Chat> mMessages;
-    private SimpleDateFormat mTimeFormat;
     private SimpleDateFormat mDateFormat;
-    private int todayDate = Calendar.getInstance().get(Calendar.DATE);
-
 
     public MessageAdapter(Activity activity, ArrayList<PatientListItem> patientList) {
         this.activity = activity;
         this.patientList = patientList;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-//        mTimeFormat = new SimpleDateFormat("HH:mm");
         mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     }
 

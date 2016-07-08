@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,7 +14,6 @@ import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientProfileAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.model.PatientProfile;
-import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.database.PatientUserProfileDbiApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.pojo.PatientUserProfileListItem;
@@ -77,6 +75,9 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
             patientItem.weight = patientProfile.weight;
             patientItem.profileId = patientProfile.profileId;
             patientItem.userId = patientProfile.userId;
+            patientItem.avatarUrl = patientProfile.avatarUrl;
+            patientItem.gender = patientProfile.gender;
+            patientItem.profileName =patientProfile.profileName;
             patientProfileLists.add(patientItem);
 
             PatientProfile id = userProfileDbApi.getProfileByProfileId(patientProfile.profileId, String.valueOf(patientProfile.userId));
@@ -93,8 +94,8 @@ public class MyPatientBioFragment extends EcareZoneBaseFragment {
 
 //        patientProfileAdapter.notifyDataSetChanged();
 
-
-        String imageUrl = patient.avatarUrl;
+        //get(0) because in response patient profile pic is inside userprofile
+        String imageUrl = patient.userProfiles.get(0).avatarUrl;
 
         if (imageUrl != null && imageUrl.trim().length() > 8) {
             int dp = getActivity().getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;

@@ -19,7 +19,6 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.fragment.AppointmentFragment;
 import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
-import com.ecarezone.android.doctor.fragment.FirstTimeUserProfileFragment;
 import com.ecarezone.android.doctor.fragment.MessagesListFragment;
 import com.ecarezone.android.doctor.fragment.WelcomeFragment;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
@@ -29,8 +28,6 @@ import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import java.util.HashMap;
 
 /**
  * Created by CHAO WEI on 5/3/2015.
@@ -208,10 +205,6 @@ public class MainActivity extends EcareZoneBaseActivity {
 //            changeFragment(R.id.screen_container, new UserProfileDetailsFragment(),
 //                    UserProfileDetailsFragment.class.getSimpleName(), args, false);
 //            isBackStackRequired = true;
-        } else if (fragmentLayoutResId == R.layout.frag_first_time_profile) {
-            changeFragment(R.id.screen_container, new FirstTimeUserProfileFragment(),
-                    FirstTimeUserProfileFragment.class.getSimpleName(), args, false);
-            isBackStackRequired = true;
         }
 
         if (mDrawerLayout != null) {

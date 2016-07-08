@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -74,7 +73,6 @@ import java.util.Calendar;
 public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         View.OnClickListener, TextWatcher, Toolbar.OnMenuItemClickListener {
 
-    private EditText profileNameET;
     private Activity mActivity = null;
     private Toolbar mToolBar = null;
     private UserProfile mProfile = null;

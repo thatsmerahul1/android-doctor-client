@@ -1,17 +1,13 @@
 package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,16 +23,9 @@ import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.VideoActivity;
 import com.ecarezone.android.doctor.config.Constants;
-import com.ecarezone.android.doctor.config.LoginInfo;
-import com.ecarezone.android.doctor.fragment.dialog.AddDoctorRequestDialog;
 import com.ecarezone.android.doctor.model.database.ChatDbApi;
-import com.ecarezone.android.doctor.model.rest.AddDoctorRequest;
-import com.ecarezone.android.doctor.model.rest.AddDoctorResponse;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.utils.PermissionUtil;
-import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
 
@@ -54,7 +43,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     private Button doctorChat;
     private Button doctorVideo;
     private Button doctorVoice;
-    private Button buttonAppointment;
     private Bundle doctorDetailData;
     private Long doctorId;
     private String doctorName;
@@ -96,14 +84,12 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         doctorChat = (Button) view.findViewById(R.id.btn_doctor_chat_id);
         doctorVideo = (Button) view.findViewById(R.id.btn_doctor_video_id);
         doctorVoice = (Button) view.findViewById(R.id.btn_doctor_voice_id);
-//        buttonAppointment = (Button) view.findViewById(R.id.button_appointment);
 
         unreadChatCount = (TextView) view.findViewById(R.id.chat_count);
 
         doctorChat.setOnClickListener(this);
         doctorVideo.setOnClickListener(this);
         doctorVoice.setOnClickListener(this);
-//        buttonAppointment.setOnClickListener(this);
 
         if (getActivity().getIntent().getBooleanExtra(MyPatientListFragment.ADD_DOCTOR_DISABLE_CHECK, false)) {
 //            addDoctorButton.setVisibility(View.GONE);
@@ -122,8 +108,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         }
         doctorId = patient.userId;
         doctorName = patient.name;
-
-        String imageUrl = patient.avatarUrl;
+        //get(0) because in response patient profile pic is inside userprofile
+        String imageUrl = patient.userProfiles.get(0).avatarUrl;
 
         if (imageUrl != null && imageUrl.trim().length() > 8) {
             int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
@@ -222,12 +208,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     /*
         Sending Add docotor request
      */
-    private void sendAddDoctorRequest() {
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
-        AddDoctorRequest request =
-                new AddDoctorRequest(doctorId, doctorName, LoginInfo.userName, LoginInfo.hashedPassword, Constants.API_KEY, Constants.deviceUnique);
-        getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
-    }
 
     public void updateChatCount() {
 
@@ -244,30 +224,6 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             }
         }
 
-    }
-
-    /*
-            Add Doctor request response
-     */
-    public final class AddDoctorTaskRequestListener implements RequestListener<AddDoctorResponse> {
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            progressDialog.dismiss();
-        }
-
-        @Override
-        public void onRequestSuccess(AddDoctorResponse addDoctorResponse) {
-            Log.d(TAG, "AddDoctorResponse Status " + addDoctorResponse.status.code);
-            progressDialog.dismiss();
-            if (addDoctorResponse.status.code.equals(HTTP_STATUS_OK)) {
-                AddDoctorRequestDialog addDoctorRequestDialog = new AddDoctorRequestDialog(doctorName);
-                FragmentManager fragmentManager = getActivity().getFragmentManager();
-                addDoctorRequestDialog.show(fragmentManager, "AddDoctorRequestSuccessFragment");
-            } else {
-                Log.d(TAG, "AddDoctorResponse Status " + addDoctorResponse.status.message);
-            }
-        }
     }
 
     @Override

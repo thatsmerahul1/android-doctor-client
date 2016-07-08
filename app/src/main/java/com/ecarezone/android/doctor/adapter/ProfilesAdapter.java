@@ -10,11 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
-import com.ecarezone.android.doctor.utils.MD5Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

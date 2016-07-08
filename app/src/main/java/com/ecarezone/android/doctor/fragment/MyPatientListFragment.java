@@ -19,8 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ecarezone.android.doctor.MyPatientActivity;
 import com.ecarezone.android.doctor.MainActivity;
+import com.ecarezone.android.doctor.MyPatientActivity;
 import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
@@ -28,8 +28,6 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
-import com.ecarezone.android.doctor.model.database.PatientUserProfileDbiApi;
-import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.model.rest.PatientAcceptRequest;

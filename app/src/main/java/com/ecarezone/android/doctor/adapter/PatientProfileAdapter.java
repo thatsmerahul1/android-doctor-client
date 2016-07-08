@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.model.pojo.PatientUserProfileListItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -57,6 +59,7 @@ public class PatientProfileAdapter extends BaseAdapter {
         PatientUserProfileListItem patient = patientList.get(position);
         view = inflater.inflate(R.layout.patient_bio_item, null, false);
 
+        TextView patientName = (TextView)view.findViewById(R.id.name);
         TextView patientProfileName = (TextView)view.findViewById(R.id.editText_profile_name);
         TextView patientHightName = (TextView)view.findViewById(R.id.editText_hight);
         TextView patientWeightName = (TextView)view.findViewById(R.id.editText_weight);
@@ -64,6 +67,7 @@ public class PatientProfileAdapter extends BaseAdapter {
         TextView patientEthnicityName = (TextView)view.findViewById(R.id.editText_ethnicity);
         TextView patientGenderName = (TextView)view.findViewById(R.id.editText_gender);
         TextView patientBirthDateName = (TextView)view.findViewById(R.id.editText_birthdate);
+        ImageView patientAvatar = (ImageView)view.findViewById(R.id.imageButton);
 
         patientProfileName.setText(patient.profileName);
         patientHightName.setText(patient.height);
@@ -72,6 +76,18 @@ public class PatientProfileAdapter extends BaseAdapter {
         patientEthnicityName.setText(patient.ethnicity);
         patientGenderName.setText(patient.gender);
         patientBirthDateName.setText(patient.birthdate);
+        patientName.setText(patient.name);
+        String imageUrl = patient.avatarUrl;
+
+        if (imageUrl != null && imageUrl.trim().length() > 8) {
+            int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
+            Picasso.with(activity)
+                    .load(imageUrl).resize(dp, dp)
+                    .centerCrop().placeholder(R.drawable.news_other)
+                    .error(R.drawable.news_other)
+                    .into(patientAvatar);
+        }
+
         notifyDataSetChanged();
         return view;
     }

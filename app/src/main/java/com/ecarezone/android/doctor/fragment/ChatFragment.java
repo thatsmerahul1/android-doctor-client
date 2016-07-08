@@ -304,5 +304,4 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
 }

@@ -101,28 +101,7 @@
                 android:inputType="none"
                 android:textSize="16sp"/>
         </FrameLayout>
-       <!-- <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/ProfileFormTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:text="@string/profile_details_address" />
-
-            <EditText
-                android:id="@+id/address"
-                style="@style/ProfileFormEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="3" />
-        </FrameLayout>-->
-
         <View style="@style/ProfileFormLineViewStyle" />
-
-
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -137,13 +116,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ProfileFormEditTextStyle"
                  android:layout_weight="1" />
-
-           <!--  <EditText
-                android:id="@+id/specializedArea"
-                style="@style/ProfileFormEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />-->
 
             <Spinner
                 style="@style/ProfileFormEditTextStyle"
@@ -196,7 +168,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|right"
                 android:text="@string/profile_details_edit" />
-
         </FrameLayout>
 
         <EditText
@@ -211,75 +182,5 @@
             android:layout_marginTop="10dp"
             android:layout_weight="0.19" />
 
-        <!-- <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/ProfileFormTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_details_profile_name" />
-
-            <EditText
-                android:id="@+id/profileName"
-                style="@style/ProfileFormEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-        </FrameLayout>-->
-
-        <!--<View style="@style/ProfileFormLineViewStyle" />
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/ProfileFormTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_details_height" />
-
-            <EditText
-                android:id="@+id/height"
-                style="@style/ProfileFormEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-        </FrameLayout>
-
-        <View style="@style/ProfileFormLineViewStyle" />-->
-
-       <!-- <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/ProfileFormTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_details_weight" />
-
-            <EditText
-                android:id="@+id/weight"
-                style="@style/ProfileFormEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-        </FrameLayout>-->
-
-<!--
-        <View style="@style/ProfileFormLineViewStyle" />
--->
-
-       <!-- <Button
-            android:id="@+id/deleteProfileBtn"
-            style="@style/EcareZoneGreenButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:padding="16dp"
-            android:text="@string/profile_details_delete_profile" />-->
     </LinearLayout>
 </ScrollView>

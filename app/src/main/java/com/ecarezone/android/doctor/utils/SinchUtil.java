@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.ecarezone.android.doctor.app.AudioPlayer;
 import com.ecarezone.android.doctor.config.Constants;
-import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.Chat;
 import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.service.SinchService;

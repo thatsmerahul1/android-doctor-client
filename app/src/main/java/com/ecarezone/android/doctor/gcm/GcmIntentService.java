@@ -9,8 +9,6 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.ecarezone.android.doctor.adapter.PatientAdapter;
-import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.sinch.android.rtc.NotificationResult;
 import com.sinch.android.rtc.SinchHelpers;

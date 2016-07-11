@@ -48,7 +48,7 @@ public class ProfileDbApi {
         }
         return true;
     }
-
+    /* detele profile using userID */
     public int deleteProfiles(String userId) {
         try {
             Dao<UserProfile, Integer> userProfileDao = mDbHelper.getProfileDao();
@@ -99,11 +99,9 @@ public class ProfileDbApi {
                     .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_ID, profileId)*/;
 
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_NAME, userProfile.name);
-//            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_EMAIL, userProfile.email);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_BIRTH_DATE, userProfile.birthDate);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_GENDER, userProfile.gender);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_AVATAR_URL, userProfile.avatarUrl);
-//            updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_IS_COMPLETE, areAllFieldsFilled(userProfile));
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_SPECIALIZED_AREAS, userProfile.category);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_REGISTRATION_ID, userProfile.registrationId);
             updateBuilder.updateColumnValue(DbContract.Profiles.COLUMN_NAME_MY_BIO, userProfile.doctorDescription);
@@ -191,10 +189,8 @@ public class ProfileDbApi {
                     .where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
                     .and()
-//                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
                     .queryForFirst();
             if(myProfile!=null){
-//                return myProfile.isComplete;
             }
             return false;
         } catch (SQLException e) {

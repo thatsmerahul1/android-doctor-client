@@ -2,9 +2,7 @@ package com.ecarezone.android.doctor;
 
 import android.os.Bundle;
 
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.LoginFragment;
-import com.ecarezone.android.doctor.utils.Util;
 
 
 public class LoginActivity extends EcareZoneBaseActivity {

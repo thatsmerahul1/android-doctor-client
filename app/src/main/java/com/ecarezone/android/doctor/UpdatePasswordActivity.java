@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.model.rest.base.UpdatePasswordRequest;
@@ -73,14 +72,6 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
                             } else {
                                 doPasswordUpdate();
                             }
-//                            Log.d("Naga", "Password Requesting");
-//                            if (newPwd.length() != 0 && confirmPwd.length() != 0 && !newPwd.equals(confirmPwd)) {
-//                                mTextViewerror.setText(getString(R.string.password_mismatch));
-//                                mTextViewerror.setVisibility(View.VISIBLE);
-//                                return false;
-//                            }
-//                            mTextViewerror.setVisibility(View.GONE);
-//                            doPasswordUpdate();
                             return true;
                         }
                     });

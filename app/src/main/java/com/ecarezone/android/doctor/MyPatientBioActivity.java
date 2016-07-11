@@ -34,7 +34,6 @@ public class MyPatientBioActivity extends EcareZoneBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_doctor);
-//        Bundle bundle = getIntent().getBundleExtra(Constants.PATIENT_BIO_DETAIL);
 
         onNavigationChanged(R.layout.frag_doctor_bio, getIntent().getBundleExtra("doctorBioDetail"));
         Log.i(TAG, "bio data = " + getIntent().getBundleExtra("doctorBioDetail"));
@@ -48,7 +47,6 @@ public class MyPatientBioActivity extends EcareZoneBaseActivity {
                         public boolean onMenuItemClick(MenuItem item) {
                             if (item.getItemId() == R.id.action_add) {
                                 Log.i(TAG, "Menu = " + item.getTitle() + ", " + item.getItemId());
-//                                sendAddDoctorRequest();
                             }
                             return true;
                         }

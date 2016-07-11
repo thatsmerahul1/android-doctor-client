@@ -86,14 +86,14 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         }
         return mProfileDao;
     }
-
+    // patient profile data-access-object(Dao).
     public Dao<Patient, Integer> getPatientProfileDao() throws SQLException {
         if (mPatientProfileDao == null) {
             mPatientProfileDao = getDao(Patient.class);
         }
         return mPatientProfileDao;
     }
-
+    // patient userprofile data-access-object(Dao).
     public Dao<PatientProfile, Integer> getPatientUserProfileDao() throws SQLException {
         if (mPatientUserProfile == null) {
             mPatientUserProfile = getDao(PatientProfile.class);
@@ -115,7 +115,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
         }
         return mChatDao;
     }
-
+    // appointment data-access-object(Dao).
     public Dao<Appointment, Integer> getAppointmentDao() throws SQLException {
         if (mAppointmentDao == null) {
             mAppointmentDao = getDao(Appointment.class);

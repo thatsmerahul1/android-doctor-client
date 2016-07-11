@@ -202,7 +202,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 Patient patient = null;
                 while(iter.hasNext()){
                     patient = iter.next();
-                    PatientListItem patientItem = new PatientListItem();
+                    PatientListItem patientItem = new PatientListItem(); //PatientListItem this class is because there is list of data but in db only one patient details can be saved at a time
                     patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPROVED;
                     patientItem.email = patient.email;
                     patientItem.name = patient.name;
@@ -213,12 +213,10 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientItem.userProfile = patient.userProfiles;
 
-                    int size = patient.userProfiles.size();
                     for(PatientProfile patientProfile : patient.userProfiles){
                         patientProfile.userId = patient.userId;
                     }
 
-//                    patient.userProfiles.
                     patientLists.add(patientItem);
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
 

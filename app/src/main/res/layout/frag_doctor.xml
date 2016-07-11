@@ -164,8 +164,5 @@
                 android:text="@string/patient_chat_history" />
         </LinearLayout>
 
-        <!--<View
-            android:layout_width="fill_parent"
-            android:layout_height="?android:attr/actionBarSize" />-->
     </LinearLayout>
 </ScrollView>

@@ -24,8 +24,6 @@ import java.util.Map;
  * Created by L&T Technology Services.
  */
 public class VideoActivity extends EcareZoneBaseActivity {
-    private ActionBar mActionBar = null;
-    private Toolbar mToolBar = null;
     private VideoFragment videoFragment;
     private String mCallId;
     private String TAG = VideoActivity.class.getName();

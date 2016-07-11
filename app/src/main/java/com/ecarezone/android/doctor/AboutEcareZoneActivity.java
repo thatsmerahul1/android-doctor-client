@@ -6,7 +6,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.utils.Util;
 
 /**

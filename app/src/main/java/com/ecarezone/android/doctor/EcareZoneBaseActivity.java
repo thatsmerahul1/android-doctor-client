@@ -8,11 +8,9 @@ import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 
 import com.ecarezone.android.doctor.app.AbstractBaseActivity;
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.service.RoboEcareSpiceServices;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.SinchUtil;
-import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.SpiceManager;
 
 /**

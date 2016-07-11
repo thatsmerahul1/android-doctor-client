@@ -2,12 +2,10 @@ package com.ecarezone.android.doctor;
 
 import android.os.Bundle;
 
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.ForgetPasswordFragment;
 import com.ecarezone.android.doctor.fragment.LoginFragment;
 import com.ecarezone.android.doctor.fragment.RegistrationFragment;
 import com.ecarezone.android.doctor.utils.SinchUtil;
-import com.ecarezone.android.doctor.utils.Util;
 
 /**
  * Created by CHAO WEI on 5/10/2015.
@@ -70,17 +68,4 @@ public class RegistrationActivity extends EcareZoneBaseActivity {
     public void onServiceDisconnected() {
 
     }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Util.changeStatus(true,this);
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        Util.changeStatus(false,this);
-//    }
-
 }

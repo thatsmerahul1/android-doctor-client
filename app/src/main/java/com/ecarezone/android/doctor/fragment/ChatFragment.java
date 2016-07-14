@@ -185,7 +185,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
             return;
         }
         if (textBody.isEmpty() && messageType.equals(CHAT_TEXT)) {
-            Toast.makeText(getActivity(), "No text message", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No text broadcastReceiver", Toast.LENGTH_SHORT).show();
             return;
         }
 

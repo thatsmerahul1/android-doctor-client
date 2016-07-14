@@ -14,9 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.DoctorApplication;
-import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.NetworkCheck;
-import com.ecarezone.android.doctor.ProfileDetailsActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.RegistrationActivity;
 import com.ecarezone.android.doctor.app.widget.NavigationItem;
@@ -24,9 +22,7 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.rest.LoginRequest;
 import com.ecarezone.android.doctor.model.rest.LoginResponse;
-import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
-import com.ecarezone.android.doctor.utils.SinchUtil;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -147,7 +143,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
                         Intent intent = new Intent(activity.getApplicationContext(), RegistrationActivity.class);
                         intent.putExtra("stop_sinch", true);
                         activity.startActivity(intent);
-                        DoctorApplication.lastAvailablityStaus = -1;
+                        ((DoctorApplication) getApplicationContext()).setLastAvailabilityStaus(-1);
                         activity.finish();
                     }
 

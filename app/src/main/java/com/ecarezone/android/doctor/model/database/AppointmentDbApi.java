@@ -116,9 +116,9 @@ public class AppointmentDbApi {
             updateBuilder.where()
                     .eq(DbContract.Appointments.COLUMN_NAME_APPOINTMENT_ID, appointmentId);
 
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, appointment.getPatientId());
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_CALL_TYPE, appointment.getCallType());
-            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_DATE_TIME, appointment.getTimeStamp());
+            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, appointment.patientId);
+            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_CALL_TYPE, appointment.callType);
+            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_DATE_TIME, appointment.dateTime);
 
             updateBuilder.update();
             return true;

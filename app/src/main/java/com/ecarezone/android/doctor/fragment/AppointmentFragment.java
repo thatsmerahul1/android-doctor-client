@@ -3,7 +3,10 @@ package com.ecarezone.android.doctor.fragment;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +18,13 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.AppointmentActivity;
+import com.ecarezone.android.doctor.EditAppointmentActivity;
 import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.AppointmentAdapter;
 import com.ecarezone.android.doctor.adapter.OnButtonClickedListener;
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
-import com.ecarezone.android.doctor.fragment.dialog.EcareZoneAlertDialog;
 import com.ecarezone.android.doctor.fragment.dialog.EditAppointmentDialog;
 import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
@@ -28,17 +32,30 @@ import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
 import com.ecarezone.android.doctor.model.pojo.AppointmentListItem;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.AppointmentAcceptRequest;
+import com.ecarezone.android.doctor.model.rest.AppointmentRejectRequest;
 import com.ecarezone.android.doctor.model.rest.AppointmentRequest;
 import com.ecarezone.android.doctor.model.rest.AppointmentResponse;
-import com.ecarezone.android.doctor.model.rest.EditAppointmentRequest;
 import com.ecarezone.android.doctor.model.rest.EditAppointmentResponse;
 import com.ecarezone.android.doctor.model.rest.Patient;
-import com.ecarezone.android.doctor.model.rest.AppointmentRejectRequest;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
+import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +65,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+
+import ch.boye.httpclientandroidlib.HttpEntity;
+import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.HttpStatus;
+import ch.boye.httpclientandroidlib.client.ClientProtocolException;
+import ch.boye.httpclientandroidlib.client.HttpClient;
+import ch.boye.httpclientandroidlib.client.methods.HttpDelete;
+import ch.boye.httpclientandroidlib.entity.InputStreamEntity;
+import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 
 /**
  * Created by L&T Technology Services.
@@ -95,11 +121,10 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
         final View view = inflater.inflate(R.layout.frag_appointment, container, false);
 
 
-        if(getActivity() instanceof MainActivity) {
+        if (getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).getSupportActionBar()
                     .setTitle(getResources().getText(R.string.doctor_appointment_header));
-        }
-        else if(getActivity() instanceof AppointmentActivity){
+        } else if (getActivity() instanceof AppointmentActivity) {
             ((AppointmentActivity) getActivity()).getSupportActionBar()
                     .setTitle(getResources().getText(R.string.doctor_appointment_header));
         }
@@ -117,32 +142,35 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
             @Override
             public void onButtonClickedListener(int position, boolean isPositiveButtonPressed) {
 
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage(getString(R.string.processing));
-                progressDialog.show();
                 currentAppointment = mAppointmentList.get(position);
                 appointmentIdRespondedTo = currentAppointment.appointmentId;
-                if(! isPositiveButtonPressed) {
+                if (!isPositiveButtonPressed) {
                     String callTime = dateFormat.format(new Date(Long.parseLong(currentAppointment.dateTime)));
                     AppointmentRejectRequest request = new AppointmentRejectRequest(currentAppointment.appointmentId,
                             callTime, currentAppointment.callType);
                     getSpiceManager().execute(request, new RespondRequestListener());
-                }
-                else{
+//                    DeleteAppointment deleteAppointment = new DeleteAppointment(currentAppointment.appointmentId,
+//                            mButtonClickListener);
+//                    deleteAppointment.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                } else {
                     AppointmentAcceptRequest request = new AppointmentAcceptRequest(currentAppointment.appointmentId);
                     getSpiceManager().execute(request, new RespondRequestListener());
                 }
-
             }
         });
 
         appointmentList = (ListView) view.findViewById(R.id.appointment_list);
         appointmentList.setAdapter(adapter);
         appointmentList.setOnItemClickListener(this);
-        populateAppointmentList();
 
         populateMyAppointmentListFromServer();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        populateAppointmentList();
     }
 
     private void populateAppointmentList() {
@@ -170,15 +198,15 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
 
         List<Appointment> appoConfirmedList = appointmentDbApi.getAllAppointments(true, startDate, endDate);
 //      appoConfirmedList.addAll(appoPendingList);
-        for(Appointment appointment : appoConfirmedList){
+        for (Appointment appointment : appoConfirmedList) {
             AppointmentListItem appointmentItem = new AppointmentListItem();
-            appointmentItem.appointmentId = appointment.getAppointmentId();
-            appointmentItem.callType = appointment.getCallType();
-            appointmentItem.dateTime = appointment.getTimeStamp();
-            appointmentItem.patientId = appointment.getPatientId();
+            appointmentItem.appointmentId = appointment.id;
+            appointmentItem.callType = appointment.callType;
+            appointmentItem.dateTime = appointment.dateTime;
+            appointmentItem.patientId = appointment.patientId;
             appointmentItem.isConfirmed = true;
-            Patient patient = patientProfileDbApi.getProfile(String.valueOf(appointment.getPatientId()));
-            if(patient != null) {
+            Patient patient = patientProfileDbApi.getProfile(String.valueOf(appointment.patientId));
+            if (patient != null) {
                 appointmentItem.patientName = patient.name;
                 appointmentItem.profilePicUrl = patient.avatarUrl;
             }
@@ -188,16 +216,16 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
         }
 
         List<Appointment> appoPendingList = appointmentDbApi.getAllAppointments(false);
-        for(Appointment appointment : appoPendingList){
+        for (Appointment appointment : appoPendingList) {
 
             AppointmentListItem appointmentItem = new AppointmentListItem();
-            appointmentItem.appointmentId = appointment.getAppointmentId();
-            appointmentItem.callType = appointment.getCallType();
-            appointmentItem.dateTime = appointment.getTimeStamp();
-            appointmentItem.patientId = appointment.getPatientId();
+            appointmentItem.appointmentId = appointment.id;
+            appointmentItem.callType = appointment.callType;
+            appointmentItem.dateTime = appointment.dateTime;
+            appointmentItem.patientId = appointment.patientId;
 
-            Patient patient = patientProfileDbApi.getProfile(String.valueOf(appointment.getPatientId()));
-            if(patient != null) {
+            Patient patient = patientProfileDbApi.getProfile(String.valueOf(appointment.patientId));
+            if (patient != null) {
                 appointmentItem.patientName = patient.name;
                 appointmentItem.profilePicUrl = patient.avatarUrl;
             }
@@ -229,16 +257,22 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if(mAppointmentList != null && mAppointmentList.size() > position){
+        if (mAppointmentList != null && mAppointmentList.size() > position) {
             AppointmentListItem appointment = mAppointmentList.get(position);
-            if(appointment.isConfirmed){
-                Bundle bundle;
-                editAppointmentDialog =
-                        EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked, appointment);
-                FragmentManager fragmentManager = getActivity().getFragmentManager();
+            long dateTime = Util.getTimeInLongFormat(appointment.dateTime);
+            Log.i("Appointment", System.currentTimeMillis() + " < " +(dateTime + Constants.THIRTY_MINUTES));
+            if (System.currentTimeMillis() < (dateTime + Constants.THIRTY_MINUTES)) {
+                if (appointment.isConfirmed) {
+                    Bundle bundle;
+                    editAppointmentDialog =
+                            EditAppointmentDialog.newInstance(mOnAppointmentOptionClicked, appointment);
+                    FragmentManager fragmentManager = getActivity().getFragmentManager();
 
-                editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
-
+                    editAppointmentDialog.show(fragmentManager, "EditAppointmentDialogFragment");
+                }
+            }
+            else{
+                Toast.makeText(getActivity(), "Appointment time over", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -251,12 +285,25 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
 
                     if (whichButtonClicked == OnAppointmentOptionButtonClickListener.BTN_CHANGE_TIME) {
 
-                        EditAppointmentRequest request = new EditAppointmentRequest(LoginInfo.userId, appointmentListItem.patientId,
-                                appointmentListItem.dateTime, appointmentListItem.dateTime, appointmentListItem.callType);
-                        getSpiceManager().execute(request, new RescheduleRequestListener());
+//                        EditAppointmentRequest request = new EditAppointmentRequest(LoginInfo.userId, appointmentListItem.patientId,
+//                                appointmentListItem.dateTime, appointmentListItem.dateTime, appointmentListItem.callType);
+//                        getSpiceManager().execute(request, new RescheduleRequestListener());
+
+                        Intent intent = new Intent(getActivity(), EditAppointmentActivity.class);
+                        intent.putExtra("currentAppointment", appointmentListItem);
+                        intent.putExtra("doctorId", LoginInfo.userId);
+                        startActivity(intent);
 
                     } else if (whichButtonClicked == OnAppointmentOptionButtonClickListener.BTN_CANCEL) {
                         String callTime = dateFormat.format(new Date(Long.parseLong(appointmentListItem.dateTime)));
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setMessage(getString(R.string.cancelling_appointment));
+                        progressDialog.show();
+
                         AppointmentRejectRequest request = new AppointmentRejectRequest(appointmentListItem.appointmentId,
                                 callTime, appointmentListItem.callType);
                         getSpiceManager().execute(request, new RespondRequestListener());
@@ -289,16 +336,15 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                     while (iter.hasNext()) {
                         appointment = iter.next();
                         try {
-                            appointment.setTimeStamp(String.valueOf(dateFormat.parse(appointment.getTimeStamp()).getTime()));
+                            appointment.dateTime = String.valueOf(dateFormat.parse(appointment.dateTime).getTime());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
 
-                        if(appointmentDbApi.isAppointmentPresent(appointment.getAppointmentId())){
-                            appointmentDbApi.updateAppointment(appointment.getAppointmentId(), appointment);
-                        }
-                        else {
+                        if (appointmentDbApi.isAppointmentPresent(appointment.id)) {
+                            appointmentDbApi.updateAppointment(appointment.id, appointment);
+                        } else {
                             appointmentDbApi.saveAppointment(appointment);
                         }
 //                        }
@@ -340,14 +386,15 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                 if (progressDialog != null && progressDialog.isShowing())
                     progressDialog.dismiss();
             }
-            if(baseResponse != null && baseResponse.status != null && baseResponse.status.message != null) {
+            if (baseResponse != null && baseResponse.status != null && baseResponse.status.message != null) {
                 if ("Appointment accepted".equalsIgnoreCase(baseResponse.status.message)) {
                     AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
                     boolean isConfirmed = appointmentDbApi.acceptAppointment(appointmentIdRespondedTo);
                     Toast.makeText(getActivity(), getString(R.string.appointment_accepted), Toast.LENGTH_LONG).show();
+                    populateAppointmentList();
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.appointment_rejected), Toast.LENGTH_LONG).show();
-                    if(mAppointmentList != null) {
+                    if (mAppointmentList != null) {
                         ListIterator<AppointmentListItem> iterator = mAppointmentList.listIterator();
                         while (iterator.hasNext()) {
                             AppointmentListItem appointmentListItem = iterator.next();
@@ -358,14 +405,16 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                                 break;
                             }
                         }
-                        adapter.notifyDataSetChanged();
+                        populateAppointmentList();
                     }
                 }
             }
         }
     }
 
-    /***********RE SCHEDULE APPOINTMENT*********/
+    /***********
+     * RE SCHEDULE APPOINTMENT
+     *********/
 
     private class RescheduleRequestListener implements RequestListener<EditAppointmentResponse> {
         @Override
@@ -386,14 +435,14 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                 if (progressDialog != null && progressDialog.isShowing())
                     progressDialog.dismiss();
             }
-            if(response != null && response.status != null && response.status.message != null) {
+            if (response != null && response.status != null && response.status.message != null) {
                 if (response.status.message.startsWith("Appointment re-scheduled successfully")) {
                     AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
 
-                    appointmentDbApi.updateAppointment(response.data.getAppointmentId(), response.data);
+                    appointmentDbApi.updateAppointment(response.data.id, response.data);
 
-                    Toast.makeText(getActivity(), getString(R.string.appointment_rescheduled)+
-                            " "+response.data.getTimeStamp() , Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.appointment_rescheduled) +
+                            " " + response.data.dateTime, Toast.LENGTH_LONG).show();
                 }
             }
             populateMyAppointmentListFromServer();
@@ -401,52 +450,124 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
     }
 
 
-    /*********CANCEL APPOINTMENT***********/
+    /*********
+     * REJECT APPOINTMENT NETWORK COMMUNICATION
+     ***********/
      /*
-        Cancel Appointment
+        Reject Appointment
+        Retrofit is unable to send body parameter with method type delete
+         This is a workaround for this retrofit limitation
      */
-//    private void cancelAppointment() {
-//        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
-//        long appointmentId = currentAppointment.getAppointmentId();
-//        String appointmentTime = currentAppointment.getTimeStamp();
-//        String callType = currentAppointment.getCallType();//voice/video
-//
-//        DeleteAppointmentRequest request =
-//                new DeleteAppointmentRequest(LoginInfo.userName, LoginInfo.hashedPassword,
-//                        Constants.API_KEY, Constants.deviceUnique,
-//                        appointmentTime,
-//                        callType, appointmentId);
-//        getSpiceManager().execute(request, new DeleteAppointmentTaskRequestListener());
-//
-//    }
 
-//    public final class AppointmentRejectRequest implements RequestListener<BaseResponse> {
-//
-//        @Override
-//        public void onRequestFailure(SpiceException spiceException) {
-//            if(progressDialog != null && progressDialog.isShowing()){
-//                progressDialog.dismiss();
-//            }
-//        }
-//
-//        @Override
-//        public void onRequestSuccess(BaseResponse baseResponse) {
-//
-//            if(progressDialog != null && progressDialog.isShowing()){
-//                progressDialog.dismiss();
-//            }
-//
-//            if(baseResponse.status.code == HTTP_STATUS_OK &&
-//                    baseResponse.status.message.startsWith("Appointment deleted successfully")){
-//                mAppointmentDbApi.deleteAppointment(currentAppointment);
-//                EcareZoneAlertDialog.showAlertDialog(getActivity(), getString(R.string.alert),
-//                        getString(R.string.appointment_deleted), getString(R.string.welcome_button_ok));
-//                try {
-//                    isAppointmentPresent();
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        }
-//    };
+    private class DeleteAppointment extends AsyncTask<String, String, String> {
+
+        private int appointmentId;
+        private String body;
+        private OnButtonClickedListener mButtonClickListener;
+
+        public DeleteAppointment(int appointmentId, OnButtonClickedListener mButtonClickListener) {
+            this.appointmentId = appointmentId;
+            this.mButtonClickListener = mButtonClickListener;
+
+            progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), getString(R.string.processing));
+            progressDialog.show();
+
+            JSONObject jsonObj = new JSONObject();
+            try {
+                jsonObj.put("apiKey", Constants.API_KEY);
+                jsonObj.put("password", LoginInfo.hashedPassword);
+                jsonObj.put("deviceUnique", Constants.deviceUnique);
+                jsonObj.put("email", LoginInfo.userName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            body = jsonObj.toString();
+        }
+
+        @Override
+        protected String doInBackground(String... param) {
+
+            String response = null;
+            String line = "";
+            URL url;
+            HttpURLConnection urlConnection = null;
+            BufferedReader rd;
+
+            try {
+                url = new URL("http://188.166.55.204:9000/deleteappointment/" + appointmentId);
+                urlConnection = (HttpURLConnection) url.openConnection();
+//                urlConnection.setDoOutput(true);
+                urlConnection.setChunkedStreamingMode(0);
+                urlConnection.setRequestMethod("DELETE");
+                urlConnection.setRequestProperty("X-HTTP-Method-Override", "DELETE");
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+                writeStream(out);
+                int code = urlConnection.getResponseCode();
+                if (code == 200) {
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                    response = Util.readDataFromInputStream(in);
+                }
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            return response;
+        }
+
+        private void writeStream(OutputStream stream)
+                throws IOException {
+
+            OutputStream out = new BufferedOutputStream(stream);
+
+            if (body != null) {
+                out.write(URLEncoder.encode(body, "UTF-8")
+                        .getBytes());
+            }
+            out.flush();
+        }
+
+
+        @Override
+        protected void onCancelled(String s) {
+            super.onCancelled(s);
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            if (mButtonClickListener != null) {
+                if (s != null && s.equalsIgnoreCase("Appointment deleted successfully")) {
+                    mButtonClickListener.onButtonClickedListener(-1, true);
+                } else {
+                    mButtonClickListener.onButtonClickedListener(-1, false);
+                }
+            }
+        }
+    }
+
+    private OnButtonClickedListener mButtonClickListener = new OnButtonClickedListener() {
+        @Override
+        public void onButtonClickedListener(int position, boolean isSuccessful) {
+            if (isSuccessful) {
+                Toast.makeText(getActivity(), getString(R.string.appointment_deleted),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
 }

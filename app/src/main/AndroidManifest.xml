@@ -141,11 +141,22 @@
         <activity
             android:name=".UpdatePasswordActivity"
             android:label="@string/title_activity_update_password"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".EditAppointmentActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+            android:label="@string/reschedule_appointment"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.FetchAppointmentService"
             android:exported="false"></service>
+        <service
+            android:name=".gcm.HeartbeatService"
+            android:exported="false" />
     </application>
 
 </manifest>

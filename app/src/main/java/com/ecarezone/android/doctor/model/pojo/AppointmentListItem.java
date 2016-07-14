@@ -1,11 +1,12 @@
 package com.ecarezone.android.doctor.model.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by 10603675 on 30-05-2016.
  */
-public class AppointmentListItem {
+public class AppointmentListItem implements Serializable{
 
     public int appointmentId;
     public String dateTime;

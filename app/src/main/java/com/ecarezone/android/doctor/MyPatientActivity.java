@@ -102,7 +102,6 @@ public class MyPatientActivity extends EcareZoneBaseActivity {
         if(mDoctorFragment != null) {
             mDoctorFragment.updateChatCount();
         }
-
     }
 
     @Override

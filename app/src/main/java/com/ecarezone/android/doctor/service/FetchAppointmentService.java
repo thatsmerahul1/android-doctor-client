@@ -160,20 +160,20 @@ public class FetchAppointmentService extends IntentService{
                     while (iter.hasNext()) {
                         appointment = iter.next();
                         try {
-                            appointment.setTimeStamp(String.valueOf(dateFormat.parse(appointment.getTimeStamp()).getTime()));
+                            appointment.dateTime = (String.valueOf(dateFormat.parse(appointment.dateTime).getTime()));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
-                        if(appointmentDbApi.isAppointmentPresent(appointment.getAppointmentId())){
+                        if(appointmentDbApi.isAppointmentPresent(appointment.id)){
                             if(! isPendingRequest){
-                                appointment.setConfirmed(true);
+                                appointment.isConfirmed = true;
                             }
-                            appointmentDbApi.updateAppointment(appointment.getAppointmentId(), appointment);
+                            appointmentDbApi.updateAppointment(appointment.id, appointment);
                         }
                         else {
                             if(! isPendingRequest){
-                                appointment.setConfirmed(true);
+                                appointment.isConfirmed = true;
                             }
                             appointmentDbApi.saveAppointment(appointment);
                         }

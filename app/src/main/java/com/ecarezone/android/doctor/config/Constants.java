@@ -54,4 +54,12 @@ public class Constants {
     public static final int ONLINE = 1;
     public static final int IDLE = 2;
 
+    public static String SEND_HEART_BEAT = "send_heart_beat";
+    public static String UPDATE_STATUS = "update_status";
+
+    public static String SET_STATUS = "set_status";
+    public static String BROADCAST_STATUS_CHANGED = "broadcast_status_changed";
+
+    public static final long THIRTY_MINUTES = 1800000;
+
 }

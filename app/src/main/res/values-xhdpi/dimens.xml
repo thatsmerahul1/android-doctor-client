@@ -2,5 +2,5 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
 
     <dimen name="unread_chat_circle_margin">28dp</dimen>
-
+    <dimen name="unread_profile_thumbnail_size">60dp</dimen>
 </resources>

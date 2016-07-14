@@ -83,31 +83,6 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         myPatientListView = (ListView) view.findViewById(R.id.message_list);
         noMessage = (TextView) view.findViewById(R.id.emptyMessages);
 
-//        myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.i(TAG, "position = " + position);
-//                Bundle data = new Bundle();
-//
-//                PatientListItem patientListItem = patientLists.get(position);
-//                Patient patient = new Patient(patientListItem.userId, patientListItem.email,
-//                        patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
-//                        patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-//                        patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
-//
-//                data.putParcelable(Constants.DOCTOR_DETAIL, patient);
-//                data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
-//                final Activity activity = getActivity();
-//                if (activity != null) {
-//                    Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
-//                    showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
-//                    showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-//                    activity.startActivity(showDoctorIntent);
-//                    activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-//                }
-//            }
-//        });
-
         return view;
     }
 
@@ -154,7 +129,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
             if (getDoctorsResponse.status.code == HTTP_STATUS_OK) {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
-
+                patientLists.clear();
                 while (iter.hasNext()) {
                     Patient patient = iter.next();
                     PatientListItem patientItem = new PatientListItem();
@@ -169,40 +144,54 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                     patientItem.requestedDate = patient.requestedDate;
                     patientLists.add(patientItem);
                 }
-                mycareDoctorAdapter = new MessageAdapter(getActivity(), patientLists);
-                myPatientListView.setAdapter(mycareDoctorAdapter);
+                if (mycareDoctorAdapter == null) {
+                    mycareDoctorAdapter = new MessageAdapter(getActivity(), patientLists);
+                    myPatientListView.setAdapter(mycareDoctorAdapter);
+                }
+
                 if (patientLists.size() == 0) {
                     progressDialog.dismiss();
 //                    noMessage.setVisibility(View.VISIBLE);
-
                 } else if (patientLists.size() > 0) {
 //                    noMessage.setVisibility(View.GONE);
-                    myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.i(TAG, "position = " + position);
-                            Bundle data = new Bundle();
+                    if(myPatientListView.getOnItemClickListener() == null) {
+                        myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.i(TAG, "position = " + position);
+                                Bundle data = new Bundle();
 
-                            PatientListItem patientListItem = patientLists.get(position);
-                            Patient patient = new Patient(patientListItem.userId, patientListItem.email,
-                                    patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
-                                    patientListItem.isCallAllowed, patientListItem.userDevicesCount,
-                                    patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
+                                PatientListItem patientListItem = patientLists.get(position);
+                                Patient patient = new Patient(patientListItem.userId, patientListItem.email,
+                                        patientListItem.name, patientListItem.recommandedDoctorId, patientListItem.status,
+                                        patientListItem.isCallAllowed, patientListItem.userDevicesCount,
+                                        patientListItem.userSettings, patientListItem.userProfile, patientListItem.avatarUrl);
 
-                            data.putParcelable(Constants.DOCTOR_DETAIL, patient);
-                            data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
-                            final Activity activity = getActivity();
-                            if (activity != null) {
-                                Intent showDoctorIntent = new Intent(activity.getApplicationContext(), MyPatientActivity.class);
-                                showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
-                                showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
-                                activity.startActivity(showDoctorIntent);
-                                activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                
+                                data.putParcelable(Constants.DOCTOR_DETAIL, patient);
+                                data.putBoolean(Constants.PATIENT_ALREADY_ADDED, true);
+                                final Activity activity = getActivity();
+                                if (activity != null) {
+
+                                    Intent showDoctorIntent;
+                                    if(patientListItem.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING){
+                                        if(getActivity() instanceof MainActivity) {
+                                            ((MainActivity) getActivity()).changeFragmentToAppointment();
+                                        }
+                                    }
+                                    else {
+                                        showDoctorIntent = new Intent(activity.getApplicationContext(),
+                                                MyPatientActivity.class);
+                                        showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
+                                        showDoctorIntent.putExtra(ADD_DOCTOR_DISABLE_CHECK, true);
+                                        activity.startActivity(showDoctorIntent);
+                                        activity.overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                    }
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
+                mycareDoctorAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(getApplicationContext(), "Failed to get doctors: " + getDoctorsResponse.status.message, Toast.LENGTH_LONG).show();
             }
@@ -262,7 +251,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
 //                        if (todayDate == calendar.get(Calendar.DATE)) {
                            /* timeStamp = mTimeFormat.format(lastMsg.getTimeStamp());
                         } else {*/
-                            timeStamp = mDateFormat.format(lastMsg.getTimeStamp());
+                        timeStamp = mDateFormat.format(lastMsg.getTimeStamp());
 //                        }
                         patientItem.dateTime = timeStamp;
                         patientLists.add(patientItem);
@@ -279,19 +268,19 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                         PatientListItem patientItem = new PatientListItem();
                         patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPOINTMENT;
                         patientItem.userId = patient.userId;
-                        patientItem.patientId = appointment.getPatientId();
-                        patientItem.appointmentId = appointment.getAppointmentId();
-                        patientItem.callType = appointment.getCallType();
+                        patientItem.patientId = appointment.patientId;
+                        patientItem.appointmentId = appointment.id;
+                        patientItem.callType = appointment.callType;
                         patientItem.name = patient.name;
 
                         String timeStamp;
                         Calendar calendar = Calendar.getInstance();
-                        Date currDate = new Date(Long.parseLong(appointment.getTimeStamp()));
+                        Date currDate = new Date(Long.parseLong(appointment.dateTime));
                         calendar.setTime(currDate);
 //                        if (todayDate == calendar.get(Calendar.DATE)) {
 //                            timeStamp = mTimeFormat.format(currDate);
 //                        } else {
-                            timeStamp = mDateFormat.format(currDate);
+                        timeStamp = mDateFormat.format(currDate);
 //                        }
 
                         patientItem.dateTime = timeStamp;

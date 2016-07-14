@@ -1,11 +1,12 @@
 package com.ecarezone.android.doctor;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,14 +23,13 @@ import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
 import com.ecarezone.android.doctor.fragment.FirstTimeUserProfileFragment;
 import com.ecarezone.android.doctor.fragment.MessagesListFragment;
 import com.ecarezone.android.doctor.fragment.WelcomeFragment;
+import com.ecarezone.android.doctor.gcm.HeartBeatReceiver;
+import com.ecarezone.android.doctor.gcm.HeartbeatService;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
-import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
-import com.ecarezone.android.doctor.model.rest.base.ChangeStatusRequest;
 import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.utils.Util;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -118,13 +118,39 @@ public class MainActivity extends EcareZoneBaseActivity {
         } else {
             isNavigationChanged = false;
         }
-        disconnectHandler.post(disconnectCallback);
+//        disconnectHandler.post(disconnectCallback);
+        initStatus();
+        setStatusAlarm();
+        Util.setAppointmentAlarm(this);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Util.changeStatus(true,this);
+    private void initStatus() {
+        DoctorApplication doctorApplication = (DoctorApplication) getApplicationContext();
+        doctorApplication.setLastAvailabilityStaus(1);
+        HashMap<String, Boolean> statusMap = doctorApplication.getNameValuePair();
+        statusMap.put(Constants.STATUS_CHANGE, true);
+        doctorApplication.setStatusNameValuePair(statusMap);
+
+        Intent intent = new Intent(this, HeartbeatService.class);
+        intent.putExtra(Constants.UPDATE_STATUS, true);
+        startService(intent);
+    }
+
+    private void setStatusAlarm() {
+
+        try {
+            Calendar updateTime = Calendar.getInstance();
+            Intent intent = new Intent(this, HeartBeatReceiver.class);
+            intent.putExtra(Constants.SEND_HEART_BEAT, true);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            mAlarmManager.setInexactRepeating(AlarmManager.RTC,
+                    updateTime.getTimeInMillis(),
+                    AlarmManager.INTERVAL_FIFTEEN_MINUTES / 3, pendingIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -249,60 +275,21 @@ public class MainActivity extends EcareZoneBaseActivity {
         }
     }
 
+    public void changeFragmentToAppointment(){
+        changeFragment(R.id.screen_container, new MyPatientListFragment(),
+                getString(R.string.main_side_menu_my_patients), null, false);
+        isBackStackRequired = true;
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
-        Util.changeStatus(false,this);
+        Util.changeStatus(false, this);
     }
 
-
-    private Handler disconnectHandler = new Handler() {
-        public void handleMessage(Message msg) {
-        }
-    };
-
-    private Runnable disconnectCallback = new Runnable() {
-        @Override
-        public void run() {
-            // Perform any required operation on disconnect
-            Log.d(TAG, "status" + "status update called");
-            stopDisconnectTimer();
-        }
-    };
-
-    public void stopDisconnectTimer() {
-        disconnectHandler.removeCallbacks(disconnectCallback);
-//        if(DoctorApplication.nameValuePair)
-
-        if (!DoctorApplication.nameValuePair.get(Constants.STATUS_CHANGE)) {
-            status = 2;
-        } else {
-            status = 1;
-        }
-
-        if (DoctorApplication.lastAvailablityStaus != status) {
-            ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
-                    LoginInfo.userName, LoginInfo.role);
-            getSpiceManager().execute(request, new DoUpdatePasswordRequestListener());
-            Log.d(TAG, "statuschange " + "changed");
-        }
-
-        DoctorApplication.lastAvailablityStaus = status ;
-        Log.d(TAG, "statuschangelastAvailablityStaus " + status);
-        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
-    }
-
-    public final class DoUpdatePasswordRequestListener implements RequestListener<BaseResponse> {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-//            progressDialog.dismiss();
-        }
-
-        @Override
-        public void onRequestSuccess(final BaseResponse baseResponse) {
-            Log.d(TAG, "statuschange " + "changed");
-
-//            DoctorApplication.lastAvailablityStaus = status ;
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Util.changeStatus(true,this);
     }
 }

@@ -80,12 +80,12 @@ public class AppointmentAdapter extends BaseAdapter {
 
         ImageView pendingPatientAvatar = (ImageView) view.findViewById(R.id.appointment_patient_avatar_of_request);
         Patient patient = parentPatientProfileDbApi.getProfile(String.valueOf(appointment.patientId));
-        if(patient != null){
+        if(patient != null && patient.avatarUrl != null){
             Picasso.with(mContext)
                     .load(patient.avatarUrl)
                     .config(Bitmap.Config.RGB_565).fit()
                     .centerCrop()
-                    .placeholder(R.drawable.news_other)
+                    .placeholder(R.drawable.request_icon)
                     .into(pendingPatientAvatar);
         }
 

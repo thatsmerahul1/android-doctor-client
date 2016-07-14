@@ -7,8 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -83,7 +81,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         doctorDetailData = getArguments();
         patient = doctorDetailData.getParcelable(Constants.DOCTOR_DETAIL);
         IntentFilter intentFilter = new IntentFilter("send");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(message, intentFilter);
+        intentFilter.addAction(Constants.BROADCAST_STATUS_CHANGED);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(broadcastReceiver, intentFilter);
         getAllComponent(view, patient);
         return view;
     }
@@ -111,11 +110,11 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (patient != null) {
             setDoctorPresenceIcon(patient.status);
-            if(patient.status.equalsIgnoreCase("0")) {
+            if (patient.status.equalsIgnoreCase("0")) {
                 doctorStatusText.setText(R.string.doctor_busy);
-            } else if(patient.status.equalsIgnoreCase("1")) {
+            } else if (patient.status.equalsIgnoreCase("1")) {
                 doctorStatusText.setText(R.string.doctor_available);
-            } else{
+            } else {
                 doctorStatusText.setText(R.string.doctor_idle);
             }
             doctorNameView.setText(patient.name);
@@ -126,7 +125,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         String imageUrl = patient.avatarUrl;
 
         if (imageUrl != null && imageUrl.trim().length() > 8) {
-            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
+            int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
+            ;
             Picasso.with(mActivity)
                     .load(imageUrl).resize(dp, dp)
                     .centerCrop().placeholder(R.drawable.news_other)
@@ -140,7 +140,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         if (v == null) return;
 
         viewId = v.getId();
-        if(NetworkCheck.isNetworkAvailable(mActivity)) {
+        if (NetworkCheck.isNetworkAvailable(mActivity)) {
             switch (viewId) {
                 case R.id.btn_doctor_chat_id:
                     chatButtonClicked();
@@ -220,7 +220,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     }
 
     /*
-        Sending Add docotor request
+        Sending Add doctor request
      */
     private void sendAddDoctorRequest() {
         progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(), "Adding Doctor......");
@@ -229,16 +229,18 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         getSpiceManager().execute(request, new AddDoctorTaskRequestListener());
     }
 
+    /**
+     * updates the unread message count
+     */
     public void updateChatCount() {
 
-        if(unreadChatCount != null && patient != null){
+        if (unreadChatCount != null && patient != null) {
             ChatDbApi chatDbApi = ChatDbApi.getInstance(getApplicationContext());
             int unreadCount = chatDbApi.getUnReadChatCountByUserId(patient.email);
-            if(unreadCount > 0) {
+            if (unreadCount > 0) {
                 unreadChatCount.setText(String.valueOf(unreadCount));
                 unreadChatCount.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 unreadChatCount.setText(String.valueOf(0));
                 unreadChatCount.setVisibility(View.GONE);
             }
@@ -247,7 +249,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     }
 
     /*
-            Add Doctor request response
+     * Add Doctor request response
      */
     public final class AddDoctorTaskRequestListener implements RequestListener<AddDoctorResponse> {
 
@@ -273,16 +275,24 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        IntentFilter intentFilter = new IntentFilter("send");
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(message);
+        if (broadcastReceiver != null) {
+            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        }
     }
 
-    /*Incoming chat message receiver*/
-    BroadcastReceiver message = new BroadcastReceiver() {
+    /* BroadcastReceiver receiver that updates the chat count or
+    * changes the availability status */
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equalsIgnoreCase("send")) {
+            if (intent.getAction().equalsIgnoreCase("send")) {
                 updateChatCount();
+            } else if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
+                if (intent.getBooleanExtra(Constants.SET_STATUS, false)) {
+                    setDoctorPresenceIcon("1");
+                } else {
+                    setDoctorPresenceIcon("0");
+                }
             }
         }
     };

@@ -119,14 +119,14 @@ public class PatientAdapter extends BaseAdapter {
             View patientPresence = view.findViewById(R.id.patient_presence);
 
             if (patient.status.equalsIgnoreCase("0") ) {
-                patientStatus.setText(R.string.doctor_busy);
-                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+                patientStatus.setText(R.string.doctor_idle);
+                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
             } else if(patient.status.equalsIgnoreCase("1")){
                 patientStatus.setText(R.string.doctor_available);
                 patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
             } else {
-                patientStatus.setText(R.string.doctor_idle);
-                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
+                patientStatus.setText(R.string.doctor_busy);
+                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
             }
             patientName.setText(patient.name);
             int count = ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email);

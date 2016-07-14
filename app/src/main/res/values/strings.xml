@@ -230,6 +230,7 @@
     <string name="appointment_rejected">Appointment rejected</string>
     <string name="change_date_n_time">Change date&amp;time</string>
     <string name="cancel_appointment">Cancel appointment</string>
+    <string name="cancelling_appointment">Cancelling appointment, please wait...</string>
     <string name="appointment_detail_1">Appointment detail</string>
     <string name="doctor_appointment">Make an appointment</string>
     <string name="doctor_appointment_header">Appointment</string>
@@ -238,6 +239,13 @@
     <string name="change_date_and_time">Change date and time</string>
     <string name="appointment_deleted">Appointment successfully cancelled</string>
     <string name="appointment_rescheduled">Appointment re-scheduled to</string>
+    <string name="rescheduling_appointment">Rescheduling appointment, please wait...</string>
+    <string name="reschedule_appointment">Reschedule appointment</string>
+    <string name="invalid_date">Please enter valid date</string>
+    <string name="no_slots_open">There is a conflict with the requested appointment. Please try another slot</string>
+    <string name="book">Book</string>
+    <string name="thirty_mins">30 min</string>
+    <string name="appointment_cannot_be_set">Appointment date cannot be set for a past time/date.</string>
 
     <string-array name="array_name">
         <item>Select</item>

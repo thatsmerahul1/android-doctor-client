@@ -9,6 +9,7 @@
     <dimen name="text_size_small">12sp</dimen>
 
     <dimen name="thumbnail_square_size">80dp</dimen>
+    <dimen name="unread_profile_thumbnail_size">50dp</dimen>
     <dimen name="unread_chat_circle_margin">34dp</dimen>
 
 </resources>

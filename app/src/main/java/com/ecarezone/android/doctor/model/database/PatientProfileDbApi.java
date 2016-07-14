@@ -36,9 +36,12 @@ public class PatientProfileDbApi {
 
     }
 
-    public static boolean saveProfile(Patient userProfile) {
+    public boolean saveProfile(Patient userProfile) {
         try {
             Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
+            if(getProfile(String.valueOf(userProfile.userId)) != null){
+                deleteProfile(userProfile.userId);
+            }
             int status = userProfileDao.create(userProfile);
             return status != 0;
         } catch (SQLException e) {
@@ -47,7 +50,7 @@ public class PatientProfileDbApi {
         return false;
     }
     /* Saves a user profile in local database. Returns success failure response. */
-    public boolean updateProfile(String userId, Patient userProfile) {
+    public boolean updateProfile(long userId, Patient userProfile) {
         try {
             Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
             UpdateBuilder<Patient, Integer> updateBuilder = userProfileDao.updateBuilder();
@@ -72,7 +75,7 @@ public class PatientProfileDbApi {
      * @param userId
      * @return
      */
-    public boolean deleteProfile(String userId){
+    public boolean deleteProfile(long userId){
         try {
             Dao<Patient, Integer> userProfileDao = mDbHelper.getPatientProfileDao();
             DeleteBuilder<Patient, Integer> deleteBuilder = userProfileDao.deleteBuilder();

@@ -113,7 +113,7 @@ public interface EcareZoneApi {
     @POST("/changeStatus")
     BaseResponse changeStatus(@Body ChangeStatusRequest request);
 
-    @DELETE("/deleteappointment/{appointmentId}")
+    @POST("/deleteappointment/{appointmentId}")
     BaseResponse rejectAppointmentRequest(@Path("appointmentId") Long appointmentId, @Body AppointmentRejectRequest request);
 
     @PUT("/acceptappointment/{appointmentId}")

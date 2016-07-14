@@ -40,7 +40,7 @@ public class LocationFinder extends Service implements LocationListener {
         findLocationCordinates();
     }
 
-    private void findLocationCordinates() {
+    private void findLocationCordinates() throws SecurityException{
 
         locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
         if (locationManager == null) {

@@ -112,7 +112,7 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         //get(0) because in response patient profile pic is inside userprofile
         String imageUrl = patient.userProfiles.get(0).avatarUrl;
 
-//        if (imageUrl != null && imageUrl.trim().length() > 8) {
+        if (imageUrl != null && imageUrl.trim().length() > 8) {
             int dp = mActivity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);;
             Picasso.with(mActivity)
                     .load(imageUrl).resize(dp, dp)

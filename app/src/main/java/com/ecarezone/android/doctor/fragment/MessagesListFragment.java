@@ -124,7 +124,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
         }
 
         @Override
-        public void onRequestSuccess(SearchDoctorsResponse getDoctorsResponse) {
+        public void onRequestSuccess(final SearchDoctorsResponse getDoctorsResponse) {
             if (getDoctorsResponse.status.code == HTTP_STATUS_OK) {
                 ArrayList<Patient> tempPatient = (ArrayList<Patient>) getDoctorsResponse.data;
                 ListIterator<Patient> iter = tempPatient.listIterator();
@@ -158,7 +158,7 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
 //                    	noMessage.setVisibility(View.GONE);
-                            if(myPatientListView.getOnItemClickListener() == null) {
+                            if (myPatientListView.getOnItemClickListener() == null) {
                                 myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -177,12 +177,11 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                                         if (activity != null) {
 
                                             Intent showDoctorIntent;
-                                            if(patientListItem.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING){
-                                                if(getActivity() instanceof MainActivity) {
+                                            if (patientListItem.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
+                                                if (getActivity() instanceof MainActivity) {
                                                     ((MainActivity) getActivity()).changeFragmentToAppointment();
                                                 }
-                                            }
-                                            else {
+                                            } else {
                                                 showDoctorIntent = new Intent(activity.getApplicationContext(),
                                                         MyPatientActivity.class);
                                                 showDoctorIntent.putExtra(Constants.DOCTOR_DETAIL, data);
@@ -205,7 +204,8 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                         }
                     });
                 }
-            }        
+            }
+        }
     }
 
     public final class PopulateMyCareDoctorListRequestListener implements RequestListener<SearchDoctorsResponse> {

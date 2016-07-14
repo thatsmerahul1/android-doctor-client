@@ -1,17 +1,11 @@
 package com.ecarezone.android.doctor;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.ecarezone.android.doctor.adapter.ChatAdapter;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.ChatFragment;
 import com.ecarezone.android.doctor.utils.SinchUtil;

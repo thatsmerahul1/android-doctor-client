@@ -1,11 +1,8 @@
 package com.ecarezone.android.doctor.fragment;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +14,8 @@ import com.ecarezone.android.doctor.NewsListActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.NewsCategoriesAdapter;
 import com.ecarezone.android.doctor.model.News;
-import com.ecarezone.android.doctor.model.rest.GetNewsResponse;
 import com.ecarezone.android.doctor.model.rest.GetNewsRequest;
+import com.ecarezone.android.doctor.model.rest.GetNewsResponse;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;

@@ -19,8 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ecarezone.android.doctor.MyPatientActivity;
 import com.ecarezone.android.doctor.MainActivity;
+import com.ecarezone.android.doctor.MyPatientActivity;
 import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.adapter.PatientAdapter;
@@ -28,8 +28,6 @@ import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.PatientProfile;
 import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
-import com.ecarezone.android.doctor.model.database.PatientUserProfileDbiApi;
-import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.model.rest.PatientAcceptRequest;
@@ -203,7 +201,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                 Patient patient = null;
                 while (iter.hasNext()) {
                     patient = iter.next();
-                    PatientListItem patientItem = new PatientListItem();
+                    PatientListItem patientItem = new PatientListItem(); //PatientListItem this class is because there is list of data but in db only one patient details can be saved at a time
                     patientItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPROVED;
                     patientItem.email = patient.email;
                     patientItem.name = patient.name;
@@ -214,8 +212,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     patientItem.avatarUrl = patient.avatarUrl;
                     patientItem.userProfile = patient.userProfiles;
 
-                    int size = patient.userProfiles.size();
-                    for (PatientProfile patientProfile : patient.userProfiles) {
+                    for(PatientProfile patientProfile : patient.userProfiles){
                         patientProfile.userId = patient.userId;
                     }
 

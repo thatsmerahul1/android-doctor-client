@@ -1,11 +1,8 @@
 package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,13 +18,7 @@ import android.widget.Toast;
 
 import com.ecarezone.android.doctor.CallActivity;
 import com.ecarezone.android.doctor.R;
-import com.ecarezone.android.doctor.config.Constants;
-import com.ecarezone.android.doctor.config.LoginInfo;
-import com.ecarezone.android.doctor.model.Chat;
-import com.ecarezone.android.doctor.model.UserProfile;
-import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
-import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.service.SinchService;
 import com.ecarezone.android.doctor.utils.SinchUtil;
@@ -37,7 +28,6 @@ import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -117,7 +107,6 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
                 topPanel.setText(tempProfiles.name);
             }
         } else{
-//            tempProfiles = profileDbApi.getProfile(incomingCallArguments.getString("INCOMING_CALL_USER"));
             String emailId = incomingCallArguments.getString("INCOMING_CALL_USER");
             tempProfiles = profileDbApi.getProfileByEmail(emailId);
             if(tempProfiles != null) {
@@ -148,14 +137,12 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
 
     @Override
     public void onCallProgressing(Call call) {
-        Log.d(TAG, "Call progressing");
         SinchUtil.getSinchAudioPlayer().playProgressTone();
         mCallId = call.getCallId();
     }
 
     @Override
     public void onCallEstablished(Call call) {
-        Log.d(TAG, "Call established");
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         mActivity.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
         mCallId = call.getCallId();
@@ -165,7 +152,6 @@ public class CallFragment extends EcareZoneBaseFragment implements View.OnClickL
     @Override
     public void onCallEnded(Call call) {
         CallEndCause cause = call.getDetails().getEndCause();
-        Log.d(TAG, "Call ended. Reason: " + cause.toString());
         SinchUtil.getSinchAudioPlayer().stopProgressTone();
         mActivity.setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
         String endMsg = "Call ended: " + call.getDetails().toString();

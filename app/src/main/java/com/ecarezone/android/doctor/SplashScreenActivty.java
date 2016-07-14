@@ -1,6 +1,5 @@
 package com.ecarezone.android.doctor;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 

@@ -12,7 +12,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="16dp">
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +52,6 @@
         <include layout="@layout/template_country_spinner" />
 
     </LinearLayout>
-
 
     <TextView
         android:layout_width="match_parent"

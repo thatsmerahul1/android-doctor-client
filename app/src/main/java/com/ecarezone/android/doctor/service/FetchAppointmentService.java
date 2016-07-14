@@ -1,13 +1,12 @@
 package com.ecarezone.android.doctor.service;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
-import com.ecarezone.android.doctor.model.rest.AppointmentRequest;
 import com.ecarezone.android.doctor.model.rest.AppointmentResponse;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;

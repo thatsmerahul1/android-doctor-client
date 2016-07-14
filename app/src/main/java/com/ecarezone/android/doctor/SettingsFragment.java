@@ -3,7 +3,6 @@ package com.ecarezone.android.doctor;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -19,9 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ecarezone.android.doctor.AboutEcareZoneActivity;
-import com.ecarezone.android.doctor.MainActivity;
-import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.fragment.EcareZoneBaseFragment;
@@ -139,9 +135,6 @@ public class SettingsFragment extends EcareZoneBaseFragment implements View.OnCl
                 startActivity(emailIntent);
             }
         });
-//        mTextViewAbout = (TextView) view.findViewById(R.id.textview_registration_about);
-//        mTextViewAbout.setVisibility(View.VISIBLE);
-//        mTextViewAbout.setOnClickListener(this);
         updateUserData();
         //Enabling the option menu use
         setHasOptionsMenu(true);

@@ -14,10 +14,7 @@ import com.ecarezone.android.doctor.AppointmentActivity;
 import com.ecarezone.android.doctor.ChatActivity;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.Constants;
-import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.Chat;
-import com.ecarezone.android.doctor.model.database.AppointmentDbApi;
-import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.view.CircleImageView;
@@ -26,7 +23,6 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,12 +34,9 @@ public class MessageAdapter extends BaseAdapter {
     private Activity activity;
     private static LayoutInflater inflater;
     private ArrayList<PatientListItem> patientList;
-    private List<Chat> mMessages;
-    private SimpleDateFormat mTimeFormat;
     private SimpleDateFormat mDateFormat;
     private int iconSizeInDp;
     private int todayDate = Calendar.getInstance().get(Calendar.DATE);
-
 
     public MessageAdapter(Activity activity, ArrayList<PatientListItem> patientList) {
         this.activity = activity;
@@ -82,17 +75,8 @@ public class MessageAdapter extends BaseAdapter {
         if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
             TextView messageSenderName = (TextView) view.findViewById(R.id.messagesenderName);
             TextView timeStamp = (TextView) view.findViewById(R.id.updateTime);
-            CircleImageView imgView = (CircleImageView) view.findViewById(R.id.messageIcon);
-
             messageSenderName.setText("From:" + patient.name);
             timeStamp.setText(patient.requestedDate);
-
-//            Picasso.with(activity)
-//                    .load(patient.avatarUrl).resize(iconSizeInDp, iconSizeInDp)
-//                    .centerCrop().placeholder(R.drawable.request_icon)
-//                    .error(R.drawable.news_other)
-//                    .into(imgView);
-
 
         } else if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_MESSAGE) {
 

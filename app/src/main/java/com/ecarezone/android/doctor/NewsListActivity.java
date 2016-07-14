@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.NewsCategoriesFragment;
 import com.ecarezone.android.doctor.fragment.NewsListFragment;
 import com.ecarezone.android.doctor.utils.Util;

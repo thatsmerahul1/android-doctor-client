@@ -2,21 +2,13 @@ package com.ecarezone.android.doctor;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.UserProfileDetailsFragment;
 import com.ecarezone.android.doctor.utils.Util;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
 
 /**
  * Created by L&T Technology Services on 3/18/2016.

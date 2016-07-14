@@ -21,13 +21,11 @@ public class CreateProfileRequest extends RetrofitSpiceRequest<CreateProfileResp
     public String apiKey;
     @Expose
     public String deviceUnique;
-//    public Long userId;
 
     public CreateProfileRequest(Long userId, String email, String password, String apiKey, String deviceUnique,DoctorProfile doctorProfile) {
         super(CreateProfileResponse.class, EcareZoneApi.class);
 
         this.doctorProfile = doctorProfile;
-//        this.userId = userId;
         this.email = LoginInfo.userName;
         this.password = LoginInfo.hashedPassword;
         this.apiKey = Constants.API_KEY;

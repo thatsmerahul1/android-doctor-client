@@ -2,19 +2,16 @@ package com.ecarezone.android.doctor.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
-import com.ecarezone.android.doctor.gcm.GcmIntentService;
 import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.squareup.picasso.Picasso;
@@ -75,9 +72,10 @@ public class PatientAdapter extends BaseAdapter {
         int dp = activity.getResources().getDimensionPixelSize(R.dimen.profile_thumbnail_edge_size);
         PatientListItem patient = patientList.get(position);
         if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
-
+            //pending patient list
             view = inflater.inflate(R.layout.patient_pending_list_item, null, false);
         } else {
+            // accepted patient list
             view = inflater.inflate(R.layout.doctor_list_item_layout, null, false);
         }
          if (patient.listItemType == PatientListItem.LIST_ITEM_TYPE_PENDING) {
@@ -137,7 +135,7 @@ public class PatientAdapter extends BaseAdapter {
                 chatCount.setText(String.valueOf(0));
                 chatCount.setVisibility(View.GONE);
              }
-            String imageUrl = patient.avatarUrl;
+            String imageUrl = patient.userProfile.get(0).avatarUrl;
 
             if (imageUrl != null && imageUrl.trim().length() > 8) {
                 Picasso.with(activity)

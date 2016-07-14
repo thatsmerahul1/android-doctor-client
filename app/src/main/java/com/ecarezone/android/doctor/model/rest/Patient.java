@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.ecarezone.android.doctor.model.PatientProfile;
-import com.ecarezone.android.doctor.model.UserProfile;
 import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 
@@ -77,9 +76,6 @@ public class Patient implements Parcelable, Serializable {
         this.userId = in.readLong();
         this.email = in.readString();
         this.name = in.readString();
-//        this.userProfiles = in.readParcelable(userProfiles.getClass().getClassLoader());
-                /*this.userProfiles = */
-
         in.readList(userProfiles, Patient.class.getClassLoader());
         this.status = in.readString();
         this.isCallAllowed = in.readString();
@@ -100,7 +96,6 @@ public class Patient implements Parcelable, Serializable {
         dest.writeString(email);
         dest.writeString(name);
         dest.writeList(userProfiles);
-//        dest.writeParcelable((Parcelable) userProfiles, flags);
         dest.writeString(status);
         dest.writeString(isCallAllowed);
         dest.writeString(userDevicesCount);

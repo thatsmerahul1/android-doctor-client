@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -30,7 +28,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +89,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         mFormatter = new SimpleDateFormat("HH:mm");
         mContext = context;
         this.recipient = recipient;
-
+        //creating directory in external storage under eCareZone/recipient/incoming
         direct = new File(Environment.getExternalStorageDirectory()
                 + "/eCareZone" + "/" + recipient + "/incoming");
         ;
@@ -143,7 +140,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.i("Onimageclick: ", "Onimageclick1");
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()), "image/*");
@@ -159,8 +155,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.i("Onimageclick: ", "Onimageclick2");
-
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse("file://" + chat.getDeviceImagePath()), "image/*");
@@ -180,7 +174,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 String formattedDate = dateFormat.format(chat.getTimeStamp());
                 localImgFileArr = direct.list();
                 for (String fileName : localImgFileArr) {
-                    Log.i("Comapring: ", fileName + " with " +formattedDate + ".jpg");
                     if (fileName.equalsIgnoreCase(formattedDate + ".jpg")) {
                         imagePath = direct.getAbsolutePath() + File.separator + fileName;
                         break;
@@ -218,7 +211,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("Onimageclick: ", "Onimageclick3");
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse("file://" + finalImagePath),"image/*");
@@ -230,7 +222,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.mChatText.setVisibility(View.VISIBLE);
             holder.mChartImage.setVisibility(View.GONE);
         }
-//        holder.mChatUser.setText(name);
         holder.mChartTime.setText(mFormatter.format(chat.getTimeStamp()));
 
     }

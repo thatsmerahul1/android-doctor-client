@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ecarezone.android.doctor.DoctorApplication;
 import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
@@ -29,10 +28,8 @@ import com.ecarezone.android.doctor.model.database.UserTable;
 import com.ecarezone.android.doctor.model.rest.Data;
 import com.ecarezone.android.doctor.model.rest.LoginRequest;
 import com.ecarezone.android.doctor.model.rest.LoginResponse;
-import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.service.LocationFinder;
 import com.ecarezone.android.doctor.service.SinchService;
-import com.ecarezone.android.doctor.utils.AESUtil;
 import com.ecarezone.android.doctor.utils.EcareZoneLog;
 import com.ecarezone.android.doctor.utils.PasswordUtil;
 import com.ecarezone.android.doctor.utils.PermissionUtil;

@@ -2,8 +2,6 @@ package com.ecarezone.android.doctor.model.database;
 
 import android.content.Context;
 
-import com.ecarezone.android.doctor.model.Appointment;
-import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -33,7 +31,6 @@ public class PatientProfileDbApi {
             mPatientProfileDbApi = new PatientProfileDbApi();
         }
         return mPatientProfileDbApi;
-
     }
 
     public boolean saveProfile(Patient userProfile) {
@@ -120,6 +117,7 @@ public class PatientProfileDbApi {
         return null;
     }
 
+    /* retrive the details of a perticuler profile using email */
     public int getProfileIdUsingEmail(String emailId) {
         Patient[] profiles = new Patient[0];
         try {

@@ -3,7 +3,6 @@ package com.ecarezone.android.doctor.model.rest;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.DoctorProfile;
-import com.ecarezone.android.doctor.model.UserProfile;
 import com.ecarezone.android.doctor.service.EcareZoneApi;
 import com.google.gson.annotations.Expose;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;

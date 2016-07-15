@@ -27,6 +27,7 @@ import com.ecarezone.android.doctor.gcm.HeartbeatService;
 import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.utils.Util;
+import com.urbanairship.UAirship;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -53,6 +54,16 @@ public class MainActivity extends EcareZoneBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
+
+        UAirship.takeOff(getApplication(), new UAirship.OnReadyCallback() {
+
+            @Override
+            public void onAirshipReady(UAirship uAirship) {
+                uAirship.getPushManager().setUserNotificationsEnabled(true);
+            }
+
+        });
+
         if (mDrawerLayout == null) {
             mDrawerLayout = (DrawerLayout) findViewById(R.id.side_drawer_layout);
             mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {

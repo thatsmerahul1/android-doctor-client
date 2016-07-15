@@ -1,6 +1,11 @@
 package com.ecarezone.android.doctor;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.ecarezone.android.doctor.config.Constants;
+import com.urbanairship.UAirship;
 
 import java.util.HashMap;
 
@@ -16,6 +21,15 @@ public class DoctorApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
+                Context.MODE_PRIVATE);
+        if(sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, null) == null) {
+
+        }
+        else{
+            Constants.deviceUnique = sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, Constants.deviceUnique);
+        }
     }
 
     public void setStatusNameValuePair(HashMap<String, Boolean> nameValuePair){

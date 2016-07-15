@@ -50,13 +50,21 @@ public class Constants {
 
     //status changes
     public static String STATUS_CHANGE = "statusChange";
+    public static final int OFFLINE = 2;
+    public static final int ONLINE = 1;
+    public static final int IDLE = 0;
 
     public static String SEND_HEART_BEAT = "send_heart_beat";
     public static String UPDATE_STATUS = "update_status";
 
     public static String SET_STATUS = "set_status";
-    public static String BROADCAST_STATUS_CHANGED = "broadcast_status_changed";
 
     public static final long THIRTY_MINUTES = 1800000;
+
+
+    public static String SHARED_PREFERENCE_NAME = "eCareZoneSP";
+    public static String UA_CHANNEL_NUMBER = "ua_channel_number";
+    public static String PUSH_NEWS_UPDATE = "ua_news_update";
+    public static String BROADCAST_STATUS_CHANGED = "broadcast_status_changed";
 
 }

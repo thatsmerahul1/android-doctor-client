@@ -46,7 +46,7 @@ public class WelcomeFragment extends EcareZoneBaseFragment implements View.OnCli
     }
 
     public void isProfilePresent() {
-        ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+        ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
         boolean hasProfiles = profileDbApi.hasProfile(LoginInfo.userId.toString());
         if(hasProfiles){
             Bundle b = null;

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.ecarezone.android.doctor.DoctorApplication;
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.config.LoginInfo;
+import com.ecarezone.android.doctor.model.database.ProfileDbApi;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
 import com.ecarezone.android.doctor.model.rest.base.ChangeStatusRequest;
 import com.ecarezone.android.doctor.service.RoboEcareSpiceServices;
@@ -17,10 +18,9 @@ import com.octo.android.robospice.request.listener.RequestListener;
 /**
  * Created by Umesh on 27-06-2016.
  */
-public class HeartbeatService extends IntentService{
+public class HeartbeatService extends IntentService {
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
      */
     public HeartbeatService() {
         super("HeartbeatService");
@@ -30,30 +30,33 @@ public class HeartbeatService extends IntentService{
     protected void onHandleIntent(Intent intent) {
         /**
          * sent a heart beat to the GCM to keep the TCP connection alive
-        */
-        if(intent.getBooleanExtra(Constants.SEND_HEART_BEAT, false)) {
+         */
+        if (intent.getBooleanExtra(Constants.SEND_HEART_BEAT, false)) {
             sendBroadcast(new Intent(
                     "com.google.android.intent.action.GTALK_HEARTBEAT"));
             sendBroadcast(new Intent(
                     "com.google.android.intent.action.MCS_HEARTBEAT"));
             Log.i("HeartbeatService", "Heartbeat sent to GCM");
         }
-        if(intent.getBooleanExtra(Constants.UPDATE_STATUS, false)){
+        if (intent.getBooleanExtra(Constants.UPDATE_STATUS, false)) {
             DoctorApplication doctorApplication = (DoctorApplication) getApplicationContext();
             int status;
-            if(doctorApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
+            if (doctorApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
                 if (!doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
                     status = Constants.IDLE;
                 } else {
                     status = Constants.ONLINE;
                 }
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
+                String name = profileDbApi.getMyProfile().name;
                 if (doctorApplication.getLastAvailabilityStaus() != status) {
-                    ChangeStatusRequest request = new ChangeStatusRequest(status, LoginInfo.hashedPassword,
-                            LoginInfo.userName, "0");
+
+                    ChangeStatusRequest request = new ChangeStatusRequest(
+                            LoginInfo.userName, LoginInfo.hashedPassword,
+                            name, Constants.USER_ROLE, status, Constants.deviceUnique);
                     getSpiceManager().execute(request, new ChangeStatusRequestListener());
                 }
-            }
-            else{
+            } else {
                 doctorApplication.getNameValuePair().put(Constants.STATUS_CHANGE, false);
                 status = Constants.ONLINE;
             }
@@ -62,16 +65,17 @@ public class HeartbeatService extends IntentService{
         }
     }
 
-    public final class ChangeStatusRequestListener implements RequestListener<BaseResponse> {
+    public final class ChangeStatusRequestListener implements RequestListener<String> {
 
         private String TAG = "ChangeStatusRequestListener";
+
         @Override
         public void onRequestFailure(SpiceException spiceException) {
 //            progressDialog.dismiss();
         }
 
         @Override
-        public void onRequestSuccess(final BaseResponse baseResponse) {
+        public void onRequestSuccess(final String baseResponse) {
             Log.d(TAG, "statuschange " + "changed");
 
 //            DoctorApplication.lastAvailablityStaus = status ;

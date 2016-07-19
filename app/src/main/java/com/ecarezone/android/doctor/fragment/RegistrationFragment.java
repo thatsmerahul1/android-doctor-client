@@ -375,7 +375,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
 
                     // Make server call & get the user information & save it internally in db.
                     if (data.doctorProfile != null) {
-                        ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                        ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                         profileDbApi.deleteProfiles(LoginInfo.userId.toString());
                         profileDbApi.saveMultipleProfiles(LoginInfo.userId.toString(), response.data.doctorProfile);
                     }

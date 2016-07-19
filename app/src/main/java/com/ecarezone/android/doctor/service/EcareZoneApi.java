@@ -110,8 +110,11 @@ public interface EcareZoneApi {
     @GET("/pendingappointments/doctors/{doctorId}")
     AppointmentResponse getAppointmentDate(@Path("doctorId") Long doctorId);
 
-    @POST("/changeStatus")
-    BaseResponse changeStatus(@Body ChangeStatusRequest request);
+//    @POST("/changeStatus")
+//    BaseResponse changeStatus(@Body ChangeStatusRequest request);
+
+    @POST("/ECZ/doctor/pushstatus/{doctorId}")
+    String changeStatus(@Path("doctorId") long doctorId, @Body ChangeStatusRequest request);
 
     @POST("/deleteappointment/{appointmentId}")
     BaseResponse rejectAppointmentRequest(@Path("appointmentId") Long appointmentId, @Body AppointmentRejectRequest request);

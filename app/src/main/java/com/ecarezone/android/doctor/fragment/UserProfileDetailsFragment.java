@@ -119,7 +119,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         EditText nameET = (EditText) view.findViewById(R.id.name);
         nameET.addTextChangedListener(this);
 
-        ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+        ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
         mProfile = profileDbApi.getProfile(LoginInfo.userId.toString());
 
         spec = (Spinner) view.findViewById(R.id.specializedArea);
@@ -589,7 +589,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 editor.putString(Constants.PROFILE_ID, response.id);
                 editor.commit();
 
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 profileDbApi.saveProfile(LoginInfo.userId.toString(), profile, response.id);
 
                 getActivity().setResult(getActivity().RESULT_OK, null);
@@ -611,7 +611,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
             if (response != null && response.id != null && Integer.parseInt(response.id) > 0) {
                 UserProfile profile = createUserProfileFromResponse(response);
 
-                ProfileDbApi profileDbApi = new ProfileDbApi(getApplicationContext());
+                ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
                 profileDbApi.updateProfile(LoginInfo.userId.toString(), profile, mProfile.id);
                 getActivity().setResult(getActivity().RESULT_OK, null);
                 getActivity().finish();

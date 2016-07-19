@@ -19,11 +19,21 @@ import java.util.List;
 public class ProfileDbApi {
 
     private static DbHelper mDbHelper;
-    private Context mContext;
+    private static Context mContext;
+    private static ProfileDbApi mProfileDbApi;
 
-    public ProfileDbApi(Context context) {
+    private ProfileDbApi() {
+
+    }
+
+    public static ProfileDbApi getInstance(Context context) {
         mContext = context;
-        mDbHelper = new DbHelper(context);
+        if (mDbHelper == null || mProfileDbApi == null) {
+            mDbHelper = new DbHelper(context);
+            mProfileDbApi = new ProfileDbApi();
+        }
+        return mProfileDbApi;
+
     }
 
     /* checks whether the user has any profiles. */
@@ -172,7 +182,7 @@ public class ProfileDbApi {
             QueryBuilder<UserProfile, Integer> queryBuilder = userProfileDao.queryBuilder();
             return queryBuilder.where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
-                    .and()
+//                    .and()
 //                    .eq(DbContract.Profiles.COLUMN_NAME_PROFILE_NAME, mContext.getString(R.string.profile_mine))
                     .queryForFirst();
         } catch (SQLException e) {
@@ -188,7 +198,7 @@ public class ProfileDbApi {
             UserProfile myProfile = queryBuilder
                     .where()
                     .eq(DbContract.Profiles.COLUMN_NAME_USER_ID, LoginInfo.userId)
-                    .and()
+//                    .and()
                     .queryForFirst();
             if(myProfile!=null){
             }

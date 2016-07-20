@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecarezone.android.doctor.R;
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.MyPatientListFragment;
 import com.ecarezone.android.doctor.model.database.ChatDbApi;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
@@ -116,15 +117,15 @@ public class PatientAdapter extends BaseAdapter {
             TextView chatCount = (TextView) view.findViewById(R.id.chat_count);
             View patientPresence = view.findViewById(R.id.patient_presence);
 
-            if (patient.status.equalsIgnoreCase("0") ) {
-                patientStatus.setText(R.string.doctor_idle);
-                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
-            } else if(patient.status.equalsIgnoreCase("1")){
+            if (patient.status.equalsIgnoreCase(String.valueOf(Constants.OFFLINE)) ) {
+                patientStatus.setText(R.string.doctor_busy);
+                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+            } else if(patient.status.equalsIgnoreCase(String.valueOf(Constants.ONLINE))){
                 patientStatus.setText(R.string.doctor_available);
                 patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_green));
             } else {
-                patientStatus.setText(R.string.doctor_busy);
-                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_red));
+                patientStatus.setText(R.string.doctor_idle);
+                patientPresence.setBackground(activity.getResources().getDrawable(R.drawable.circle_amber));
             }
             patientName.setText(patient.name);
             int count = ChatDbApi.getInstance(activity).getUnReadChatCountByUserId(patient.email);

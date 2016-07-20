@@ -429,20 +429,42 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             if (intent.getAction().equalsIgnoreCase("send")) {
                 mycareDoctorAdapter.notifyDataSetChanged();
             } else if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
-                String status;
-                if (intent.getBooleanExtra(Constants.SET_STATUS, false)) {
-                    status = "1";
-                } else {
-                    status = "0";
+                String statusTxt = intent.getStringExtra(Constants.SET_STATUS);
+                if (statusTxt != null) {
+                    String[] statusArr = statusTxt.split(",");
+                    if (statusArr.length > 2) {
+                        int patId = -1;
+                        try {
+                            patId = Integer.parseInt(statusArr[1].trim());
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        if (patId > -1) {
+                            for (PatientListItem patientListItem : patientLists) {
+                                if (patientListItem.patientId == patId) {
+                                     patientListItem.status = statusArr[2] ;
+                                     break;
+                                }
+                            }
+                        }
+                    }
+                    mycareDoctorAdapter.notifyDataSetChanged();
+//                String status;
+//                if (intent.getBooleanExtra(Constants.SET_STATUS, false)) {
+//                    status = "1";
+//                } else {
+//                    status = "0";
+//                }
+//
+//                for (PatientListItem patientListItem : patientLists){
+//                    if(patientListItem.patientId == 1){
+//                        patientListItem.status = status;
+//                        break;
+//                    }
+//                }
+//                mycareDoctorAdapter.notifyDataSetChanged();
                 }
 
-                for (PatientListItem patientListItem : patientLists){
-                    if(patientListItem.patientId == 1){
-                        patientListItem.status = status;
-                        break;
-                    }
-                }
-                mycareDoctorAdapter.notifyDataSetChanged();
             }
         }
     };

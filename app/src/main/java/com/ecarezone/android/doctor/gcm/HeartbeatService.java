@@ -35,6 +35,9 @@ import ch.boye.httpclientandroidlib.impl.client.HttpClientBuilder;
  * Created by Umesh on 27-06-2016.
  */
 public class HeartbeatService extends IntentService {
+    DoctorApplication doctorApplication;
+    int status;
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
@@ -55,8 +58,7 @@ public class HeartbeatService extends IntentService {
             Log.i("HeartbeatService", "Heartbeat sent to GCM");
         }
         if (intent.getBooleanExtra(Constants.UPDATE_STATUS, false)) {
-            DoctorApplication doctorApplication = (DoctorApplication) getApplicationContext();
-            int status;
+            doctorApplication = (DoctorApplication) getApplicationContext();
             if (doctorApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
                 if (!doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
                     status = Constants.IDLE;
@@ -73,7 +75,6 @@ public class HeartbeatService extends IntentService {
                 doctorApplication.getNameValuePair().put(Constants.STATUS_CHANGE, false);
                 status = Constants.ONLINE;
             }
-            doctorApplication.setLastAvailabilityStaus(status);
             Log.i("HeartbeatService", "status updated");
         }
     }
@@ -144,6 +145,8 @@ public class HeartbeatService extends IntentService {
 
             if (response != null && response.equalsIgnoreCase("Notification Sent")) {
                 Log.i("HeartbeatService", response);
+                doctorApplication.setLastAvailabilityStaus(status);
+
             } else {
                 Log.i("HeartbeatService", "Notification Not Sent: " + response);
             }

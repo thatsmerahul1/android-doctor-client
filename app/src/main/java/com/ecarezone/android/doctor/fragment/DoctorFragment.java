@@ -98,9 +98,9 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
         if (patient != null) {
             setDoctorPresenceIcon(patient.status);
-            if (patient.status.equalsIgnoreCase("0")) {
+            if (patient.status.equalsIgnoreCase(String.valueOf(Constants.OFFLINE))) {
                 doctorStatusText.setText(R.string.doctor_busy);
-            } else if (patient.status.equalsIgnoreCase("1")) {
+            } else if (patient.status.equalsIgnoreCase(String.valueOf(Constants.ONLINE))) {
                 doctorStatusText.setText(R.string.doctor_available);
             } else {
                 doctorStatusText.setText(R.string.doctor_idle);
@@ -191,11 +191,11 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
         Doctor Status status updating
      */
     private void setDoctorPresenceIcon(String status) {
-        if (status.equalsIgnoreCase("1")) {
+        if (status.equalsIgnoreCase(String.valueOf(Constants.ONLINE))) {
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_green));
             doctorVideo.setEnabled(true);
             doctorVoice.setEnabled(true);
-        } else if (status.equalsIgnoreCase("0")) {
+        } else if (status.equalsIgnoreCase(String.valueOf(Constants.OFFLINE))) {
             doctorStatusIcon.setBackground(getActivity().getResources().getDrawable(R.drawable.circle_red));
             doctorVideo.setEnabled(false);
             doctorVoice.setEnabled(false);
@@ -236,7 +236,37 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
 
     /* BroadcastReceiver receiver that updates the chat count or
     * changes the availability status */
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase("send")) {
+                updateChatCount();
+            }
+            if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
+                String statusTxt = intent.getStringExtra(Constants.SET_STATUS);
+                if (statusTxt != null) {
+                    String[] statusArr = statusTxt.split(",");
+                    if (statusArr.length > 2) {
+                        int patId = -1;
+                        try {
+                            patId = Integer.parseInt(statusArr[1].trim());
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        if (patId > -1) {
+
+                            if (patient.userId == patId) {
+                                 patient.status = statusArr[2];
+                                 setDoctorPresenceIcon(statusTxt);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    };
+   /* BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase("send")) {
@@ -249,5 +279,5 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                 }
             }
         }
-    };
+    };*/
 }

@@ -22,6 +22,17 @@ public class DoctorApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        UAirship.takeOff(this, new UAirship.OnReadyCallback() {
+
+            @Override
+            public void onAirshipReady(UAirship uAirship) {
+                //  do not show notification in the notification tray
+                uAirship.getPushManager().setUserNotificationsEnabled(false);
+
+            }
+
+        });
+
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
                 Context.MODE_PRIVATE);
         if(sharedPreferences.getString(Constants.UA_CHANNEL_NUMBER, null) == null) {

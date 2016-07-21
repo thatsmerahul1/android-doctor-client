@@ -55,15 +55,6 @@ public class MainActivity extends EcareZoneBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
 
-        UAirship.takeOff(getApplication(), new UAirship.OnReadyCallback() {
-
-            @Override
-            public void onAirshipReady(UAirship uAirship) {
-                uAirship.getPushManager().setUserNotificationsEnabled(true);
-            }
-
-        });
-
         if (mDrawerLayout == null) {
             mDrawerLayout = (DrawerLayout) findViewById(R.id.side_drawer_layout);
             mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {

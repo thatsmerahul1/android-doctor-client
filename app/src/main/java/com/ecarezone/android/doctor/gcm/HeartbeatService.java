@@ -90,17 +90,20 @@ public class HeartbeatService extends IntentService {
             UserProfile userProfile = profileDbApi.getMyProfile();
 
             JSONObject jsonObj = new JSONObject();
-            try {
-                jsonObj.put("email", LoginInfo.userName);
-                jsonObj.put("password", LoginInfo.hashedPassword);
-                jsonObj.put("name", userProfile.name);
-                jsonObj.put("role", Constants.USER_ROLE);
-                jsonObj.put("status", status);
-                jsonObj.put("deviceUnique", Constants.deviceUnique);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(userProfile != null) {
+                try {
+                    jsonObj.put("email", LoginInfo.userName);
+                    jsonObj.put("password", LoginInfo.hashedPassword);
+                    jsonObj.put("name", userProfile.name);
+                    jsonObj.put("role", Constants.USER_ROLE);
+                    jsonObj.put("status", status);
+                    jsonObj.put("deviceUnique", Constants.deviceUnique);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                requestBody = jsonObj.toString();
             }
-            requestBody = jsonObj.toString();
         }
 
         public void startHttpRequest() {

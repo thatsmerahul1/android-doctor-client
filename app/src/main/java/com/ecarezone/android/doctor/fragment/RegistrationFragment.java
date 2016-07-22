@@ -160,7 +160,7 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         mSpinnerCountry.setKeyListener(null);
         mSpinnerCountry.setOnClickListener(this);
         //English selected as a default language
-//        mSpinnerLanguage.setText(R.string.language_english);
+        mSpinnerLanguage.setText(R.string.language_english);
         mSpinnerLanguage.setTag(getResources().getString(R.string.language_local_english));
         mSpinnerLanguage.setOnClickListener(this);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.checkbox_registration_terms);
@@ -221,6 +221,8 @@ public class RegistrationFragment extends EcareZoneBaseFragment implements View.
         FragmentManager fm = getFragmentManager();
         Bundle bun = new Bundle();
         bun.putString(Constants.TYPE, type);
+        bun.putString(Constants.COUNTRY, String.valueOf(mSpinnerCountry.getTag()));
+        bun.putString(Constants.LANGUAGE, String.valueOf(mSpinnerLanguage.getTag()));
         if (type.equalsIgnoreCase(Constants.COUNTRY)) {
             regFragment.setTargetFragment(this, COUNTRY_RESULT);
         } else {

@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class DoctorApplication extends Application {
 
-    private HashMap<String, Boolean> nameValuePair = new HashMap<String, Boolean>();
+    private HashMap<String, Integer> nameValuePair = new HashMap<String, Integer>();
     private int lastAvailabilityStatus;
 
     final String getCallerName() {
@@ -32,11 +32,11 @@ public class DoctorApplication extends Application {
         }
     }
 
-    public void setStatusNameValuePair(HashMap<String, Boolean> nameValuePair){
+    public void setStatusNameValuePair(HashMap<String, Integer> nameValuePair){
         this.nameValuePair = nameValuePair;
     }
 
-    public HashMap<String, Boolean> getNameValuePair() {
+    public HashMap<String, Integer> getNameValuePair() {
         return nameValuePair;
     }
 

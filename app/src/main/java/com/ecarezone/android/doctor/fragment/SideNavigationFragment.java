@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.DoctorApplication;
+import com.ecarezone.android.doctor.MainActivity;
 import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.RegistrationActivity;
@@ -47,7 +48,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
     private NavigationItem mDoctors = null;
     private NavigationItem mSettings = null;
     private NavigationItem mLogout = null;
-
+    MainActivity main = new MainActivity();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +80,7 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
 
         mHome.highlightItem(true);
         highlightNavigationItem(null);
-
+        main.setStatus(false);
         return view;
     }
 
@@ -119,6 +120,9 @@ public class SideNavigationFragment extends EcareZoneBaseFragment implements Nav
         LoginRequest request =
                 new LoginRequest(LoginInfo.userName, null, 0/*Integer.parseInt(LoginInfo.role)*/, null, null, null, null);
         getSpiceManager().execute(request, new LogoutRequestListener());
+        // change status to offline
+
+        main.setStatus(true);
     }
 
     //Logout response

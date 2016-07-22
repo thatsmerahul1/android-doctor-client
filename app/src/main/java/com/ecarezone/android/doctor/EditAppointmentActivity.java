@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.EditAppointmentFragment;
 import com.ecarezone.android.doctor.model.Appointment;
 import com.ecarezone.android.doctor.model.pojo.AppointmentListItem;
@@ -76,12 +77,12 @@ public class  EditAppointmentActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Util.changeStatus(true, this);
+        Util.changeStatus(Constants.ONLINE, this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Util.changeStatus(false, this);
+        Util.changeStatus(Constants.IDLE, this);
     }
 }

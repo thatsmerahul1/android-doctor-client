@@ -6,6 +6,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.utils.Util;
 
 /**
@@ -51,12 +52,12 @@ public class AboutEcareZoneActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Util.changeStatus(true,this);
+        Util.changeStatus(Constants.ONLINE,this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Util.changeStatus(false, this);
+        Util.changeStatus(Constants.IDLE, this);
     }
 }

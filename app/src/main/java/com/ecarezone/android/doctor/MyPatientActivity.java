@@ -98,7 +98,7 @@ public class MyPatientActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-         Util.changeStatus(true, this);
+         Util.changeStatus(Constants.ONLINE, this);
         if(mDoctorFragment != null) {
             mDoctorFragment.updateChatCount();
         }
@@ -107,7 +107,7 @@ public class MyPatientActivity extends EcareZoneBaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Util.changeStatus(false,this);
+        Util.changeStatus(Constants.IDLE,this);
     }
 }
 

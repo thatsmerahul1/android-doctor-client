@@ -107,7 +107,7 @@ public class HeartbeatService extends IntentService {
 
             String response = null;
             HttpClient httpClient = HttpClientBuilder.create().build();
-            HttpPost httpPost = new HttpPost("http://188.166.55.204:8080/ECZ/notification/pushstatus/" + LoginInfo.userId);
+            HttpPost httpPost = new HttpPost(Constants.ENDPOINTURL+":8080/ECZ/notification/pushstatus/" + LoginInfo.userId);
             // Set content type
             httpPost.setHeader("Content-Type", "application/json");
 

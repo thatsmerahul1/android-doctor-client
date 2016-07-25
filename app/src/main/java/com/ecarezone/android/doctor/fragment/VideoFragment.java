@@ -103,7 +103,7 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
         }
         PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(mActivity);
         Patient tempProfiles;
-        String email = inComingvideoArguments.getString("INCOMING_CALL_USER");
+        String email = inComingvideoArguments.getString("email");
         tempProfiles = profileDbApi.getProfileByEmail(email);
         if(tempProfiles != null) {
             String imageUrl = tempProfiles.avatarUrl;
@@ -115,7 +115,7 @@ public class VideoFragment extends EcareZoneBaseFragment implements View.OnClick
                         .error(R.drawable.news_other)
                         .into(incomingUserProfilePic);
             }
-            inComingVideoCallRemoteUser.setText(tempProfiles.name);
+//            inComingVideoCallRemoteUser.setText(tempProfiles.name);
             callingUser.setText(tempProfiles.name);
         }
         hangupButton.setOnClickListener(this);

@@ -12,10 +12,13 @@ import android.widget.TextView;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.fragment.AppointmentFragment;
 import com.ecarezone.android.doctor.model.pojo.AppointmentListItem;
+import com.ecarezone.android.doctor.utils.Util;
 import com.ecarezone.android.doctor.view.CircleImageView;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by 10603675 on 23-06-2016.
@@ -76,13 +79,17 @@ public class EditAppointmentDialog extends DialogFragment implements View.OnClic
 
 
         textViewPatientName.setText(mSelectdAppointment.patientName);
-        textViewTypeOfCall.setText("(" + mSelectdAppointment.callType + ")");
+        textViewTypeOfCall.setText("(" + mSelectdAppointment.callType + " call" + ")");
         Picasso.with(getActivity())
                 .load(mSelectdAppointment.profilePicUrl).resize(100, 100)
                 .centerCrop().placeholder(R.drawable.news_other)
                 .error(R.drawable.news_other)
                 .into(imgViewProfilePic);
-        textViewTime.setText(dateTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy, MMM. dd. hh:mm a");
+
+        textViewTime.setText(Util.getTimeInStringFormat(Long.parseLong(mSelectdAppointment.dateTime), sdf) +" - "  );
+
+//        textViewTime.setText(mSelectdAppointment.dateTime);
 
         if (isTimeToCall) {
 //            btnTimeToCall.setEnabled(true);

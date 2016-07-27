@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:weightSum="1">
 
     <TextView
         android:id="@+id/textViewInfo"
@@ -39,7 +40,7 @@
 
     <TextView
         android:id="@+id/textViewTypeOfCall"
-        android:layout_width="wrap_content"
+        android:layout_width="167dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
@@ -49,13 +50,14 @@
 
     <TextView
         android:id="@+id/textViewTime"
-        android:layout_width="wrap_content"
+        android:layout_width="107dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:text="Small Text"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/ecarezone_green_dark" />
+        android:textColor="@color/ecarezone_green_dark"
+        android:layout_weight="0.11" />
 
     <Button
         android:id="@+id/buttonChangeTime"

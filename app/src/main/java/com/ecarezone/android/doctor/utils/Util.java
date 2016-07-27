@@ -106,6 +106,22 @@ public class Util {
     }
 
     /**
+     *
+     * @param dateTime
+     * @param format
+     * @return
+     */
+    public static String getTimeInStringFormat(long dateTime, DateFormat format) {
+        String timeInDateFormat  = null;
+        try {
+            timeInDateFormat = format.format(dateTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return timeInDateFormat;
+    }
+
+    /**
      * reads the input stream and returns the content of the stream
      *
      * @param stream

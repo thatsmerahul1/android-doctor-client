@@ -1,5 +1,3 @@
-/* Copyright 2016 Urban Airship and Contributors */
-
 package com.ecarezone.android.doctor.gcm;
 
 import android.content.Context;
@@ -12,6 +10,10 @@ import android.util.Log;
 import com.ecarezone.android.doctor.config.Constants;
 import com.urbanairship.AirshipReceiver;
 import com.urbanairship.push.PushMessage;
+
+/**
+ * class that handles the push notification received from urban airship
+ */
 
 public class EcareZoneAirshipReceiver extends AirshipReceiver {
 
@@ -54,9 +56,7 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
         Log.i(TAG, "Received push message. Alert: " + message.getAlert() + ". posted notification: " + notificationPosted);
 
         if(message != null && !message.getAlert().isEmpty()){
-//            if(message.getAlert().startsWith("News")) {
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.PUSH_NEWS_UPDATE));
-//            }
+
             if(message.getAlert().startsWith("Patient")){
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BROADCAST_STATUS_CHANGED));
             }

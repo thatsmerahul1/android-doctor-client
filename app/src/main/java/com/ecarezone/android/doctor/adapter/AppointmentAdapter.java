@@ -17,6 +17,7 @@ import com.ecarezone.android.doctor.model.database.PatientProfileDbApi;
 import com.ecarezone.android.doctor.model.pojo.AppointmentListItem;
 import com.ecarezone.android.doctor.model.pojo.PatientListItem;
 import com.ecarezone.android.doctor.model.rest.Patient;
+import com.ecarezone.android.doctor.utils.Util;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -35,7 +36,7 @@ public class AppointmentAdapter extends BaseAdapter {
     private Context mContext;
     private List<AppointmentListItem> mAppointmentList;
     private OnButtonClickedListener mOnButtonClickedListener;
-    private SimpleDateFormat sdf;
+    private SimpleDateFormat startTime;
     PatientProfileDbApi parentPatientProfileDbApi;
 
 
@@ -44,7 +45,7 @@ public class AppointmentAdapter extends BaseAdapter {
         mContext = context;
         this.mAppointmentList = appointmentList;
         mOnButtonClickedListener = onButtonClickedListener;
-        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        startTime = new SimpleDateFormat("hh:mm ");
         parentPatientProfileDbApi = PatientProfileDbApi.getInstance(context);
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -85,7 +86,6 @@ public class AppointmentAdapter extends BaseAdapter {
                     .load(patient.avatarUrl)
                     .config(Bitmap.Config.RGB_565).fit()
                     .centerCrop()
-                    .placeholder(R.drawable.request_icon)
                     .into(pendingPatientAvatar);
         }
 
@@ -117,10 +117,19 @@ public class AppointmentAdapter extends BaseAdapter {
             if(patient != null) {
                 appointmentPatientName.setText("Patient: "+WordUtils.capitalize(patient.name));
             }
-            appointmentPendingTime.setText(sdf.format(new Date(Long.parseLong(appointment.dateTime.trim()))));
-            appointmentTypeOfCall.setText(WordUtils.capitalize(appointment.callType) + " call");
-            pendingPatientAvatar.setImageResource(R.drawable.request_icon);
 
+            long forEndTime = Long.parseLong(appointment.dateTime) + ( 30 * 60 * 1000);
+            appointmentPendingTime.setText(Util.getTimeInStringFormat(Long.parseLong(appointment.dateTime), startTime) +
+                    " - " + Util.getTimeInStringFormat((forEndTime), startTime));
+
+            appointmentTypeOfCall.setText(WordUtils.capitalize(appointment.callType) + " call");
+            if(patient != null && patient.avatarUrl != null){
+                Picasso.with(mContext)
+                        .load(patient.avatarUrl)
+                        .config(Bitmap.Config.RGB_565).fit()
+                        .centerCrop()
+                        .into(pendingPatientAvatar);
+            }
         }
         else {
             TextView appointmentTime = (TextView) view.findViewById(R.id.appointment_accepted_time);
@@ -132,7 +141,9 @@ public class AppointmentAdapter extends BaseAdapter {
                 appointedPatientName.setText("Patient: "+ WordUtils.capitalize(patient.name));
             }
             modeOfAppointment.setText(WordUtils.capitalize(appointment.callType) + " call");
-            appointmentTime.setText(sdf.format(new Date(Long.parseLong(appointment.dateTime.trim()))));
+            long forEndTime = Long.parseLong(appointment.dateTime) + ( 30 * 60 * 1000);
+            appointmentTime.setText(Util.getTimeInStringFormat(Long.parseLong(appointment.dateTime), startTime) +
+                    " - " + Util.getTimeInStringFormat((forEndTime), startTime ));
 
 
            //TODO:

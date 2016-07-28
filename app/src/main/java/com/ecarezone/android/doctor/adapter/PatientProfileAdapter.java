@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * Created by 20109804 on 6/23/2016.
+ * Created by Namitha on 6/23/2016.
  */
 public class PatientProfileAdapter extends BaseAdapter {
     private final static String TAG = PatientProfileAdapter.class.getSimpleName();
@@ -89,7 +89,6 @@ public class PatientProfileAdapter extends BaseAdapter {
                     .into(patientAvatar);
         }
 
-//      notifyDataSetChanged();
         return view;
     }
 }

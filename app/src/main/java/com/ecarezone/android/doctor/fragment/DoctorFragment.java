@@ -266,18 +266,4 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
             }
         }
     };
-   /* BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equalsIgnoreCase("send")) {
-                updateChatCount();
-            } else if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_STATUS_CHANGED)) {
-                if (intent.getBooleanExtra(Constants.SET_STATUS, false)) {
-                    setDoctorPresenceIcon("1");
-                } else {
-                    setDoctorPresenceIcon("0");
-                }
-            }
-        }
-    };*/
 }

@@ -9,7 +9,7 @@ import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 import java.io.Serializable;
 
 /**
- * Created by 20109804 on 4/22/2016.
+ * Created by Namitha on 4/22/2016.
  */
 public class PatientAcceptRequest extends RetrofitSpiceRequest<SearchDoctorsResponse, EcareZoneApi> implements Serializable {
     @Expose

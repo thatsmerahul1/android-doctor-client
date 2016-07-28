@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 /**
- * Created by 20109804 on 5/16/2016.
+ * Created by Namitha on 5/16/2016.
  */
 public class UpdatePasswordRequest extends RetrofitSpiceRequest<BaseResponse, EcareZoneApi> {
     @Expose

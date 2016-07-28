@@ -29,6 +29,7 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
     private RegistrationAdapter adapter;
     private String item;
     private String itemCode;
+    private boolean isSelectionMade = false;
 
     @Nullable
     @Override
@@ -41,6 +42,8 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
         textview_cancel = (TextView) v.findViewById(R.id.button_cancel);
         textview_ok.setOnClickListener(this);
         textview_cancel.setOnClickListener(this);
+        textview_ok.setTextColor(getResources().getColor(R.color.ecarezone_green_light));
+
 
         if (getArguments().getString(Constants.TYPE).equalsIgnoreCase(Constants.COUNTRY)) {
             listview_registration = (ListView) v.findViewById(R.id.lisview_registration);
@@ -53,6 +56,10 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
             String[] languages = getResources().getStringArray(R.array.language_array);
             String[] languageCodes = getResources().getStringArray(R.array.language_local_array);
             adapter = new RegistrationAdapter(getActivity(), R.layout.country_spinner_item, languages, languageCodes, false, getArguments().getString(Constants.LANGUAGE));
+            if(languageCodes != null){
+                isSelectionMade = true;
+                textview_ok.setTextColor(getResources().getColor(R.color.ecarezone_green_dark));
+            }
         }
         listview_registration.setAdapter(adapter);
         listview_registration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,6 +72,8 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
                         tv.setBackgroundResource(R.drawable.circle_blue_complete);
                         item = tv.getText().toString();
                         itemCode = (String) tv.getTag();
+                        isSelectionMade = true;
+                        textview_ok.setTextColor(getResources().getColor(R.color.ecarezone_green_dark));
                         continue;
                     }
 
@@ -84,12 +93,14 @@ public class RegistrationDialogFragment extends DialogFragment implements View.O
     public void onClick(View v) {
         int viewId = v.getId();
         if (viewId == R.id.button_ok) {
-            Intent i = new Intent();
-            i.putExtra(Constants.ITEM, item);
-            i.putExtra(Constants.ITEM_CODE, itemCode);
+            if(isSelectionMade) {
+                Intent i = new Intent();
+                i.putExtra(Constants.ITEM, item);
+                i.putExtra(Constants.ITEM_CODE, itemCode);
 
-            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
-            dismiss();
+                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
+                dismiss();
+            }
         } else {
             dismiss();
         }

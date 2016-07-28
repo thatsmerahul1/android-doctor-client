@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by 20109804 on 5/17/2016.
+ * Created by Namitha on 5/17/2016.
  */
 public class PatientProfileDbApi {
 

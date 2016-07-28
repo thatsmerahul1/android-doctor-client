@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by 20109804 on 5/9/2016.
+ * Created by Namitha on 5/9/2016.
  */
 public class AppointmentAdapter extends BaseAdapter {
     private Activity activity;

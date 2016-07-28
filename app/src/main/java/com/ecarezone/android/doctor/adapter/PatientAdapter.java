@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * Created by 20109804 on 4/21/2016.
+ * Created by Namitha on 4/21/2016.
  */
 public class PatientAdapter extends BaseAdapter {
     private final static String TAG = PatientAdapter.class.getSimpleName();

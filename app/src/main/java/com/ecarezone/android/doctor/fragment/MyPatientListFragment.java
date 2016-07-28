@@ -87,16 +87,12 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-//                getText(R.string.progress_dialog_loading).toString());
         checkProgress = true;
 
         initListWithData();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
                 new IntentFilter("send"));
         pullDBFromdevice();
-//        mycareDoctorAdapter.notifyDataSetChanged();
-//        progressDialog.dismiss();
     }
 
     private void initListWithData() {
@@ -216,17 +212,11 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         patientProfile.userId = patient.userId;
                     }
 
-//                    patient.userProfiles.
                     patientLists.add(patientItem);
                     PatientProfileDbApi profileDbApi = PatientProfileDbApi.getInstance(getApplicationContext());
                     profileDbApi.saveProfile(patient);
 
                 }
-//                if(patient != null) {
-//                    PatientProfileDbApi profileDbApi = new PatientProfileDbApi(getApplicationContext());
-////                    profileDbApi.saveProfile(LoginInfo.userId, patient);
-//                    profileDbApi.updateProfile(String.valueOf(LoginInfo.userId), patient);
-//                }
 
                 if (patientLists.size() == 0) {
                     myPatientListView.setVisibility(View.GONE);
@@ -326,9 +316,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                     noPatient.setVisibility(View.VISIBLE);
                 } else if (patientLists.size() > 0) {
                     noPatient.setVisibility(View.GONE);
-
-//                    mycareDoctorAdapter = new PatientAdapter(getActivity(), patientLists, mOnButtonClickedListener);
-//                    myPatientListView.setAdapter(mycareDoctorAdapter);
 
                     myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -449,20 +436,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         }
                     }
                     mycareDoctorAdapter.notifyDataSetChanged();
-//                String status;
-//                if (intent.getBooleanExtra(Constants.SET_STATUS, false)) {
-//                    status = "1";
-//                } else {
-//                    status = "0";
-//                }
-//
-//                for (PatientListItem patientListItem : patientLists){
-//                    if(patientListItem.patientId == 1){
-//                        patientListItem.status = status;
-//                        break;
-//                    }
-//                }
-//                mycareDoctorAdapter.notifyDataSetChanged();
                 }
 
             }

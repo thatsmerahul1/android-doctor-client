@@ -6,7 +6,7 @@ import com.j256.ormlite.field.DatabaseField;
 import java.io.Serializable;
 
 /**
- * Created by 20109804 on 4/28/2016.
+ * Created by Namitha on 4/28/2016.
  */
 public class DoctorProfile implements Serializable {
 

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by 20109804 on 4/21/2016.
+ * Created by Namitha on 4/21/2016.
  */
 public class Patient implements Parcelable, Serializable {
     @Expose

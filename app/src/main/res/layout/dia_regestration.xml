@@ -42,7 +42,7 @@
             android:minWidth="80dp"
             android:layout_gravity="center"
             android:text="@string/welcome_button_ok"
-            android:textColor="@color/ecarezone_green_dark"
+            android:textColor="@color/ecarezone_green_light"
             android:layout_alignParentTop="true"
             android:textSize="20sp"
             android:gravity="center"

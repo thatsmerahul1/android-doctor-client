@@ -498,41 +498,6 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                 dialog.dismiss();
             }
         });
-
-
-        /*new AlertDialog.Builder(getActivity())
-                .setItems(R.array.photo_options, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        if (which == 1) {
-                            if (PermissionUtil.isPermissionRequired()
-                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
-                                    PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS).length > 0) {
-
-                                PermissionUtil.setAllPermission(getActivity(),
-                                        PermissionUtil.REQUEST_CODE_ASK_CAPTURE_PHOTO_PERMISSIONS,
-                                        PermissionUtil.CAPTURE_PHOTO_FROM_CAMERA_PERMISSIONS);
-                            } else {
-                                // already have all permissions
-                                mSelectedPhotoPath = ImageUtil.dispatchTakePictureIntent(getActivity(),false,null);
-                            }
-                        } else {
-                            if (PermissionUtil.isPermissionRequired()
-                                    && PermissionUtil.getAllpermissionRequired(getActivity(),
-                                    PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS).length > 0) {
-
-                                PermissionUtil.setAllPermission(getActivity(),
-                                        PermissionUtil.REQUEST_CODE_ASK_WRITE_EXTERNAL_STORAGE_PERMISSIONS,
-                                        PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSIONS);
-                            } else {
-                                // already have all permissions
-                                dispatchSelectFromGalleryIntent();
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();*/
     }
 
     private void showGenderSelectorDialog() {

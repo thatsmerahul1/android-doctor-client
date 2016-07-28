@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by 20109804 on 6/23/2016.
+ * Created by Namitha on 6/23/2016.
  */
 public class PatientUserProfileDbiApi {
 private static DbHelper mDbHelper;

@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import java.util.List;
 
 /**
- * Created by 20109804 on 5/5/2016.
+ * Created by Namitha on 5/5/2016.
  */
 public class PatientListItem {
 

@@ -8,7 +8,7 @@ import com.j256.ormlite.field.DatabaseField;
 import java.util.List;
 
 /**
- * Created by 20109804 on 6/24/2016.
+ * Created by Namitha on 6/24/2016.
  */
 public class PatientUserProfileListItem {
     @Expose

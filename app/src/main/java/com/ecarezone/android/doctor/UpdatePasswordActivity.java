@@ -23,7 +23,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
- * Created by 20109804 on 5/16/2016.
+ * Created by Namitha on 5/16/2016.
  */
 public class UpdatePasswordActivity extends EcareZoneBaseActivity {
     private static String TAG = UpdatePasswordActivity.class.getSimpleName();

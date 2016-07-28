@@ -59,11 +59,6 @@ public class HeartbeatService extends IntentService {
         if (intent.getBooleanExtra(Constants.UPDATE_STATUS, false)) {
             doctorApplication = (DoctorApplication) getApplicationContext();
             if (doctorApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
-//                if (!doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
-//                    status = Constants.IDLE;
-//                } else {
-//                    status = Constants.ONLINE;
-//                }
 
                 if (doctorApplication.getLastAvailabilityStaus() != doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
 

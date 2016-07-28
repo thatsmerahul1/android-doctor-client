@@ -16,6 +16,7 @@ import com.ecarezone.android.doctor.utils.Util;
 import com.ecarezone.android.doctor.view.CircleImageView;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +33,7 @@ public class EditAppointmentDialog extends DialogFragment implements View.OnClic
     private TextView textViewPatientName;
     private TextView textViewTypeOfCall;
     private TextView textViewTime;
+    private TextView textViewDate;
     private CircleImageView imgViewProfilePic;
 
     private static AppointmentFragment.OnAppointmentOptionButtonClickListener mOptionButtonClickListener;
@@ -67,7 +69,7 @@ public class EditAppointmentDialog extends DialogFragment implements View.OnClic
         textViewTypeOfCall = (TextView) view.findViewById(R.id.textViewTypeOfCall);
         textViewTime = (TextView) view.findViewById(R.id.textViewTime);
         imgViewProfilePic = (CircleImageView) view.findViewById(R.id.profilePic);
-
+        textViewDate = (TextView) view.findViewById(R.id.textViewDate);
 //        Button btnTimeToCall = (Button) view.findViewById(R.id.buttonTimeToCall);
 //        btnTimeToCall.setOnClickListener(this);
 
@@ -79,17 +81,22 @@ public class EditAppointmentDialog extends DialogFragment implements View.OnClic
 
 
         textViewPatientName.setText(mSelectdAppointment.patientName);
-        textViewTypeOfCall.setText("(" + mSelectdAppointment.callType + " call" + ")");
+        textViewTypeOfCall.setText("(" + WordUtils.capitalize(mSelectdAppointment.callType) + " call" + ")");
         Picasso.with(getActivity())
                 .load(mSelectdAppointment.profilePicUrl).resize(100, 100)
                 .centerCrop().placeholder(R.drawable.news_other)
                 .error(R.drawable.news_other)
                 .into(imgViewProfilePic);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy, MMM. dd. hh:mm a");
+        SimpleDateFormat forDate = new SimpleDateFormat("yyyy, MMM. dd.");
+        textViewDate.setText(Util.getTimeInStringFormat(Long.parseLong(mSelectdAppointment.dateTime), forDate));
 
-        textViewTime.setText(Util.getTimeInStringFormat(Long.parseLong(mSelectdAppointment.dateTime), sdf) +" - "  );
+        SimpleDateFormat startTime = new SimpleDateFormat("hh:mm ");
+        SimpleDateFormat endTime = new SimpleDateFormat("hh:mm a");
 
-//        textViewTime.setText(mSelectdAppointment.dateTime);
+        long forEndTime = Long.parseLong(mSelectdAppointment.dateTime) + ( 30 * 60 * 1000);
+        textViewTime.setText(Util.getTimeInStringFormat(Long.parseLong(mSelectdAppointment.dateTime), startTime) +
+                " - " +Util.getTimeInStringFormat((forEndTime), endTime) );
+
 
         if (isTimeToCall) {
 //            btnTimeToCall.setEnabled(true);

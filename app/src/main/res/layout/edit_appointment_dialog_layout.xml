@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/textViewTypeOfCall"
-        android:layout_width="167dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
@@ -49,16 +49,23 @@
         android:textColor="@color/text_black_color_selector" />
 
     <TextView
-        android:id="@+id/textViewTime"
-        android:layout_width="107dp"
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:text="Small Text"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/ecarezone_green_dark"
-        android:layout_weight="0.11" />
-
+        android:textColor="@color/ecarezone_green_dark" />
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/ecarezone_green_dark" />
     <Button
         android:id="@+id/buttonChangeTime"
         android:layout_width="match_parent"

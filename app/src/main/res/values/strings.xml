@@ -233,7 +233,7 @@
     <string name="cancelling_appointment">Cancelling appointment, please wait...</string>
     <string name="appointment_detail_1">Appointment detail</string>
     <string name="doctor_appointment">Make an appointment</string>
-    <string name="doctor_appointment_header">Appointment</string>
+    <string name="doctor_appointment_header">Appointments</string>
     <string name="appointment_time">Time</string>
     <string name="appointment_detail">Appointment Detail</string>
     <string name="change_date_and_time">Change date and time</string>

@@ -115,7 +115,7 @@ public class AppointmentAdapter extends BaseAdapter {
             });
 
             if(patient != null) {
-                appointmentPatientName.setText("Patient: "+patient.name);
+                appointmentPatientName.setText("Patient: "+WordUtils.capitalize(patient.name));
             }
             appointmentPendingTime.setText(sdf.format(new Date(Long.parseLong(appointment.dateTime.trim()))));
             appointmentTypeOfCall.setText(WordUtils.capitalize(appointment.callType) + " call");
@@ -129,7 +129,7 @@ public class AppointmentAdapter extends BaseAdapter {
             View patientPresence = view.findViewById(R.id.patient_presence);
 
             if(patient != null) {
-                appointedPatientName.setText("Patient: "+patient.name);
+                appointedPatientName.setText("Patient: "+ WordUtils.capitalize(patient.name));
             }
             modeOfAppointment.setText(WordUtils.capitalize(appointment.callType) + " call");
             appointmentTime.setText(sdf.format(new Date(Long.parseLong(appointment.dateTime.trim()))));

@@ -58,16 +58,18 @@ public class HeartbeatService extends IntentService {
         }
         if (intent.getBooleanExtra(Constants.UPDATE_STATUS, false)) {
             doctorApplication = (DoctorApplication) getApplicationContext();
-            if (doctorApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
+            if(doctorApplication.getNameValuePair() != null) {
+                if (doctorApplication.getNameValuePair().containsKey(Constants.STATUS_CHANGE)) {
 
-                if (doctorApplication.getLastAvailabilityStaus() != doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
+                    if (doctorApplication.getLastAvailabilityStaus() != doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE)) {
 
-                    ChangeStatusRequest changeStatusService = new ChangeStatusRequest(doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
-                    changeStatusService.startHttpRequest();
+                        ChangeStatusRequest changeStatusService = new ChangeStatusRequest(doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
+                        changeStatusService.startHttpRequest();
+                    }
+                } else {
+                    doctorApplication.getNameValuePair().put(Constants.STATUS_CHANGE, doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
+                    status = Constants.ONLINE;
                 }
-            } else {
-                doctorApplication.getNameValuePair().put(Constants.STATUS_CHANGE, doctorApplication.getNameValuePair().get(Constants.STATUS_CHANGE));
-                status = Constants.ONLINE;
             }
             Log.i("HeartbeatService", "status updated");
         }
@@ -89,7 +91,8 @@ public class HeartbeatService extends IntentService {
                 try {
                     jsonObj.put("email", LoginInfo.userName);
                     jsonObj.put("password", LoginInfo.hashedPassword);
-                    jsonObj.put("name", userProfile.name);
+//                    jsonObj.put("name", userProfile.name);
+                    jsonObj.put("name", userProfile.name == null ? "" : userProfile.name);
                     jsonObj.put("role", Constants.USER_ROLE);
                     jsonObj.put("status", status);
                     jsonObj.put("deviceUnique", Constants.deviceUnique);

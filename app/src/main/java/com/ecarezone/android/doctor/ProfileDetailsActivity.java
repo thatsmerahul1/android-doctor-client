@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.UserProfileDetailsFragment;
@@ -22,6 +24,7 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
 
     public static String IS_NEW_PROFILE = "is_new_profile";
     public static String PROFILE_ID = "profile_id";
+    private EditText myBio;
 
     @Override
     protected String getCallerName() {
@@ -76,6 +79,12 @@ public class ProfileDetailsActivity extends EcareZoneBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         userProfileDetailsFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void edit(View v)
+    {
+        myBio = (EditText) findViewById(R.id.myBio);
+        myBio.setEnabled(true);
     }
 
     @Override

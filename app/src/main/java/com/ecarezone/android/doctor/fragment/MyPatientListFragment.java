@@ -106,7 +106,7 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             progressDialog.dismiss();
         } else {
             Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
-            progressDialog.dismiss();
+
 
         }
     }

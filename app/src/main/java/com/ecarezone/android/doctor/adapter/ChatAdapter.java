@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ecarezone.android.doctor.NetworkCheck;
 import com.ecarezone.android.doctor.R;
 import com.ecarezone.android.doctor.config.LoginInfo;
 import com.ecarezone.android.doctor.model.Chat;
@@ -41,7 +43,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<Chat> mMessages;
     private SimpleDateFormat mFormatter;
     private Context mContext;
-    String recipient;
+    private String recipientId;
     private String[] localImgFileArr;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");//2016-05-26 14:14:52
 
@@ -84,14 +86,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return mMessages.get(i).getChatType().equals(ChatDbApi.CHAT_INCOMING) ? DIRECTION_INCOMING : DIRECTION_OUTGOING;
     }
 
-    public ChatAdapter(Context context, String recipient) {
+    public ChatAdapter(Context context, String recipientId) {
         mMessages = new ArrayList<Chat>();
         mFormatter = new SimpleDateFormat("HH:mm");
         mContext = context;
-        this.recipient = recipient;
-        //creating directory in external storage under eCareZone/recipient/incoming
+        this.recipientId = recipientId;
+        //creating directory in external storage under eCareZone/recipientId/incoming
         direct = new File(Environment.getExternalStorageDirectory()
-                + "/eCareZone" + "/" + recipient + "/incoming");
+                + "/eCareZone" + "/" + recipientId + "/incoming");
         ;
     }
 
@@ -185,7 +187,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
                 holder.mChartImage.setImageBitmap(bitmap);
             } else {
-                Picasso.with(mContext)
+                String  imgPath1 = mMessages.get(position).getChatUserId();
+                if(NetworkCheck.isNetworkAvailable(mContext)) {
+                    ImageUtil.downloadFile(
+                            mContext.getApplicationContext(), chat.getInComingImageUrl(),
+                            chat.getTimeStamp(), imgPath1);
+                }
+                else {
+                    Toast.makeText(mContext, "Please check your internet connection", Toast.LENGTH_LONG).show();
+                }
+
+               /* Picasso.with(mContext)
                         .load(chat.getInComingImageUrl())
                         .resize(200,200)
                         .into(new Target() {
@@ -204,13 +216,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             public void onPrepareLoad(Drawable placeHolderDrawable) {
                                 holder.mProgressBar.setVisibility(View.VISIBLE);
                             }
-                        });
+                        });*/
+
             }
-            final String finalImagePath = imagePath;
- 
+//            final String finalImagePath = imagePath;
+            holder.mChartImage.setTag(imagePath);
             holder.mChartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String finalImagePath = (String) v.getTag();
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse("file://" + finalImagePath),"image/*");
@@ -252,6 +266,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         @Override
         protected void onPostExecute(UploadImageResponse uploadImageResponse) {
             SinchUtil.getSinchServiceInterface().sendMessage(chat.getChatUserId(), uploadImageResponse.data.avatarUrl);
+            holder.mChartImage.setImageBitmap(ImageUtil.createScaledBitmap(chat.getDeviceImagePath(), 200, 200));
+            holder.mProgressBar.setVisibility(View.GONE);
         }
     }
 

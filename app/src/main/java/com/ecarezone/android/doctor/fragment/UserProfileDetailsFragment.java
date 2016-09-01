@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecarezone.android.doctor.NetworkCheck;
@@ -83,7 +84,9 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
     private String mSelectedPhotoPath = null;
     private String mUploadedImageUrl = null;
     private ProgressDialog mProgressDialog;
+    private EditText myBio;
     Spinner spec;
+    TextView mErrorText;
     Bitmap imgBitmap;
 
     @Override
@@ -122,6 +125,7 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         ProfileDbApi profileDbApi = ProfileDbApi.getInstance(getApplicationContext());
         mProfile = profileDbApi.getProfile(LoginInfo.userId.toString());
 
+        mErrorText = (TextView) view.findViewById(R.id.txtErrorMsg);
         spec = (Spinner) view.findViewById(R.id.specializedArea);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mActivity,
                 R.array.array_name, R.layout.right_aligned_simple_spinner_item);
@@ -350,6 +354,14 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
                     getResources().getString(R.string.progress_dialog_save));
             mProgressDialog.show();
             super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            myBio = (EditText) view.findViewById(R.id.myBio);
+            myBio.setEnabled(false);
+
         }
 
         @Override
@@ -649,8 +661,38 @@ public class UserProfileDetailsFragment extends EcareZoneBaseFragment implements
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
-            setDateToDobField(dateSb.toString());
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+            mErrorText.setText("");
+
+            Calendar cal = Calendar.getInstance();
+            int yearT = cal.get(Calendar.YEAR);
+            int monthT = cal.get(Calendar.MONTH);
+            int dayT = cal.get(Calendar.DAY_OF_MONTH);
+
+            boolean isDateValid = true;
+            if (yearT < year) {
+                isDateValid = false;
+            } else if (yearT == year && monthT < month) {
+                isDateValid = false;
+            } else if (yearT == year && monthT <= month && dayT <= day) {
+                isDateValid = false;
+            }
+
+            if (isDateValid) {
+                String monthStr;
+                if (month + 1 < 10) {
+                    monthStr = "0" + (month + 1);
+                } else {
+                    monthStr = String.valueOf(month + 1);
+                }
+                StringBuilder dateSb = new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day);
+                setDateToDobField(dateSb.toString());
+            } else {
+                mErrorText.setText(getString(R.string.invalid_birth_date));
+            }
+
         }
     }
 

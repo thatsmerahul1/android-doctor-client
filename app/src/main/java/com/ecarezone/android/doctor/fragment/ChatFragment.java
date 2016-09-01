@@ -2,8 +2,10 @@ package com.ecarezone.android.doctor.fragment;
 
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -62,7 +64,10 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     String recipient = "ecareuser@mail.com";
     private String deviceImagePath;
     Map<String, Integer> perms = new HashMap<>();
-    String recipientName;
+    private String recipientName;
+    private String recipientEmailId;
+    private BroadcastReceiver onDownloadFinishReceiver;
+
     @Override
     protected String getCallerName() {
         return null;
@@ -71,6 +76,13 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getApplicationContext().registerReceiver(onDownloadFinishReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                } ,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         final View view = inflater.inflate(R.layout.frag_chat, container, false);
         getAllComponent(view);
         return view;
@@ -78,7 +90,9 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
 
     private void getAllComponent(View view) {
         recipientName = getArguments().getString(Constants.EXTRA_NAME);
-        chatAdapter = new ChatAdapter(getActivity(),recipientName);
+        recipientEmailId = getArguments().getString(Constants.EXTRA_EMAIL);
+
+        chatAdapter = new ChatAdapter(getActivity(), recipientEmailId);
         chatList = (RecyclerView) view.findViewById(R.id.chat_mesage_list);
         chatList.setAdapter(chatAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -104,8 +118,8 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         cameraBtn.setOnClickListener(this);
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        recipient = getArguments().getString(Constants.EXTRA_EMAIL);
-        chatAdapter.getChatHistory(recipient);
+
+        chatAdapter.getChatHistory(recipientEmailId);
         ((ChatActivity) getActivity()).getSupportActionBar()
                 .setTitle(recipientName);
     }
@@ -131,7 +145,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     public void onIncomingMessage(MessageClient messageClient, Message message) {
         String messageSenderId = message.getSenderId();
         if(messageSenderId != null) {
-            if (!messageSenderId.equals(recipient)) {
+            if (!messageSenderId.equals(recipientEmailId)) {
                 return;
             }
             chatAdapter.addMessage(incomingMessage(message));
@@ -141,7 +155,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
 
     private void takePicture(){
         chat = new Chat();
-        deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity(), true, recipientName);
+        deviceImagePath = ImageUtil.dispatchTakePictureIntent(getActivity(), true, recipientEmailId);
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(deviceImagePath);
         Uri contentUri = Uri.fromFile(f);
@@ -177,7 +191,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     private Date mMessageReceivedDate;
     private void sendMessage(String textBody, String messageType) {
         chat = new Chat();
-        if (recipient.isEmpty()) {
+        if (recipientEmailId.isEmpty()) {
             Toast.makeText(getActivity(), "No recipient added", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -186,7 +200,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
             return;
         }
 
-        chat.setChatUserId(recipient);
+        chat.setChatUserId(recipientEmailId);
         chatBox.setText("");
         mMessageReceivedDate = new Date();
         chat.setTimeStamp(mMessageReceivedDate);
@@ -198,7 +212,7 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
                 chat.setDeviceImagePath(deviceImagePath);
             } else {
                 chat.setMessageText(textBody);
-                SinchUtil.getSinchServiceInterface().sendMessage(recipient, textBody);
+                SinchUtil.getSinchServiceInterface().sendMessage(recipientEmailId, textBody);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -217,10 +231,11 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
     private Chat incomingMessage(Message message) {
         chat = new Chat();
         chat.setChatUserId(message.getSenderId());
+        chat.setSenderId(recipientEmailId);
         if (message.getTextBody().contains(Constants.ENDPOINTURL)) {
             chat.setInComingImageUrl(message.getTextBody());
             if(NetworkCheck.isNetworkAvailable(getActivity())) {
-                downloadFile(chat.getInComingImageUrl(), message.getTimestamp());
+                //    ImageUtil.downloadFile(getApplicationContext(), chat.getInComingImageUrl(), message.getTimestamp() ,recipientEmailId );
             } else {
                 Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_LONG).show();
             }
@@ -231,34 +246,6 @@ public class ChatFragment extends EcareZoneBaseFragment implements View.OnClickL
         chat.setChatType(ChatDbApi.CHAT_INCOMING);
 
         return chat;
-    }
-
-    //store images in sd card
-    public void downloadFile(String uri, Date fileName) {
-        File direct = new File(Environment.getExternalStorageDirectory()
-                + "/eCareZone"+ "/" + recipientName + "/incoming");
-
-        if (!direct.exists()) {
-            direct.mkdirs();
-        }
-
-        DownloadManager mgr = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-
-        Uri downloadUri = Uri.parse(uri);
-        DownloadManager.Request request = new DownloadManager.Request(
-                downloadUri);
-
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
-        String todayDate = dateFormat.format(fileName);
-
-        request.setAllowedNetworkTypes(
-                DownloadManager.Request.NETWORK_WIFI
-                        | DownloadManager.Request.NETWORK_MOBILE)
-                        .setDestinationInExternalPublicDir("/eCareZone" + "/" + recipientName + "/incoming", todayDate + ".jpg");
-
-        mgr.enqueue(request);
-
     }
 
     @Override

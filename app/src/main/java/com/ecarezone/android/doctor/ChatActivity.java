@@ -1,10 +1,16 @@
 package com.ecarezone.android.doctor;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.ecarezone.android.doctor.config.Constants;
 import com.ecarezone.android.doctor.fragment.ChatFragment;
@@ -19,12 +25,14 @@ public class ChatActivity extends EcareZoneBaseActivity {
     private ActionBar mActionBar = null;
     private Toolbar mToolBar = null;
     private ChatFragment chatFragment;
+    Activity activity;
 
     @Override
     protected String getCallerName() {
         return ChatActivity.class.getSimpleName();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         chatFragment = new ChatFragment();
@@ -32,6 +40,19 @@ public class ChatActivity extends EcareZoneBaseActivity {
         setContentView(R.layout.act_chat);
         Bundle data = getIntent().getExtras();
         onNavigationChanged(R.layout.frag_chat, ((data == null) ? null : data));
+        activity = this;
+        Window window = activity.getWindow();
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+// clear FLAG_TRANSLUCENT_STATUS flag:
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+            window.setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.ecarezone_green_dark_2));
+        }
         mToolBar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);

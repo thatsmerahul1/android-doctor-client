@@ -88,10 +88,11 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
-                getText(R.string.progress_dialog_loading).toString());
+
         patientLists.clear();
         if (NetworkCheck.isNetworkAvailable(getActivity())) {
+            progressDialog = ProgressDialogUtil.getProgressDialog(getActivity(),
+                    getText(R.string.progress_dialog_loading).toString());
             populatePendingPatientList();
             populateMyCarePatientList();
             progressDialog.dismiss();
@@ -153,13 +154,13 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
 
                 } else if (patientLists.size() > 0) {
                     myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
+                       /* @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i(TAG, "position = " + position);
                             Bundle data = new Bundle();
 //                    	noMessage.setVisibility(View.GONE);
-                            if (myPatientListView.getOnItemClickListener() == null) {
-                                myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            if (myPatientListView.getOnItemClickListener() != null) {
+                                myPatientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {*/
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         Log.i(TAG, "position = " + position);
@@ -202,11 +203,11 @@ public class MessagesListFragment extends EcareZoneBaseFragment {
                                 progressDialog.dismiss();
                             }
                         }
-                    });
+
                 }
             }
-        }
-    }
+
+
 
     public final class PopulateMyCareDoctorListRequestListener implements RequestListener<SearchDoctorsResponse> {
 

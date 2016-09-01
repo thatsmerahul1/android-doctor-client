@@ -70,7 +70,7 @@
     <string name="profile_details_registration_id">Registration ID</string>
     <string name="profile_details_my_bio">My bio</string>
     <string name="profile_details_edit">Edit</string>
-
+    <string name="invalid_birth_date">Invalid birth date</string>
     <string name="imageutil_camera_not_found">Camera application not found</string>
 
     <!-- Progress dialog -->

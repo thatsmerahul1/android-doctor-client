@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -93,6 +94,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
     private int appointmentIdRespondedTo;
     private EditAppointmentDialog editAppointmentDialog;
     private AppointmentDbApi mAppointmentDbApi;
+    private static final String TAG =  "AppointmentFragment";
 
     private static final int HTTP_STATUS_OK = 200;
 
@@ -236,9 +238,9 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
         adapter.notifyDataSetChanged();
     }
 
-    private void getAllComponent(View view) {
+   /* private void getAllComponent(View view) {
 
-    }
+    }*/
 
     private void populateMyAppointmentListFromServer() {
         progressDialog = new ProgressDialog(getActivity());
@@ -250,7 +252,19 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
     private CalendarView.OnDateChangeListener mDateChangeListener = new CalendarView.OnDateChangeListener() {
         @Override
         public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-            populateAppointmentList();
+            final Calendar c = Calendar.getInstance();
+            int year_curr = c.get(Calendar.YEAR);
+            int month_curr = c.get(Calendar.MONTH);
+            int day_curr = c.get(Calendar.DAY_OF_MONTH);
+            if(year_curr>year || year_curr== year&& month_curr> month || year_curr == year&& month_curr== month && day_curr > dayOfMonth)
+            {
+                mAppointmentList.clear();
+                adapter.notifyDataSetChanged();
+                Log.i(TAG , "selected date is less than current date");
+            }
+            else {
+                populateAppointmentList();
+            }
         }
     };
 
@@ -351,6 +365,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
 
                     }
                 }
+
             } else {
                 Toast.makeText(getApplicationContext(), "Failed to get appointments: " + appointmentResponse.data, Toast.LENGTH_LONG).show();
             }
@@ -407,6 +422,8 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                         }
                         populateAppointmentList();
                     }
+
+                    Util.setAppointmentAlarm(getApplicationContext());
                 }
             }
         }

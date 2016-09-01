@@ -1,6 +1,8 @@
 package com.ecarezone.android.doctor.utils;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -133,9 +135,9 @@ public class ImageUtil {
     }
 
     /* creates an image in external storage and returns the File */
-    public static File createChatImageFile( String recipient) throws IOException {
+    public static File createChatImageFile( String senderID) throws IOException {
           File storageDir = new File(Environment.getExternalStorageDirectory()
-                +  "/eCareZone"+ "/" + recipient + "/outgoing");
+                +  "/eCareZone"+ "/" + senderID + "/outgoing");
 
         if (!storageDir.exists()) {
             storageDir.mkdirs();
@@ -168,7 +170,7 @@ public class ImageUtil {
     /* fires an intent to open camera to take a photo.
     *  Passes the empty file through bundle to place the captured photo into it
     * */
-    public static String dispatchTakePictureIntent(Activity context, boolean fromChat, String recipient) {
+    public static String dispatchTakePictureIntent(Activity context, boolean fromChat, String senderID) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String imagePath = null;
         // Ensure that there's a camera activity to handle the intent
@@ -177,7 +179,7 @@ public class ImageUtil {
             File photoFile = null;
             try {
                 if(fromChat) {
-                    photoFile = ImageUtil.createChatImageFile(recipient);
+                    photoFile = ImageUtil.createChatImageFile(senderID);
                 } else {
                     photoFile = ImageUtil.createImageFile();
                 }
@@ -218,5 +220,33 @@ public class ImageUtil {
             e.printStackTrace();
         }
         return file;
+    }
+
+    //store images in sd card
+    public static void downloadFile(Context context, String uri, Date fileName , String senderID) {
+        File direct = new File(Environment.getExternalStorageDirectory()
+                + "/eCareZone"+ "/" + senderID + "/incoming");
+
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
+
+        DownloadManager mgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uri);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss");
+        String todayDate = dateFormat.format(fileName);
+
+        request.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI
+                        | DownloadManager.Request.NETWORK_MOBILE)
+                .setDestinationInExternalPublicDir("/eCareZone" + "/" + senderID + "/incoming", todayDate + ".jpg");
+
+        mgr.enqueue(request);
+
     }
 }

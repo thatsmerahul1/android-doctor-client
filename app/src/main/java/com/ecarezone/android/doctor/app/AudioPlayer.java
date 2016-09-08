@@ -36,30 +36,25 @@ public class AudioPlayer {
     }
 
     public void playRingtone() {
-        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        AudioManager mobilemode = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 
         // Honour silent mode
         switch (audioManager.getRingerMode()) {
-            case AudioManager.RINGER_MODE_NORMAL:
-                mPlayer = new MediaPlayer();
-                mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                Log.e(LOG_TAG, "maxVolume::" + maxVolume);
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_PLAY_SOUND);
-                Uri ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-                Log.e(LOG_TAG, "ringtone::" + ringtone.getPath());
-                try {
-                    mPlayer.setDataSource(mContext, ringtone);
-                    mPlayer.prepare();
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Could not setup media player for ringtone");
-                    mPlayer = null;
-                    return;
-                }
-                mPlayer.setLooping(true);
-                mPlayer.setVolume(VOLUME, VOLUME);
-                mPlayer.start();
+            case AudioManager.RINGER_MODE_SILENT:
+                Log.i("MyApp","Silent mode");
+
+                mobilemode.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                mobilemode.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
                 break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                Log.i("MyApp","Vibrate mode");
+                mobilemode.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                mobilemode.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
+                break;
+            case AudioManager.RINGER_MODE_NORMAL:
+                Log.i("MyApp","Normal mode");
+                break;
+
         }
     }
 

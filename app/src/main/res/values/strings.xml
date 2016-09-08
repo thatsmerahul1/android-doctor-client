@@ -185,7 +185,7 @@
     <string name="error_user_registration">@string/error_user_login</string>
     <string name="error_user_name">Please enter a valid email address as user name</string>
     <string name="error_password_less_than_registration">Password must be minimum 8 character</string>
-
+    <string name="error_current_password">Current Password is Not Correct</string>
     <string name="cancel" translatable="false">Cancel</string>
     <string name="welcome_button_send">send</string>
 

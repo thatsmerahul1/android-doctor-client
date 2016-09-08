@@ -9,12 +9,13 @@
         android:id="@+id/doctor_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="7">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight="3.5"
             android:background="@android:color/white"
             android:orientation="vertical">
 
@@ -53,15 +54,17 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.57">
+                android:orientation="vertical"
+                >
 
                 <com.ecarezone.android.doctor.view.CircleImageView
                     android:id="@+id/doctor_profile_pic_id"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
+                    android:layout_gravity="center"
                     android:layout_centerInParent="true"
                     android:src="@drawable/dr_john_photo"></com.ecarezone.android.doctor.view.CircleImageView>
 
@@ -69,15 +72,16 @@
                     android:id="@+id/doctor_name_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_below="@+id/doctor_profile_pic_id"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:text="@string/doctor_name1"
                     android:textColor="@color/text_blue_color_selector"
                     android:textSize="20sp" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -85,13 +89,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="3.5"
+
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:orientation="horizontal">
 
                 <FrameLayout
@@ -119,7 +125,7 @@
                         android:background="@drawable/circle_red"
                         android:gravity="center"
                         android:layout_marginLeft="@dimen/unread_chat_circle_margin"
-                        android:layout_marginBottom="@dimen/unread_chat_circle_margin"
+                        android:layout_marginBottom="27dp"
                         android:layout_gravity="center"
                         android:paddingBottom="1dp"
                         android:textColor="@android:color/white"
@@ -161,6 +167,7 @@
                 android:layout_marginTop="30dp"
                 android:enabled="false"
                 android:minWidth="220dp"
+                android:background="@drawable/grey_button_oval"
                 android:text="@string/patient_chat_history" />
         </LinearLayout>
 

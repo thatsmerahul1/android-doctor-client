@@ -188,9 +188,9 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
 
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTime(new Date(mCalendarView.getDate()));
-        endCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        /*endCalendar.set(Calendar.HOUR_OF_DAY, 0);
         endCalendar.set(Calendar.MINUTE, 0);
-        endCalendar.set(Calendar.SECOND, 0);
+        endCalendar.set(Calendar.SECOND, 0);*/
         long startDate = endCalendar.getTimeInMillis();
 
 //      List<Appointment> appoList1 = appointmentDbApi.getAppointmentHistory(253);
@@ -217,7 +217,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
             mAppointmentList.add(appointmentItem);
         }
 
-        List<Appointment> appoPendingList = appointmentDbApi.getAllAppointments(false);
+        List<Appointment> appoPendingList = appointmentDbApi.getAllAppointments(false, startDate, endDate);
         for (Appointment appointment : appoPendingList) {
 
             AppointmentListItem appointmentItem = new AppointmentListItem();

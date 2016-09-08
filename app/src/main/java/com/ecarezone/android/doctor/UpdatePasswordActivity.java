@@ -136,9 +136,11 @@ public class UpdatePasswordActivity extends EcareZoneBaseActivity {
         @Override
         public void onRequestSuccess(final BaseResponse baseResponse) {
 
+            String error_message ;
+            error_message = baseResponse.status.message;
             progressDialog.dismiss();
             mTextViewerror.setVisibility(View.VISIBLE);
-            mTextViewerror.setText(baseResponse.status.message);
+            mTextViewerror.setText(error_message);
             if (baseResponse.status.code == 200) {
                 LoginInfo.hashedPassword = newPwd;
             }

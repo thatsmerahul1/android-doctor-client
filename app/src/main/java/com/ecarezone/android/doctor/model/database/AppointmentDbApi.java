@@ -66,6 +66,8 @@ public class AppointmentDbApi {
             QueryBuilder<Appointment, Integer> queryBuilder = chatDao.queryBuilder();
             return queryBuilder.where().eq(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, patientId)
                     .and()
+                    .gt(DbContract.Appointments.COLUMN_NAME_DATE_TIME, System.currentTimeMillis())
+                    .and()
                     .eq(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, isConfirmed).query();
         } catch (SQLException e) {
             e.printStackTrace();

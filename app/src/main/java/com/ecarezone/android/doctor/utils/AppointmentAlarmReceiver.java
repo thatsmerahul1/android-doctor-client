@@ -21,24 +21,34 @@ public class AppointmentAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
 //       String doctorName = intent.getStringExtra("doctor_name");
-       String appointment_type = intent.getStringExtra("appointment_type");
-       int docId = intent.getIntExtra("patId", 0);
 
-        PatientProfileDbApi patientProfileDbApi = PatientProfileDbApi.getInstance(context);
-        Patient patient = patientProfileDbApi.getProfile(String.valueOf(intent.getIntExtra("patId", 0)));
 
-        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
-                .setContentTitle("Appointment with " + patient.name)
-                .setContentText("You have an "+appointment_type+" appointment with "+patient.name)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setColor(Color.BLUE)
-                .setAutoCancel(true);
+        // Log.e("Appointment alarm", "Heartbeat method called. ");
+      /*  if(intent.getAction().equalsIgnoreCase("START_ALARM")) {
+            String doctorName = intent.getStringExtra("doctor_name");
+            String appointment_type = intent.getStringExtra("appointment_type");
+            int docId = intent.getIntExtra("docId", 0);
+*/
+        //
+        if(intent.getAction().equalsIgnoreCase("START_ALARM")) {
+            String appointment_type = intent.getStringExtra("appointment_type");
+            int docId = intent.getIntExtra("patId", 0);
 
-        Notification notification = mNotifyBuilder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(docId, notification);
+            PatientProfileDbApi patientProfileDbApi = PatientProfileDbApi.getInstance(context);
+            Patient patient = patientProfileDbApi.getProfile(String.valueOf(intent.getIntExtra("patId", 0)));
 
+            NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(context)
+                    .setContentTitle("Appointment with " + patient.name)
+                    .setContentText("You have an "+appointment_type+" appointment with "+patient.name)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setDefaults(Notification.DEFAULT_SOUND)
+                    .setColor(Color.BLUE)
+                    .setAutoCancel(true);
+
+            Notification notification = mNotifyBuilder.build();
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(docId, notification);
+        }
     }
 }

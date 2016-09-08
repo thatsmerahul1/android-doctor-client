@@ -171,20 +171,34 @@ public class Util {
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
                     Intent appointmentIntent = new Intent(context, AppointmentAlarmReceiver.class);
+                    appointmentIntent.setAction("START_ALARM");
                     appointmentIntent.putExtra("doctor_name", LoginInfo.userName);
                     appointmentIntent.putExtra("appointment_type", app.callType);
                     appointmentIntent.putExtra("patId", app.patientId);
-                    PendingIntent pendingUpdateIntent = PendingIntent.getService(context, 0, appointmentIntent, 0);
-
-                    // Cancel alarms
+                    PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context,
+                            app.id, appointmentIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                     try {
+
                         alarmManager.cancel(pendingUpdateIntent);
                     } catch (Exception e) {
                         Log.e("Appointment alarm", "AlarmManager update was not canceled. " + e.toString());
                     }
 
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            Util.getTimeInLongFormat(app.dateTime), pendingUpdateIntent);
+
+                    if(android.os.Build.VERSION.SDK_INT > 18) {
+                        try {
+                            Log.e("Appointment alarm", "Alarm set for. " + new Date(Util.getTimeInLongFormat(app.dateTime)));
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        alarmManager.setWindow(AlarmManager.RTC_WAKEUP,
+                                Util.getTimeInLongFormat(app.dateTime) , 1000L, pendingUpdateIntent);
+                    }
+                    else{
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                                Util.getTimeInLongFormat(app.dateTime), pendingUpdateIntent);
+                    }
                 }
             }
         }

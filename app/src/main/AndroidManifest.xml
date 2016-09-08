@@ -147,7 +147,9 @@
                         <category android:name="${applicationId}" />                    
             </intent-filter>
         </receiver>
-
+        <receiver android:name=".utils.AppointmentAlarmReceiver">
+            <action android:name="START_ALARM" />
+        </receiver>
         <service android:name=".gcm.GcmIntentService" />
 
         <activity

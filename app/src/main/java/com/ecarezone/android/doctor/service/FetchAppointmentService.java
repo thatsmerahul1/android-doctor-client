@@ -153,7 +153,13 @@ public class FetchAppointmentService extends IntentService{
                 ArrayList<Appointment> appointments = (ArrayList<Appointment>) appointmentResponse.data;
 
                 if (appointments != null) {
+
                     AppointmentDbApi appointmentDbApi = AppointmentDbApi.getInstance(getApplicationContext());
+
+                    if(appointmentResponse.data.size() > 0){
+                        boolean isDeleted = appointmentDbApi.deleteAllAppointments(isPendingRequest);
+                    }
+
                     ListIterator<Appointment> iter = appointments.listIterator();
                     Appointment appointment = null;
                     while (iter.hasNext()) {

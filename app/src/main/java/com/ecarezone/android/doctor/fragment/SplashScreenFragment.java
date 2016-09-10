@@ -64,12 +64,15 @@ public class SplashScreenFragment extends EcareZoneBaseFragment implements Sinch
                     SharedPreferences perPreferences =
                             activity.getSharedPreferences(Constants.SHARED_PREF_NAME, Activity.MODE_PRIVATE);
                     boolean is_login = perPreferences.getBoolean(Constants.IS_LOGIN, false);
+
                     String userId = perPreferences.getString(Constants.USER_ID, null);
                     userTable = new UserTable(getApplicationContext());
                     User user = userTable.getUserData(userId);
                     if (is_login) { // the current user is still in login status
                         LoginInfo.userId = Long.parseLong(userId);
-                        LoginInfo.userName = user.email;
+                        if (user.email != null) {
+                            LoginInfo.userName = user.email;
+                        }
                         LoginInfo.hashedPassword = user.password;
                         LoginInfo.role = user.role;
                         if(SinchUtil.getSinchServiceInterface()!=null) {

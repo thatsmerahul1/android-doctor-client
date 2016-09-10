@@ -47,6 +47,20 @@ public class AppointmentDbApi {
         return false;
     }
 
+    public boolean deleteAllAppointments(boolean isConfirmed){
+        try {
+            Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();
+            DeleteBuilder deleteBuilder = appointmentDao.deleteBuilder();
+            deleteBuilder.where()
+                    .eq(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED, isConfirmed);
+            int status = deleteBuilder.delete();
+            return status != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /* retrieve the AppointmentHistory of a particular user */
     public List<Appointment> getAppointmentHistory(long patientId) {
         try {
@@ -121,6 +135,7 @@ public class AppointmentDbApi {
             updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_PATIENT_ID, appointment.patientId);
             updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_CALL_TYPE, appointment.callType);
             updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_DATE_TIME, appointment.dateTime);
+            updateBuilder.updateColumnValue(DbContract.Appointments.COLUMN_NAME_IS_CONFIRMED,appointment.isConfirmed);
 
             updateBuilder.update();
             return true;

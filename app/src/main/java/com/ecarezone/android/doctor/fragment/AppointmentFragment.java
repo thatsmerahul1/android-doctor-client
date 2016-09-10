@@ -39,6 +39,7 @@ import com.ecarezone.android.doctor.model.rest.AppointmentResponse;
 import com.ecarezone.android.doctor.model.rest.EditAppointmentResponse;
 import com.ecarezone.android.doctor.model.rest.Patient;
 import com.ecarezone.android.doctor.model.rest.base.BaseResponse;
+import com.ecarezone.android.doctor.service.FetchAppointmentService;
 import com.ecarezone.android.doctor.utils.ProgressDialogUtil;
 import com.ecarezone.android.doctor.utils.Util;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -165,7 +166,9 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
         appointmentList.setAdapter(adapter);
         appointmentList.setOnItemClickListener(this);
 
+        FetchAppointmentService.startActionFetchAppointment(getApplicationContext());
         populateMyAppointmentListFromServer();
+
         return view;
     }
 
@@ -187,7 +190,18 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
         long endDate = startCalendar.getTimeInMillis();
 
         Calendar endCalendar = Calendar.getInstance();
-        endCalendar.setTime(new Date(mCalendarView.getDate()));
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(new Date(mCalendarView.getDate()));
+
+        if(Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == endCal.get(Calendar.DAY_OF_MONTH) &&
+                Calendar.getInstance().get(Calendar.MONTH) == endCal.get(Calendar.MONTH) &&
+                Calendar.getInstance().get(Calendar.YEAR) == endCal.get(Calendar.YEAR)){
+            endCalendar.setTime(new Date(System.currentTimeMillis()));
+        }
+        else
+        {
+            endCalendar.setTime(new Date(mCalendarView.getDate()));
+        }
         /*endCalendar.set(Calendar.HOUR_OF_DAY, 0);
         endCalendar.set(Calendar.MINUTE, 0);
         endCalendar.set(Calendar.SECOND, 0);*/
@@ -329,6 +343,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+
             if (checkProgress) {
                 checkProgress = false;
             } else {
@@ -361,7 +376,6 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                         } else {
                             appointmentDbApi.saveAppointment(appointment);
                         }
-//                        }
 
                     }
                 }

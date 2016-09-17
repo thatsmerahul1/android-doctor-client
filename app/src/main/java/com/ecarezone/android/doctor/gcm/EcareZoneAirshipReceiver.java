@@ -53,7 +53,7 @@ public class EcareZoneAirshipReceiver extends AirshipReceiver {
 
     @Override
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
-        Log.i(TAG, "Received push message. Alert: " + message.getAlert() + ". posted notification: " + notificationPosted);
+        Log.d(TAG, "Received push message. Alert: " + message.getAlert() + ". posted notification: " + notificationPosted);
 
         if(message != null && !message.getAlert().isEmpty()){
 

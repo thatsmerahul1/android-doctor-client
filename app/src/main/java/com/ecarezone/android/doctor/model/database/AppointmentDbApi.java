@@ -236,6 +236,9 @@ public class AppointmentDbApi {
         return null;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+
     public List<Appointment> getAllAppointments(boolean isConfirmed) {
         try {
             Dao<Appointment, Integer> appointmentDao = mDbHelper.getAppointmentDao();

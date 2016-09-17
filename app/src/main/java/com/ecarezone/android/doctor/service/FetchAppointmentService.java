@@ -75,7 +75,7 @@ public class FetchAppointmentService extends IntentService{
 
         FetchPendingAppointmentRequest request =
                 new FetchPendingAppointmentRequest(LoginInfo.userId);
-        getSpiceManager().execute(request, new FetchAppointmentListRequestListener(true));
+        getSpiceManager().execute(request, new FetchAppointmentListRequestListener(false));
     }
 
     /**
@@ -86,7 +86,7 @@ public class FetchAppointmentService extends IntentService{
 
         FetchAllAppointmentRequest request =
                 new FetchAllAppointmentRequest(LoginInfo.userId);
-        getSpiceManager().execute(request, new FetchAppointmentListRequestListener(false));
+        getSpiceManager().execute(request, new FetchAppointmentListRequestListener(true));
 
     }
 
@@ -123,10 +123,10 @@ public class FetchAppointmentService extends IntentService{
 
     private class FetchAppointmentListRequestListener implements RequestListener<AppointmentResponse> {
 
-        private boolean isPendingRequest;
+       private boolean isPendingRequest;
 
         public FetchAppointmentListRequestListener(boolean isPendingRequest){
-            this.isPendingRequest = isPendingRequest;
+           this.isPendingRequest = isPendingRequest;
         }
 
         @Override
@@ -166,11 +166,19 @@ public class FetchAppointmentService extends IntentService{
                         appointment = iter.next();
                         try {
                             appointment.dateTime = (String.valueOf(dateFormat.parse(appointment.dateTime).getTime()));
+                            if(isPendingRequest)
+                            {
+                                appointment.isConfirmed = true;
+                            }
+                            if(!isPendingRequest ){
+                                if(appointment.reScheduledBy != null && appointment.reScheduledBy.equalsIgnoreCase("doctor") )
+                                break;
+                            }
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
-                        if(appointmentDbApi.isAppointmentPresent(appointment.id)){
+                      /*  if(appointmentDbApi.isAppointmentPresent(appointment.id)){
                             if(! isPendingRequest){
                                 appointment.isConfirmed = true;
                             }
@@ -179,7 +187,7 @@ public class FetchAppointmentService extends IntentService{
                         else {
                             if(! isPendingRequest){
                                 appointment.isConfirmed = true;
-                            }
+                            }*/
                             appointmentDbApi.saveAppointment(appointment);
                         }
                     }
@@ -187,4 +195,5 @@ public class FetchAppointmentService extends IntentService{
             }
         }
     }
-}
+
+

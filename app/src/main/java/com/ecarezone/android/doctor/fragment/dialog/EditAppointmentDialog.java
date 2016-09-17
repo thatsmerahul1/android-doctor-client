@@ -70,8 +70,7 @@ public class EditAppointmentDialog extends DialogFragment implements View.OnClic
         textViewTime = (TextView) view.findViewById(R.id.textViewTime);
         imgViewProfilePic = (CircleImageView) view.findViewById(R.id.profilePic);
         textViewDate = (TextView) view.findViewById(R.id.textViewDate);
-//        Button btnTimeToCall = (Button) view.findViewById(R.id.buttonTimeToCall);
-//        btnTimeToCall.setOnClickListener(this);
+
 
         Button btnChangeTime = (Button) view.findViewById(R.id.buttonChangeTime);
         btnChangeTime.setOnClickListener(this);

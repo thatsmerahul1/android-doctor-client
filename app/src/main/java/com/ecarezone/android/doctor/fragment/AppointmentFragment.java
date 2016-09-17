@@ -201,6 +201,9 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
         else
         {
             endCalendar.setTime(new Date(mCalendarView.getDate()));
+            endCalendar.set(Calendar.HOUR_OF_DAY, 0);
+            endCalendar.set(Calendar.MINUTE, 0);
+            endCalendar.set(Calendar.SECOND, 0);
         }
         /*endCalendar.set(Calendar.HOUR_OF_DAY, 0);
         endCalendar.set(Calendar.MINUTE, 0);
@@ -213,7 +216,6 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
         mAppointmentList.clear();
 
         List<Appointment> appoConfirmedList = appointmentDbApi.getAllAppointments(true, startDate, endDate);
-//      appoConfirmedList.addAll(appoPendingList);
         for (Appointment appointment : appoConfirmedList) {
             AppointmentListItem appointmentItem = new AppointmentListItem();
             appointmentItem.appointmentId = appointment.id;
@@ -226,11 +228,9 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                 appointmentItem.patientName = patient.name;
                 appointmentItem.profilePicUrl = patient.avatarUrl;
             }
-
             appointmentItem.listItemType = PatientListItem.LIST_ITEM_TYPE_APPROVED;
             mAppointmentList.add(appointmentItem);
         }
-
         List<Appointment> appoPendingList = appointmentDbApi.getAllAppointments(false, startDate, endDate);
         for (Appointment appointment : appoPendingList) {
 
@@ -248,13 +248,10 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
             appointmentItem.listItemType = PatientListItem.LIST_ITEM_TYPE_PENDING;
             mAppointmentList.add(appointmentItem);
         }
-
         adapter.notifyDataSetChanged();
     }
 
-   /* private void getAllComponent(View view) {
 
-    }*/
 
     private void populateMyAppointmentListFromServer() {
         progressDialog = new ProgressDialog(getActivity());
@@ -422,7 +419,7 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                     Toast.makeText(getActivity(), getString(R.string.appointment_accepted), Toast.LENGTH_LONG).show();
                     populateAppointmentList();
                 } else {
-                    Toast.makeText(getActivity(), getString(R.string.appointment_rejected), Toast.LENGTH_LONG).show();
+
                     if (mAppointmentList != null) {
                         ListIterator<AppointmentListItem> iterator = mAppointmentList.listIterator();
                         while (iterator.hasNext()) {
@@ -434,7 +431,9 @@ public class AppointmentFragment extends EcareZoneBaseFragment implements Adapte
                                 break;
                             }
                         }
+
                         populateAppointmentList();
+                        Toast.makeText(getActivity(), getString(R.string.appointment_rejected), Toast.LENGTH_LONG).show();
                     }
 
                     Util.setAppointmentAlarm(getApplicationContext());

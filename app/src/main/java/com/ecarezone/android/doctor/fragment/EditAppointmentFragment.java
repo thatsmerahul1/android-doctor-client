@@ -197,9 +197,6 @@ public class EditAppointmentFragment extends EcareZoneBaseFragment implements Vi
                 if (radioVoip.isChecked())
                     break;
             case R.id.button_appointment:
-//               Toast.makeText(getActivity(), "button appointment", Toast.LENGTH_SHORT).show();
-//               date in YYYY-MM-DD format
-
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.YEAR, selectedYear);
                 calendar.set(Calendar.MONTH, selectedMonth);

@@ -90,8 +90,11 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
         checkProgress = true;
 
         initListWithData();
+        IntentFilter intentFilter = new IntentFilter("send");
+        intentFilter.addAction(Constants.BROADCAST_STATUS_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
-                new IntentFilter("send"));
+                intentFilter);
+
         pullDBFromdevice();
     }
 
@@ -428,8 +431,9 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
                         }
                         if (patId > -1) {
                             for (PatientListItem patientListItem : patientLists) {
-                                if (patientListItem.patientId == patId) {
-                                     patientListItem.status = statusArr[2] ;
+                                if (patientListItem.userId == patId) {
+                                     patientListItem.status = statusArr[2].trim() ;
+
                                      break;
                                 }
                             }
@@ -441,4 +445,6 @@ public class MyPatientListFragment extends EcareZoneBaseFragment {
             }
         }
     };
+
+
 }

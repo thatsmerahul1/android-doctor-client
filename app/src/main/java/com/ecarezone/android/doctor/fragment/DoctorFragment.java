@@ -256,8 +256,8 @@ public class DoctorFragment extends EcareZoneBaseFragment implements View.OnClic
                         if (patId > -1) {
 
                             if (patient.userId == patId) {
-                                 patient.status = statusArr[2];
-                                 setDoctorPresenceIcon(statusTxt);
+                                 patient.status = statusArr[2].trim();
+                                 setDoctorPresenceIcon(patient.status);
                             }
                         }
                     }
